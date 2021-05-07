@@ -26,7 +26,7 @@
                 </div>
                 <ul class="navbar-nav navbar-right">
                   <li class="nav-item">
-                    <a class="nav-link" href="/category" style="text-decoration:none; font-size: 25px; color:white;">Category</a>
+                    <a class="nav-link" href="/addRootCategory" style="text-decoration:none; font-size: 25px; color:white;">Category</a>
                   </li>
                   <li class="nav-item navbar-right">
                     <a class="nav-link" href="/product" style="text-decoration:none; font-size: 25px; color:white;" href="/admin/product">Product</a>

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category as ModelsCategory;
-use App\Models\Product as ModelsProduct;
+use App\Models\Category as CategoryModel;
+use App\Models\Product as ProductModel;
 use App\Models\Product\Media;
 use Facade\FlareClient\View;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +29,7 @@ class Product extends Controller
     public function setProductModel($productModel = null)
     {
         if (!$this->productModel) {
-            $productModel = new ModelsProduct();
+            $productModel = new ProductModel();
         }
 
         $this->productModel = $productModel;
@@ -48,7 +48,7 @@ class Product extends Controller
             return \view('product.tabs.form')->with('product', $this);
         }
 
-        $product = new ModelsProduct;
+        $product = new ProductModel;
 
         $product = $product->load($id);
 
@@ -110,14 +110,14 @@ class Product extends Controller
 
     public function getCategoryOptions($id = null)
     {
-        $category = new ModelsCategory();
+        $category = new CategoryModel();
 
         return $category->fetchAll()->getCategories();
     }
 
     public function getCategoryName($id)
     {
-        $category = new ModelsCategory();
+        $category = new CategoryModel();
 
         $categoryRow = (array)$category->load($id)->getCategories();
 

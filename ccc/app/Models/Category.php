@@ -38,8 +38,11 @@ class Category extends Model
 
     public function saveValue($categories)
     {
+       
         if(array_key_exists('id',$categories))
         {
+            // echo 111;
+            // die;
             return $this->updateValue($categories);
         }
         else
@@ -69,6 +72,7 @@ class Category extends Model
     public function deleteValue($id)
     {
         $categories = DB::table($this->table)->where($this->primaryKey,"=",$id)->delete();
+        $parentcategories = DB::table($this->table)->where('parent_id','=',$id)->delete();
         return ($categories) ? true : false;
     }
 }

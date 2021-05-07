@@ -63,9 +63,9 @@ Route::post('/mediaUpdate', [Media::class, 'updateAction']);
 //category
 Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
 Route::get('/categoryDelete/{id}', [Category::class, 'deleteAction'])->name('categoryDelete');
-Route::get('/categorEditSave/{id?}',[Category::class,'editSaveAction'])->name('categorEditSave');
+Route::get('/categorEditSave/{id}',[Category::class,'editSaveAction'])->name('categorEditSave');
 Route::get('/categoryAddSubCategory/{id}',[Category::class,'addSubCategoryAction'])->name('addSubCategory');
-Route::get('/addRootCategory/{id}',[Category::class,'addRootCategoryAction'])->name('addnewRootCategory');
+Route::get('/addRootCategory',[Category::class,'addRootCategoryAction'])->name('addnewRootCategory');
 Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->name('addRootCategory');
 // Route::get('/categoryAddnewSubCategory/{$id}',function($id)
 // {

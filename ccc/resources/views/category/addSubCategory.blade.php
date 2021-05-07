@@ -4,6 +4,11 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/admin/tree.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/3fd66b9b9a.js" crossorigin="anonymous"></script>
 <style>
 .tree, .tree ul {
     margin:0;
@@ -70,15 +75,37 @@
 }
 </style>
 </head>
-<body>
+<body class="bg-light">
+<div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-12 bg-secondary mainHeader">
+      <nav class="navbar navbar-expand-sm navbar-dark">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="nav-link" class="navbar-brand" style="text-decoration:none; font-size: 25px; color:white;" href="">Ccc</a>
+                </div>
+                <ul class="navbar-nav navbar-right">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/addRootCategory" style="text-decoration:none; font-size: 25px; color:white;">Category</a>
+                  </li>
+                  <li class="nav-item navbar-right">
+                    <a class="nav-link" href="/product" style="text-decoration:none; font-size: 25px; color:white;" href="/admin/product">Product</a>
+                  </li>
+                </ul>
+            </div>
+          </nav>
+				</div>
+			</div>
+    <div class="row mainBody bg-light">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 bg-warning">
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 bg-light">
             <a href="{{route('addnewRootCategory',0)}}" class="btn btn-success">Add Root Category</a>
+            <a href="{{route('addSubCategory',$parent_id)}}" class="btn btn-success">Add Sub Category</a>
             <ul id="tree1">
                 @foreach ($parentcategories as $category)
                     <li>
-                    <a href="{{route('categoryEdit',$category->id)}}">{{$category->name}}</a><a href="{{route('categoryDelete',$category->id)}}">Delete</a>
+                    <a href="{{route('addSubCategory',$category->id)}}">{{$category->name}}</a>
+                    <a href="{{route('categoryDelete',$category->id)}}">Delete</a>
                         <a href="{{route('categoryEdit',$category->id)}}">Edit</a>
                         @if(count($category->child))
                             @include('category.manageChild',['child' => $category->child])
@@ -88,18 +115,18 @@
              </ul>
             </div>
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
-            @foreach ($parentcategories as $category)
-               <form method="GET" action="{{route('addnewSubCategoryAction',$category->id)}}">
+               <form method="GET" action="{{route('addnewSubCategoryAction',$parent_id)}}">
                 @csrf
-            @endforeach
-                <div class="form-group">
+                <button class="btn btn-md btn-success">UPDATE</button>
+                <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                         <label>Category Name</label>
                     </div>
                     <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
                         <input type="text" class="form-control" name="category[name]">
                     </div>
-                    <div class="form-group">
+                </div>
+                    <div class="form-group row">
                        <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                             <label>Category Status</label>
                         </div>
@@ -110,7 +137,6 @@
                                 <option value="0">DISABLE</option>
                             </select>
                         </div>
-                     </div>
                 </div>
 
                 <div class="form-group">
@@ -121,75 +147,73 @@
                         <textarea class="form-control" name="category[description]"></textarea>
                     </div>  
                </div>
-               <button class="btn btn-md btn-success">UPDATE</button>
                </form>
                
             </div>
         </div>
     </div>
 </body>
+
 <script>
-$.fn.extend({
-    treed: function (o) {
-      
-      var openedClass = 'glyphicon-minus-sign';
-      var closedClass = 'glyphicon-plus-sign';
-      
-      if (typeof o != 'undefined'){
-        if (typeof o.openedClass != 'undefined'){
-        openedClass = o.openedClass;
-        }
-        if (typeof o.closedClass != 'undefined'){
-        closedClass = o.closedClass;
-        }
-      };
-      
-        //initialize each of the top levels
-        var tree = $(this);
-        tree.addClass("tree");
-        tree.find('li').has("ul").each(function () {
-            var branch = $(this); //li with children ul
-            branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
-            branch.addClass('branch');
-            branch.on('click', function (e) {
-                if (this == e.target) {
-                    var icon = $(this).children('i:first');
-                    icon.toggleClass(openedClass + " " + closedClass);
-                    $(this).children().children().toggle();
-                }
-            })
-            branch.children().children().toggle();
+        $.fn.extend({
+            treed: function(o) {
+                var openedClass = 'glyphicon-minus-sign';
+                var closedClass = 'glyphicon-plus-sign';
+                if (typeof o != 'undefined') {
+                    if (typeof o.openedClass != 'undefined') {
+                        openedClass = o.openedClass;
+                    }
+                    if (typeof o.closedClass != 'undefined') {
+                        closedClass = o.closedClass;
+                    }
+                };
+                //initialize each of the top levels
+                var tree = $(this);
+                tree.addClass("tree");
+                tree.find('li').has("ul").each(function() {
+                    var branch = $(this); //li with children ul
+                    branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+                    branch.addClass('branch');
+                    branch.on('click', function(e) {
+                        if (this == e.target) {
+                            var icon = $(this).children('i:first');
+                            icon.toggleClass(openedClass + " " + closedClass);
+                            $(this).children().children().toggle();
+                        }
+                    })
+                    branch.children().children().toggle();
+                });
+                //fire event from the dynamically added icon
+                tree.find('.branch .indicator').each(function() {
+                    $(this).on('click', function() {
+                        $(this).closest('li').click();
+                    });
+                });
+                //fire event to open branch if the li contains an anchor instead of text
+                tree.find('.branch>a').each(function() {
+                    $(this).on('click', function(e) {
+                        $(this).closest('li').click();
+                        //e.preventDefault();
+                    });
+                });
+                //fire event to open branch if the li contains a button instead of text
+                tree.find('.branch>button').each(function() {
+                    $(this).on('click', function(e) {
+                        $(this).closest('li').click();
+                        //e.preventDefault();
+                    });
+                });
+            }
         });
-        //fire event from the dynamically added icon
-      tree.find('.branch .indicator').each(function(){
-        $(this).on('click', function () {
-            $(this).closest('li').click();
-        });
-      });
-        //fire event to open branch if the li contains an anchor instead of text
-        tree.find('.branch>a').each(function () {
-            $(this).on('click', function (e) {
-                $(this).closest('li').click();
-                e.preventDefault();
-            });
-        });
-        //fire event to open branch if the li contains a button instead of text
-        tree.find('.branch>button').each(function () {
-            $(this).on('click', function (e) {
-                $(this).closest('li').click();
-                e.preventDefault();
-            });
-        });
-    }
-});
-
-//Initialization of treeviews
-
-$('#tree1').treed();
-
-$('#tree2').treed({openedClass:'glyphicon-folder-open', closedClass:'glyphicon-folder-close'});
-
-$('#tree3').treed({openedClass:'glyphicon-chevron-right', closedClass:'glyphicon-chevron-down'});
-
-</script>
+        //Initialization of treeviews
+         $('#tree1').treed();
+        // $('#tree1').treed({
+        //     openedClass: 'glyphicon-folder-open',
+        //     closedClass: 'glyphicon-folder-close'
+        // });
+        // $('#tree1').treed({
+        //     openedClass: 'glyphicon-chevron-right',
+        //     closedClass: 'glyphicon-chevron-down'
+        // });
+    </script>
 </html>

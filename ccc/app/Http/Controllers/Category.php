@@ -10,16 +10,17 @@ class Category extends Controller
     protected $categories=[];
     public function gridAction($id=NULL,Request  $request) 
     {
-       echo $id;
         $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
-        $allCategories = CategoryModel::pluck('name','id')->all();
+        $parent_id=0;
+        $allCategories = CategoryModel::pluck('status')->all();
+        // print_r($allCategories);
         if($id)
         {
-             $categoryData= Category::editAction($id,$request);
-           return view('category.grid',compact('parentcategories','allCategories','categoryData'));
+             $categoryData = Category::editAction($id,$request);
+             $parent_id = $categoryData[0]->id;
+           return view('category.grid',compact('parentcategories','allCategories','categoryData','parent_id'));
         }
-        
-        return view('category.grid',compact('parentcategories','allCategories'));
+        return \view('category.grid',\compact('parentcategories','allCategories','parent_id'));
     }
 
     public function FormAction($id,$request)
@@ -49,48 +50,50 @@ class Category extends Controller
     {
         $editData =$_GET['category'];
         $editData['id']=$id;
-        echo $editData['id'];
+        // echo $editData['id'];
         // print_r($editData);
         // die;
         $categoryModel = new CategoryModel;
         $categoryModel->saveValue($editData);
         return redirect()->back();
     }
+    
     public function addSubCategoryAction(Request $request)
     {
         
         $id=$request->id;
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
+        $parent_id=$request->id;
+        $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
         $allCategories = CategoryModel::pluck('name','id')->all();
-        return view('category.addSubCategory',compact('parentcategories','allCategories'));
+        return view('category.addSubCategory',compact('parentcategories','allCategories','parent_id'));
     }
 
     public function addnewSubCategory($id,Request $request)
     {
-        echo $categoryId=$request->id;
+        $categoryId=$request->id;
         $editData =$_GET['category'];
-        echo $editData['parent_id']=$id;
+        $editData['parent_id']=$id;
         $categoryModel = new CategoryModel;
         print_r($editData);
 
-        // $categoryModel->saveValue($editData);
-        // return redirect()->back();
+         $categoryModel->saveValue($editData);
+        return redirect()->back();
     }
     public function addRootCategoryAction()
     {
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
+        $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
+        $parent_id=0;
         $allCategories = CategoryModel::pluck('name','id')->all();
-        
-        return view('category.addCategory',compact('parentcategories','allCategories'));
+        return view('category.addCategory',compact('parentcategories','allCategories','parent_id'));
     }
 
-    public function rootCategoryEditSaveAction()
+    public function rootCategoryEditSave()
     {
       $formData=$_GET['category'];
-      print_r($formData);
       $formData['parent_id']=0;
       $categoryModel = new CategoryModel;
-     $categoryModel->saveValue($formData);
+      print_r($formData);
+      $categoryModel->saveValue($formData);
      return redirect()->back();
     }
 }

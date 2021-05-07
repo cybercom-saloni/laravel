@@ -75,7 +75,7 @@
 }
 </style>
 </head>
-<body class="bg-light">
+<body class="bg-light   ">
 <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-12 bg-secondary mainHeader">
       <nav class="navbar navbar-expand-sm navbar-dark">

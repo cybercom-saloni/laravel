@@ -35,73 +35,151 @@ class Product extends Controller
         $this->productModel = $productModel;
     }
 
+    public function testAction()
+    {
+        $response = [
+            'success' =>'hello',
+            'name' => 'saloni'
+        ];
+
+        header('content-type:application/json');
+        echo json_encode($response);
+        die();
+    }
+
     public function gridAction()
     {
-        $product = $this->getProductModel();
-        $this->setProducts($product->fetchAll());
-        return \view('product.product')->with('product', $this);
+        $products = new ProductModel;
+        $this->setProducts($products->fetchAll());
+        $view = \view('product.product',['products'=>$this->getProducts(),'controller'=>$this])->render();
+
+        $response = [
+            'element' => [
+                [
+                    'success' =>'hello',
+                    'name' => 'saloni',
+                    'selector' =>'#content',
+                    'html' =>$view
+                ]
+            ]
+        ];
+
+        header('content-type:application/json');
+        echo json_encode($response);
+        die();
     }
+
+    // public function formAction($id = null)
+    // {
+    //     if (!$id) {
+    //         $view = \view('product.tabs.form')->with('product', $this)->render();
+    //         $response = [
+    //             'element' => [
+    //                 [
+    //                     'selector' => '#content',
+    //                     'html' => $view
+    //                 ]
+    //             ]
+    //         ];
+    
+    //         header('content-type:application/json');
+    //         echo json_encode($response);
+    //     } else {
+    //         $product = new ProductModel;
+
+    //         $product = $product->load($id);
+
+    //         if ($product->getProducts()) {
+    //             $this->setProducts($product->getProducts());
+    //         }
+
+    //         $view = \view('product.tabs.form')->with('product', $this)->render();
+
+    //     $response = [
+    //         'element' => [
+    //             [
+    //                 'selector' => '#content',
+    //                 'html' => $view
+    //             ]
+    //         ]
+    //     ];
+
+    //     header('content-type:application/json');
+    //     echo json_encode($response);
+    //   }
+    // }
 
     public function formAction($id = null)
     {
         if (!$id) {
-            return \view('product.tabs.form')->with('product', $this);
+            $view = \view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this])->render();
+            $response = 
+            [
+                'element' => [
+                    [
+                        'selector' => '#content',
+                        'html' => $view
+                    ]
+                ]
+             ];
+            header('content-type:application/json');
+            echo json_encode($response);
+            die();
+        } 
+        else
+        {
+            $product = new ProductModel;
+            $product = $product->load($id);
+
+            if ($product->getProducts()) {
+                $this->setProducts($product->getProducts());
+            }
+                $view = \view('product.tabs.form',['product'=> $product,'controller'=>$this])->render();
+                $response = [
+                    'element' => [
+                        [
+                            'selector' => '#content',
+                            'html' => $view
+                        ]
+                    ]
+                        ];
+                header('content-type:application/json');
+                echo json_encode($response);
+                die();
         }
-
-        $product = new ProductModel;
-
-        $product = $product->load($id);
-
-        if ($product->getProducts()) {
-            $this->setProducts($product->getProducts());
-        }
-
-        return \view('product.tabs.form')->with('product', $this);
     }
 
-    public function mediaAction($id)
-    {
-        $this->id = $id;
-
-        if (!$id) {
-            return \view('product.tabs.media')->with('product', $this);
-        }
-
-        $media = new Media;
-
-        $media = $media->fetchAll("select * from media where product_id=$id");
-
-        if ($media->getMedias()) {
-            $this->setMedias($media->getMedias());
-        }
-
-        return \view('product.tabs.media')->with('product', $this);
-    }
-
-    public function saveAction($id = null)
+   
+    
+    public function saveAction($id = null,Request $request)
     {
         $product = $this->getProductModel();
-
-        $formData = $_POST['product'];
-
-
+        $formData = $request->get('product');
+        date_default_timezone_set('Asia/Kolkata');
         if ($id) {
             $formData['id'] = $id;
             $formData['updated_at'] = date('Y-m-d h:i:s');
         } else {
             $formData['created_at'] = date('Y-m-d h:i:s');
         }
-
+        
         if (!$product->saveData($formData)) {
             return redirect()->back()->withInput();
         }
-        return redirect('/product');
+         return redirect('/product');
+        // if (array_key_exists('created_at', $formData)) {
+        //     //return redirect()->back();
+        //     return redirect('/product');
+        // } else {
+        //     return redirect('/product/form/' . $id);
+        // }
+       
+
     }
 
     public function deleteAction($id)
     {
-        
-
+         $product = $this->getProductModel();
         if (!$product->deleteData([$id])) {
             return redirect('/product')->with('error', 'ERROR WHILE DELETING');
         }
@@ -126,6 +204,9 @@ class Product extends Controller
 
     public function getProducts()
     {
+        if(!$this->products){
+            return new ProductModel();
+        }
         return $this->products;
     }
 
@@ -144,5 +225,50 @@ class Product extends Controller
     {
         $this->medias = $medias;
         return $this;
+    }
+
+    public function mediaAction($id)
+    {
+        $this->id = $id;
+
+        if (!$id) {
+            $view = \view('product.tabs.media')->with('product', $this)->render();
+            $response = [
+                'element' => [
+                    [
+                        'selector' => '#content',
+                        'html' => $view
+                    ]
+                ]
+            ];
+            header('content-type: application/json');
+            echo json_encode($response);
+            die();
+            
+        } else {
+
+            $media = new Media;
+
+            $media = $media->fetchAll("select * from media where product_id=$id");
+
+            if ($media->getMedias()) {
+                $this->setMedias($media->getMedias());
+            }
+
+            $view = \view('product.tabs.media')->with('product', $this)->render();
+
+            $response = [
+                'element' => [
+                    [
+                        'selector' => '#content',
+                        'html' => $view
+                    ]
+                ]
+            ];
+        
+        header('content-type: application/json');
+        echo json_encode($response);
+        die();
+        }
     }
 }

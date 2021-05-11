@@ -1,19 +1,19 @@
+@extends('core.head')
 
+@section('container')
+    <div class="row">
         <?php $data = $product->getMedias(); ?>
-        @if($data)
+        <?php $product_id = $data[0]->product_id;?>
+
         @include('product.tabs')
-        @endif
+
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Media </h3>
-        <form action="/media/update/{{ request()->id }}" id="formupdate" method="POST">
-                <!-- <button type="button" name="update"   value="update" onclick="object.setForm('formupdate').setUrl('/media/update/{{ request()->id }}').setMethod('post').load();" name="update" value="update" class="btn btn-md btn-success"> <i
+            <form  id= "mediaUpdate" method="POST">
+                <button type="submit" name="update" value="update"  onclick="media();" class="btn btn-md btn-success"> <i
                         class="fa fa-pencil"></i></button>
-                <button type="button" name="delete" onclick="object.setForm('formupdate').setUrl('/media/delete/{{ request()->id }}').setMethod('post').load();" value="delete" class="btn btn-md btn-secondary"> <i
-                        class="fa fa-trash"  value="delete"></i></button> -->
-                        <button type="submit" name="update"   value="update"  name="update" value="update" class="btn btn-md btn-success"> <i
-                        class="fa fa-pencil"></i></button>
-                <button type="submit" name="delete"  value="delete" class="btn btn-md btn-secondary"> <i
-                        class="fa fa-trash"  value="delete"></i></button>
+                <button type="submit" name="delete" value="delete" class="btn btn-md btn-secondary"> <i
+                        class="fa fa-trash"></i></button>
                 @csrf
                 <div class="row">
                     <table class="table table-bordered bg-light  table-hover">
@@ -40,6 +40,12 @@
                                         <td>
                                             <img src="\images\products\{{ $product->id }}\{{ $media->media }}"
                                                 height=" 100px" width="100px">
+                                                <form action="/product/imageUpdateUpload/{{ $media->id }}" method="post" enctype="multipart/form-data">
+                                                 @csrf
+                                                 @method('post')
+                                                <input type="file" name="image[{{ $media->id }}][media]" class="btn btn-md btn-success" value=" {{$media->media}}"> 
+                                                <button class="btn btn-success"><i class="fa fa-pencil"></i></button>
+                                                </form>
                                         </td>
 
                                         <td>
@@ -51,40 +57,40 @@
                                         </td>
 
                                         <td>
-                                            <div class="custom-control">
+                                            <div class="custom-control custom-radio">
                                                 <input type="radio" id="small[{{ $media->id }}]"
-                                                    value="{{ $media->id }}"
+                                                    value="{{ $media->id }}" class="form-control"
                                                     name="image[small]" {{ $media->small == 1 ? 'checked' : '' }}>
                                             </div>
                                         </td>
 
                                         <td>
-                                            <div class="custom-control">
+                                            <div class="custom-control custom-radio">
                                                 <input type="radio" id="thumb[{{ $media->id }}]"
-                                                    value="{{ $media->id }}"
+                                                    value="{{ $media->id }}" class="form-control"
                                                     name="image[thumb]" {{ $media->thumb == 1 ? 'checked' : '' }}>
                                             </div>
                                         </td>
 
                                         <td>
-                                            <div class="custom-control">
+                                            <div class="custom-control custom-radio">
                                                 <input type="radio" id="base[{{ $media->id }}]"
-                                                    value="{{ $media->id }}"
+                                                    value="{{ $media->id }}" class="form-control"
                                                     name="image[base]" {{ $media->base == 1 ? 'checked' : '' }}>
                                             </div>
                                         </td>
 
                                         <td>
-                                            <div class="custom-control">
-                                                <input type="checkbox"
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="form-control"
                                                     id="gallery[{{ $media->id }}]"
                                                     name="image[{{ $media->id }}][gallery]"
                                                     {{ $media->gallery == 1 ? 'checked' : '' }}>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="custom-control">
-                                                <input type="checkbox"
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="form-control"
                                                     id="remove[{{ $media->id }}]"
                                                     name="image[{{ $media->id }}][remove]">
                                             </div>
@@ -105,9 +111,22 @@
                         <input type="file" class="form-control" id="image" name="image">
                     </div>
                     <div class="col-2">
-                        <button type="button" onclick="object.setUrl('/product/imageUpload/{{ $product->id }}').setMethod('post').uploadFile().resetParams();" class="btn btn-success">upload</i></button>
+                        <button class="btn btn-success">upload</i></button>
                     </div>
                 </div>
 
             </form>
         </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+function media()
+{
+    var form=document.getElementById('mediaUpdate');
+    form.setAttribute('Action','/mediaUpdate');
+    form.submit();
+}
+</script>
+
+@stop

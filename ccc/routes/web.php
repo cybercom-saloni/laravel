@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Product;
 use App\Http\Controllers\Product\Media;
 use App\Http\Controllers\Category;
+use App\Http\Controllers\NewDashboard;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +27,9 @@ Route::get('test',function ()
 {
     return App\Models\Category::with('child')->where('parent_id',0)->get();
 });
+
+
+
 Route::get('/posts',[PostController::class,'index']);
 Route::get('/posts/{post}/edit',[PostController::class,'edit']);
 Route::get('/posts',[PostController::class,'store']);
@@ -47,18 +51,16 @@ Route::get('/admin/category/selectPath',[CategoryController::class,'selectPath']
 Route::post('/admin/product/media/imageUpload/{id}', [MediaController::class, 'saveAction'])->whereNumber('id');
 Route::post('/admin/product/media/mediaUpdate', [MediaController::class, 'updateAction']);
 
-//new
-Route::get('/product', [Product::class, 'gridAction']);
-Route::post('/productSave/{id?}', [Product::class, 'saveAction'])->whereNumber('id');
+//laravel start
+Route::get('/product', [Product::class, 'gridAction'])->name('productGrid');
+Route::post('/productSave/{id?}', [Product::class, 'saveAction'])->whereNumber('id')->name('productSave');
 Route::get('/productDelete/{id?}', [Product::class, 'deleteAction'])->whereNumber('id');
-
-//Product Tabs
-Route::get('/product/form/{id?}', [Product::class, 'formAction'])->whereNumber('id');
+Route::get('/product/form/{id?}', [Product::class, 'formAction'])->whereNumber('id')->name('productForm');
 Route::get('/product/media/{id?}', [Product::class, 'mediaAction'])->whereNumber('id');
-
 Route::post('/product/imageUpload/{id}', [Media::class, 'saveAction'])->whereNumber('id');
-Route::post('/mediaUpdate', [Media::class, 'updateAction']);
-
+Route::post('/product/imageUpdateUpload/{{$id}}',[Media::class, 'updateMediaAction'])->whereNumber('id');
+Route::post('/media/update/{id}', [Media::class, 'updateAction']);
+Route::post('/media/delete/{id?}', [Media::class, 'deleteAction'])->whereNumber('id');
 
 //category
 Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
@@ -72,3 +74,4 @@ Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->na
 //     return $id;
 // });
 Route::get('/categoryAddnewSubCategory/{id}',[Category::class,'addnewSubCategory'])->name('addnewSubCategoryAction');
+Route::get('/dashboard',[NewDashboard::class,'dashboardAction'])->name('dashboard');

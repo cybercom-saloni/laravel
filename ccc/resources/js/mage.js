@@ -1,3 +1,4 @@
+alert('hi');
 var Base = function()
 {
 

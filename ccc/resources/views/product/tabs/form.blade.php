@@ -1,12 +1,12 @@
-@extends('core.head')
-
-@section('container')
     <div class="row">
-        <?php $data = $product->getProducts(); ?>
-        @include('product.tabs')
+        <?php $data = $product->getProducts();?>
+        
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">{{ $data ? 'Edit' : 'Add' }} Product Details</h3>
-            <form action="/productSave{{ $data ? '/' . $data[0]->id : '' }}" method="POST">
+        <form action="/productSave{{ $data ? '/' . $data[0]->id : '' }}" method="POST" id="form">
+                @if($data)
+                @include('product.tabs')
+                @endif
                 @csrf
                 <div class=" form-group row">
                     <div class="col-lg-4">
@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-lg-6">
                         <input type="text" class="form-control" value="{{ $data ? $data[0]->sku : '' }}" id="name"
-                            placeholder="PRODCUT SKU" name="product[sku]" required>
+                            placeholder="PRODUCT SKU" name="product[sku]" required>
                     </div>
                 </div>
 
@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-lg-6">
                         <input type="text" class="form-control" value="{{ $data ? $data[0]->name : '' }}" id="name"
-                            placeholder="PRODCUT NAME" name="product[name]" required>
+                            placeholder="PRODUCT NAME" name="product[name]" required>
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-lg-6">
                         <input type="number" class="form-control" value="{{ $data ? $data[0]->price : '' }}" id="price"
-                            step="0.01" placeholder="PRODUCT PRICE" name="product[price]" required>
+                        required  min="1" step="0.01" placeholder="PRODUCT PRICE" name="product[price]" required>
                     </div>
                 </div>
 
@@ -54,7 +54,7 @@
                     <div class="col-lg-6">
                         <input type="number" id="quantity" class="form-control"
                             value="{{ $data ? $data[0]->quantity : '' }}" placeholder="PRODUCT QUANTITY"
-                            name="product[quantity]" required>
+                            name="product[quantity]" required max="100" min="0" required>
                     </div>
                     </div>
                    
@@ -77,7 +77,7 @@
 
                     <div class="form-group row">
                      <div class="col-lg-4">
-                        <label for="price"> Description</label>
+                        <label for="description"> Description</label>
                         </div>
                     <div class="col-lg-6">
                         <textarea name="product[description]" id="description" style="resize: vertical" required
@@ -89,11 +89,10 @@
                      <div class="col-lg-4">
                      </div>
                     <div class="col-lg-6">
-                <button type="submit" class="btn btn-success btn-md">{{ $data ? 'Update' : 'Add' }} Product</button>
-                
+                    <button type="button" onclick="object.setUrl('/productSave{{ $data ? '/' . $data[0]->id : '' }}').setForm('form').load();" class="btn btn-success btn-md">{{ $data ? 'Update' : 'Add' }} Product</button>
                 </div>
                 <div>
             </form>
         </div>
     </div>
-@stop
+

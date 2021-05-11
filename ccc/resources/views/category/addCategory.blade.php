@@ -1,124 +1,37 @@
 <html>
 <head>
-<title>Ccc</title>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/admin/tree.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/3fd66b9b9a.js" crossorigin="anonymous"></script>
-<style>
-.tree, .tree ul {
-    margin:0;
-    padding:0;
-    list-style:none
-}
-.tree ul {
-    margin-left:1em;
-    position:relative
-}
-.tree ul ul {
-    margin-left:.5em
-}
-.tree ul:before {
-    content:"";
-    display:block;
-    width:0;
-    position:absolute;
-    top:0;
-    bottom:0;
-    left:0;
-    border-left:1px solid
-}
-.tree li {
-    margin:0;
-    padding:0 1em;
-    line-height:2em;
-    color:#369;
-    font-weight:700;
-    position:relative
-}
-.tree ul li:before {
-    content:"";
-    display:block;
-    width:10px;
-    height:0;
-    border-top:1px solid;
-    margin-top:-1px;
-    position:absolute;
-    top:1em;
-    left:0
-}
-.tree ul li:last-child:before {
-    background:#fff;
-    height:auto;
-    top:1em;
-    bottom:0
-}
-.indicator {
-    margin-right:5px;
-}
-.tree li a {
-    text-decoration: none;
-    color:#369;
-}
-.tree li button, .tree li button:active, .tree li button:focus {
-    text-decoration: none;
-    color:#369;
-    border:none;
-    background:transparent;
-    margin:0px 0px 0px 0px;
-    padding:0px 0px 0px 0px;
-    outline: 0;
-}
-</style>
+<link rel="stylesheet" href="{{asset('css/categorytree.css')}}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/3fd66b9b9a.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-light">
-<div class="row">
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-12 bg-secondary mainHeader">
-      <nav class="navbar navbar-expand-sm navbar-dark">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="nav-link" class="navbar-brand" style="text-decoration:none; font-size: 25px; color:white;" href="">Ccc</a>
-                </div>
-                <ul class="navbar-nav navbar-right">
-                  <li class="nav-item">
-                    <a class="nav-link" href="/addRootCategory" style="text-decoration:none; font-size: 25px; color:white;">Category</a>
-                  </li>
-                  <li class="nav-item navbar-right">
-                    <a class="nav-link" href="/product" style="text-decoration:none; font-size: 25px; color:white;" href="/admin/product">Product</a>
-                  </li>
-                </ul>
-            </div>
-          </nav>
-				</div>
-			</div>
-    <div class="row mainBody bg-light">
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 bg-light">
-            <a href="{{route('addnewRootCategory')}}" class="btn btn-success">Add Root Category</a>
-            <a href="{{route('addSubCategory',$parent_id)}}"  disabled="disabled" class="btn btn-success">Add Sub Category</a>
-            <ul id="tree1">
-                @foreach ($parentcategories as $category)
-                    <li> 
-                    <a href="{{route('addSubCategory',$category->id)}}">{{$category->name}}</a>
-                    <a href="{{route('categoryDelete',$category->id)}}">Delete</a>
-                     <a href="{{route('categoryEdit',$category->id)}}">Edit</a>
+               <a href="javascript:void(0)" onclick="object.setUrl('/addRootCategory').setMethod('get').load();" class="btn btn-success">Add Root Category</a>
+               <ul id="tree1">
+                @foreach($parentcategories as $category)
+
+                <li> <a href="javascript:void(0)" onclick="object.setUrl('/category/{{$category->id}}').setMethod('get').load();">{{$category->name}}</a>
+                    <ul>
                         @if(count($category->child))
                             @include('category.manageChild',['child' => $category->child])
                         @endif
-                    </li>
+                    </ul>
+                </li>
                 @endforeach
-             </ul>
+            </ul>
             </div>
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
            
                <form method="GET" action="{{route('addRootCategory')}}">
+               
                 @csrf
-                <button class="btn btn-md btn-success">UPDATE</button>
+                <button  type="submit" onclick="object.setUrl('<?php route('addRootCategory'); ?>')" class="btn btn-md btn-success">UPDATE</button>
                 <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                         <label>Category Name</label>
@@ -152,67 +65,5 @@
         </div>
     </div>
 </body>
-
-<script>
-        $.fn.extend({
-            treed: function(o) {
-                var openedClass = 'glyphicon-minus-sign';
-                var closedClass = 'glyphicon-plus-sign';
-                if (typeof o != 'undefined') {
-                    if (typeof o.openedClass != 'undefined') {
-                        openedClass = o.openedClass;
-                    }
-                    if (typeof o.closedClass != 'undefined') {
-                        closedClass = o.closedClass;
-                    }
-                };
-                //initialize each of the top levels
-                var tree = $(this);
-                tree.addClass("tree");
-                tree.find('li').has("ul").each(function() {
-                    var branch = $(this); //li with children ul
-                    branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
-                    branch.addClass('branch');
-                    branch.on('click', function(e) {
-                        if (this == e.target) {
-                            var icon = $(this).children('i:first');
-                            icon.toggleClass(openedClass + " " + closedClass);
-                            $(this).children().children().toggle();
-                        }
-                    })
-                    branch.children().children().toggle();
-                });
-                //fire event from the dynamically added icon
-                tree.find('.branch .indicator').each(function() {
-                    $(this).on('click', function() {
-                        $(this).closest('li').click();
-                    });
-                });
-                //fire event to open branch if the li contains an anchor instead of text
-                tree.find('.branch>a').each(function() {
-                    $(this).on('click', function(e) {
-                        $(this).closest('li').click();
-                        //e.preventDefault();
-                    });
-                });
-                //fire event to open branch if the li contains a button instead of text
-                tree.find('.branch>button').each(function() {
-                    $(this).on('click', function(e) {
-                        $(this).closest('li').click();
-                        //e.preventDefault();
-                    });
-                });
-            }
-        });
-        //Initialization of treeviews
-         $('#tree1').treed();
-        // $('#tree1').treed({
-        //     openedClass: 'glyphicon-folder-open',
-        //     closedClass: 'glyphicon-folder-close'
-        // });
-        // $('#tree1').treed({
-        //     openedClass: 'glyphicon-chevron-right',
-        //     closedClass: 'glyphicon-chevron-down'
-        // });
-    </script>
+<script src="{{asset('js/categorytree.js')}}"></script>
 </html>

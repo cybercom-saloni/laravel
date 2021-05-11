@@ -8,19 +8,65 @@ use App\Models\Category as CategoryModel;
 class Category extends Controller
 {
     protected $categories=[];
-    public function gridAction($id=NULL,Request  $request) 
+    public function testaction()
     {
+        $response = [
+                    'element' => [
+                        [
+                            'success' =>'hello',
+                        ]
+                    ]
+                ];
+                header('content-type:application/json');
+                echo json_encode($response);
+                die();   
+    }
+
+    // public function gridAction($id=NULL,Request  $request) 
+    // {
+    //     $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
+    //     $parent_id=0;
+    //     $allCategories = CategoryModel::pluck('status')->all();
+    //     // print_r($allCategories);
+    //     if($id)
+    //     {
+    //          $categoryData = Category::editAction($id,$request);
+    //          $parent_id = $categoryData[0]->id;
+    //        return view('category.grid',compact('parentcategories','allCategories','categoryData','parent_id'));
+    //     }
+    //     return \view('category.grid',\compact('parentcategories','allCategories','parent_id'));
+    // }
+
+     public function gridAction($id=NULL,Request  $request) 
+    {
+        // $response = [
+        //     'success' =>'hello',
+        // ];
+
+        //     header('content-type:application/json');
+        //     echo json_encode($response);
+          
+        $category_id=$id;
         $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
         $parent_id=0;
         $allCategories = CategoryModel::pluck('status')->all();
-        // print_r($allCategories);
-        if($id)
-        {
-             $categoryData = Category::editAction($id,$request);
-             $parent_id = $categoryData[0]->id;
-           return view('category.grid',compact('parentcategories','allCategories','categoryData','parent_id'));
-        }
-        return \view('category.grid',\compact('parentcategories','allCategories','parent_id'));
+    //     // print_r($allCategories);
+    //         //  $categoryData = Category::editAction($id,$request);
+            $categoryData = (new CategoryModel)->load($id)->getCategories();
+    //        $view = view('category.grid',\compact('parentcategories','allCategories','categoryData','parent_id'))->render();
+       $view = view('category.grid',['parentcategories'=>$parentcategories,'allCategories'=>$allCategories,'categoryData'=>$categoryData,'parent_id'=>$parent_id,'category_id'=>$category_id])->render();
+           $response = [
+            'element' => [
+                [
+                    'selector' =>'#content',
+                    'html' =>$view
+                ]
+            ]
+        ];
+
+        header('content-type:application/json');
+        echo json_encode($response);
+        die();
     }
 
     public function FormAction($id,$request)
@@ -29,14 +75,12 @@ class Category extends Controller
         $categoryModel = new CategoryModel;
         $categoryData = $categoryModel->load($categoryId)->getCategories();
        return $categoryData;
-    
     }
 
     public function deleteAction($id, Request $request)
     {
         (new CategoryModel)->deleteValue($id);
-
-        return redirect()->back();
+        return redirect('/addRootCategory');
     } 
 
     public function editAction($id,Request $request)
@@ -48,7 +92,7 @@ class Category extends Controller
     }
     public function editSaveAction($id,Request $request)
     {
-        $editData =$_GET['category'];
+        $editData =$request->get('category');
         $editData['id']=$id;
         // echo $editData['id'];
         // print_r($editData);
@@ -57,15 +101,39 @@ class Category extends Controller
         $categoryModel->saveValue($editData);
         return redirect()->back();
     }
-    
+    // public function addSubCategoryAction(Request $request)
+    // {
+        
+    //     $id=$request->id;
+    //     $parent_id=$request->id;
+    //     $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
+    //     $allCategories = CategoryModel::pluck('name','id')->all();
+    //     return view('category.addSubCategory',compact('parentcategories','allCategories','parent_id'));
+    // }
+
     public function addSubCategoryAction(Request $request)
     {
         
-        $id=$request->id;
+        $category_id=$request->id;
         $parent_id=$request->id;
         $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
         $allCategories = CategoryModel::pluck('name','id')->all();
-        return view('category.addSubCategory',compact('parentcategories','allCategories','parent_id'));
+        $view = view('category.addSubCategory',\compact('parentcategories','allCategories','parent_id','category_id'))->render();
+        $response = [
+            'element' => [
+                [
+                    'success' =>'hello',
+                    'name' => 'saloni',
+                    'selector' =>'#content',
+                    'html' =>$view
+                ]
+            ]
+        ];
+
+        header('content-type:application/json');
+        echo json_encode($response);
+        die();
+        
     }
 
     public function addnewSubCategory($id,Request $request)
@@ -84,7 +152,21 @@ class Category extends Controller
         $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
         $parent_id=0;
         $allCategories = CategoryModel::pluck('name','id')->all();
-        return view('category.addCategory',compact('parentcategories','allCategories','parent_id'));
+        $view = view('category.addCategory',compact('parentcategories','allCategories','parent_id'))->render();
+        $response = [
+            'element' => [
+                [
+                    'success' =>'hello',
+                    'name' => 'saloni',
+                    'selector' =>'#content',
+                    'html' =>$view
+                ]
+            ]
+        ];
+
+        header('content-type:application/json');
+        echo json_encode($response);
+        die();
     }
 
     public function rootCategoryEditSave()

@@ -11,12 +11,9 @@ class Media extends Controller
 {
     public function saveAction($id, Request $request)
     {
-        try {
-
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
-
 
             $imageName = time() . '.' . $request->image->extension();
 
@@ -26,16 +23,13 @@ class Media extends Controller
             ];
 
             $media = new ProductMedia;
-
             if ($media->saveData($mediaData)) {
                 $request->image->move(public_path("images/products/$id"), $imageName);
             }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-        return \redirect()->back();
+        return \redirect('/product/media/' . $id)->with('message', 'success');
     }
-
+    
+    
     public function updateAction(Request $request)
     {
         if (array_key_exists('update', $_POST)) {
@@ -152,4 +146,35 @@ class Media extends Controller
 
         return \redirect()->back();
     }
+
+
+    // public function deleteAction($id,Request $request)
+    // {
+    //     $imageData = $request->get('image');
+
+    //         $keys = [];
+
+    //         $imageData = $request->image;
+    //             unset($imageData['base']);
+    //             unset($imageData['small']);
+    //             unset($imageData['thumb']);
+
+    //         foreach ($imageData as $key => $value) {
+    //             if (array_key_exists('remove', $value)) {
+    //                 $keys[] = $key;
+    //             }
+    //         }
+    //         $Media = new ProductMedia;
+
+    //         $query = "SELECT media,product_id from media  where id IN (" . implode(',', $keys) . ")";
+    //         $imageNames = $Media->fetchAll($query)->getMedias();
+
+    //         foreach ($imageNames as $key => $value) {
+    //             unlink("images/products/{$value->product_id}/{$value->media}");
+    //         }
+
+    //         $Media->deleteData($keys);
+
+    //     return \redirect('/product/media/' . $id);
+    // }
 }

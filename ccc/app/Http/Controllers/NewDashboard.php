@@ -8,7 +8,7 @@ class NewDashboard extends Controller
 {
    public function dashboardAction()
    {
-       $view = \view('newdashboard.grid');
+       $view = \view('home');
        $response = 
        [
           'element' => [
@@ -20,6 +20,5 @@ class NewDashboard extends Controller
       ];
       header('content-type:application/json');
       echo json_encode($response);
-
    }
 }

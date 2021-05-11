@@ -29,7 +29,77 @@ class Media extends Controller
         return \redirect('/product/media/' . $id)->with('message', 'success');
     }
     
-    
+    // public function updateAction($id, Request $request)
+    // {
+    //     $imageData = $request->get('image');
+
+    //     if ($imageData) {
+
+    //         $small = "";
+    //         $thumb = "";
+    //         $base = "";
+
+    //         if (array_key_exists('small', $imageData)) {
+    //             $small = $imageData['small'];
+    //             unset($imageData['small']);
+    //         }
+
+    //         if (array_key_exists('thumb', $imageData)) {
+    //             $thumb = $imageData['thumb'];
+    //             unset($imageData['thumb']);
+    //         }
+    //         if (array_key_exists('base', $imageData)) {
+    //             $base = $imageData['base'];
+    //             unset($imageData['base']);
+    //         }
+
+    //         foreach ($imageData as $key => $value) {
+
+    //             if (array_key_exists('remove', $value)) {
+    //                 unset($value['remove']);
+    //             }
+
+    //             if ($key == $small) {
+    //                 $value['small'] = 1;
+    //             }
+
+    //             if ($key == $base) {
+    //                 $value['base'] = 1;
+    //             }
+
+    //             if ($key == $thumb) {
+    //                 $value['thumb'] = 1;
+    //             }
+
+
+
+    //             if (!array_key_exists('base', $value)) {
+    //                 $value['base'] = 0;
+    //             }
+    //             if (!array_key_exists('small', $value)) {
+    //                 $value['small'] = 0;
+    //             }
+    //             if (!array_key_exists('thumb', $value)) {
+    //                 $value['thumb'] = 0;
+    //             }
+
+    //             if (!array_key_exists('gallery', $value)) {
+    //                 $value['gallery'] = 0;
+    //             } else {
+    //                 $value['gallery'] = 1;
+    //             }
+    //             $values = array_values($value);
+    //             $fields = array_keys($value);
+    //             $final = array_combine($fields, $value);
+    //             $final['id'] = $key;
+    //             $mediaModel = new ProductMedia;
+    //             $mediaModel->updateData($final);
+    //         }
+    //     }
+
+    //     return redirect('media/update/' . $id);
+    // } 
+
     public function updateAction(Request $request)
     {
         if (array_key_exists('update', $_POST)) {
@@ -144,37 +214,37 @@ class Media extends Controller
             $Media->deleteData($keys);
         }
 
-        return \redirect()->back();
+        return redirect()->back();
     }
 
 
-    // public function deleteAction($id,Request $request)
-    // {
-    //     $imageData = $request->get('image');
+    public function deleteAction($id,Request $request)
+    {
+        $imageData = $request->get('image');
 
-    //         $keys = [];
+            $keys = [];
 
-    //         $imageData = $request->image;
-    //             unset($imageData['base']);
-    //             unset($imageData['small']);
-    //             unset($imageData['thumb']);
+            $imageData = $request->image;
+                unset($imageData['base']);
+                unset($imageData['small']);
+                unset($imageData['thumb']);
 
-    //         foreach ($imageData as $key => $value) {
-    //             if (array_key_exists('remove', $value)) {
-    //                 $keys[] = $key;
-    //             }
-    //         }
-    //         $Media = new ProductMedia;
+            foreach ($imageData as $key => $value) {
+                if (array_key_exists('remove', $value)) {
+                    $keys[] = $key;
+                }
+            }
+            $Media = new ProductMedia;
 
-    //         $query = "SELECT media,product_id from media  where id IN (" . implode(',', $keys) . ")";
-    //         $imageNames = $Media->fetchAll($query)->getMedias();
+            $query = "SELECT media,product_id from media  where id IN (" . implode(',', $keys) . ")";
+            $imageNames = $Media->fetchAll($query)->getMedias();
 
-    //         foreach ($imageNames as $key => $value) {
-    //             unlink("images/products/{$value->product_id}/{$value->media}");
-    //         }
+            foreach ($imageNames as $key => $value) {
+                unlink("images/products/{$value->product_id}/{$value->media}");
+            }
 
-    //         $Media->deleteData($keys);
+            $Media->deleteData($keys);
 
-    //     return \redirect('/product/media/' . $id);
-    // }
+        return \redirect('/product/media/' . $id);
+    }
 }

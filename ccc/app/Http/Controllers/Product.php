@@ -271,4 +271,16 @@ class Product extends Controller
         die();
         }
     }
+
+    public function productStatusAction($id, Request $request)
+    {
+        $product = ProductModel::find($id);
+        if ($product->status == 0) {
+            $product->status = 1;
+        } else {
+            $product->status = 0;
+        }
+        $product->save();
+        return redirect('/product');
+    }
 }

@@ -1,1 +1,1 @@
-<h2>WELCOME IN CCC</h2>
+<h1>WELCOME IN CCC</h2>

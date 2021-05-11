@@ -1,4 +1,3 @@
-alert('welcome');
 var Base = function() {
 
 };

@@ -29,9 +29,9 @@
             </ul>
             </div>
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
-               <form method="GET" action="{{route('addnewSubCategoryAction',$category_id)}}">
+               <form method="GET" action="/categoryAddnewSubCategory/{{$category_id}}" id="form">
                 @csrf
-                <button class="btn btn-md btn-success">UPDATE</button>
+                <button type="button"  onclick="object.setUrl('/categoryAddnewSubCategory/{{$category_id}}').setForm('form').load()" class="btn btn-md btn-success">UPDATE </button>
                 <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                         <label>Category Name</label>

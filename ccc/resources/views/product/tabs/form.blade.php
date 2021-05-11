@@ -68,7 +68,7 @@
                             <option value="1" {{ $data ? ($data[0]->status == 1 ? 'selected' : '') : '' }}>
                                 ENABLE
                             </option>
-                            <option value="2" {{ $data ? ($data[0]->status == 2 ? 'selected' : '') : '' }}>
+                            <option value="0" {{ $data ? ($data[0]->status == 0 ? 'selected' : '') : '' }}>
                                 DISABLE
                             </option>
                         </select>

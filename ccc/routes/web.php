@@ -58,10 +58,9 @@ Route::get('/productDelete/{id?}', [Product::class, 'deleteAction'])->whereNumbe
 Route::get('/product/form/{id?}', [Product::class, 'formAction'])->whereNumber('id')->name('productForm');
 Route::get('/product/media/{id?}', [Product::class, 'mediaAction'])->whereNumber('id');
 Route::post('/product/imageUpload/{id}', [Media::class, 'saveAction'])->whereNumber('id');
-Route::post('/product/imageUpdateUpload/{{$id}}',[Media::class, 'updateMediaAction'])->whereNumber('id');
-Route::post('/media/update/{id}', [Media::class, 'updateAction']);
+Route::post('/media/update/{id}', [Media::class,'updateAction']);
 Route::post('/media/delete/{id?}', [Media::class, 'deleteAction'])->whereNumber('id');
-
+Route::get('product/status/{id}', [Product::class, 'productStatusAction']);
 //category
 Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
 Route::get('/categoryDelete/{id}', [Category::class, 'deleteAction'])->name('categoryDelete');
@@ -73,5 +72,6 @@ Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->na
 // {
 //     return $id;
 // });
+Route::get('/tree',[Category::class,'treeAction'])->name('tree');
 Route::get('/categoryAddnewSubCategory/{id}',[Category::class,'addnewSubCategory'])->name('addnewSubCategoryAction');
 Route::get('/dashboard',[NewDashboard::class,'dashboardAction'])->name('dashboard');

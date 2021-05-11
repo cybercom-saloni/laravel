@@ -80,7 +80,7 @@ class Category extends Controller
     public function deleteAction($id, Request $request)
     {
         (new CategoryModel)->deleteValue($id);
-        return redirect('/addRootCategory');
+        return redirect('/tree');
     } 
 
     public function editAction($id,Request $request)
@@ -99,14 +99,14 @@ class Category extends Controller
         // die;
         $categoryModel = new CategoryModel;
         $categoryModel->saveValue($editData);
-        return redirect()->back();
+         return redirect('tree');
     }
     // public function addSubCategoryAction(Request $request)
     // {
         
     //     $id=$request->id;
     //     $parent_id=$request->id;
-    //     $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
+    //     $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
     //     $allCategories = CategoryModel::pluck('name','id')->all();
     //     return view('category.addSubCategory',compact('parentcategories','allCategories','parent_id'));
     // }
@@ -116,7 +116,7 @@ class Category extends Controller
         
         $category_id=$request->id;
         $parent_id=$request->id;
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
+        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
         $allCategories = CategoryModel::pluck('name','id')->all();
         $view = view('category.addSubCategory',\compact('parentcategories','allCategories','parent_id','category_id'))->render();
         $response = [
@@ -145,11 +145,11 @@ class Category extends Controller
         print_r($editData);
 
          $categoryModel->saveValue($editData);
-        return redirect()->back();
+         return redirect('tree');
     }
     public function addRootCategoryAction()
     {
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->where('status','=',1)->get();
+        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
         $parent_id=0;
         $allCategories = CategoryModel::pluck('name','id')->all();
         $view = view('category.addCategory',compact('parentcategories','allCategories','parent_id'))->render();
@@ -169,13 +169,36 @@ class Category extends Controller
         die();
     }
 
-    public function rootCategoryEditSave()
+    public function rootCategoryEditSave(Request $request)
     {
       $formData=$_GET['category'];
       $formData['parent_id']=0;
       $categoryModel = new CategoryModel;
       print_r($formData);
       $categoryModel->saveValue($formData);
-     return redirect()->back();
+     return redirect('tree');
+    }
+
+    public function treeAction(Request $request)
+    {
+        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
+        $parent_id=0;
+        $allCategories = CategoryModel::pluck('name','id')->all();
+    
+        $view = view('category.tree',compact('parentcategories','allCategories','parent_id'))->render();
+        $response = [
+            'element' => [
+                [
+                    'success' =>'hello',
+                    'name' => 'saloni',
+                    'selector' =>'#content',
+                    'html' =>$view
+                ]
+            ]
+        ];
+
+        header('content-type:application/json');
+        echo json_encode($response);
+        die();
     }
 }

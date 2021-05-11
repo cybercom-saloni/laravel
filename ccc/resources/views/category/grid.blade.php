@@ -29,9 +29,9 @@
             </ul>
             </div>
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
-               <form method="GET" action="{{route('categorEditSave',$categoryData[0]->id)}}">
+               <form method="GET" id="form" action="{{route('categorEditSave',$categoryData[0]->id)}}">
                 @csrf
-                <button type="submit" href="javascript:void(0)" onclick="object.setUrl('/categorEditSave/{{$category->id}}').setForm('form').load()" class="btn btn-md btn-success">UPDATE</button>
+                <button type="button"  onclick="object.setUrl('/categorEditSave/{{$category_id}}').setForm('form').load()" class="btn btn-md btn-success">UPDATE </button>
                 <a onclick="object.setUrl('/categoryDelete/{{$categoryData[0]->id}}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a>
                 <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">

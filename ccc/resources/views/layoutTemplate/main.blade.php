@@ -15,8 +15,8 @@
   <body>
   <div class="wrapper d-flex align-items-stretch">
     @include('layoutTemplate.left')
-    <div id="content" class="p-4 p-md-5">
-    <div id="content">
+    <div id="content" class="p-4 p-md-5 bg-light">
+    <div id="content bg-light">
       @yield('container')
     </div>
       </div>

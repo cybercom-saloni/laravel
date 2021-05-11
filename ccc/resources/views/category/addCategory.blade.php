@@ -9,9 +9,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/3fd66b9b9a.js" crossorigin="anonymous"></script>
 </head>
+<h2>Add Root Category</h2>
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4 bg-light">
+            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                <a href="javascript:void(0)" onclick="object.setUrl('/addRootCategory').setMethod('get').load();" class="btn btn-success">Add Root Category</a>
                <ul id="tree1">
                 @foreach($parentcategories as $category)
@@ -27,11 +28,9 @@
             </ul>
             </div>
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
-           
-               <form method="GET" action="{{route('addRootCategory')}}">
-               
+               <form method="GET" id="form" action="/rootCategoryEditSave">
                 @csrf
-                <button  type="submit" onclick="object.setUrl('<?php route('addRootCategory'); ?>')" class="btn btn-md btn-success">UPDATE</button>
+                <button  type="button" onclick="object.setUrl('/rootCategoryEditSave').setForm('form').load();" class="btn btn-md btn-success">Add</button>
                 <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                         <label>Category Name</label>

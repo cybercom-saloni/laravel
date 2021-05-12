@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category as CategoryModel;
 
 class Product extends Model
 {
@@ -69,5 +71,12 @@ class Product extends Model
     {
         $delete = DB::table($this->table)->where($this->primaryKey, '=', $id)->delete();
         return ($delete) ? true : false;
+    }
+
+    public function getCategoryOptions($id = null)
+    {
+        $category = new CategoryModel();
+
+        return $category->fetchAll()->getCategories();
     }
 }

@@ -206,6 +206,7 @@ class Product extends Controller
         // return $categoryName->getCategories()->id;
         return $categoryName;
     }
+    
 
     public function getCategories()
     {

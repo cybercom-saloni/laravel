@@ -74,6 +74,17 @@
                         </select>
                     </div>
                     </div>
+                    <div class="form-group row">
+                     <div class="col-lg-4">
+                        <label for="status"> Category</label>
+                        </div>
+                    <div class="col-lg-6">
+                    <select id="category" name="product[category_id]" class="form-control" required>
+                        <option disabled selected>Choose Category</option>
+                        <option value="2">CatName</option>
+                        </select>
+                    </div>
+                    </div>
 
                     <div class="form-group row">
                      <div class="col-lg-4">

@@ -22,20 +22,7 @@ class Category extends Controller
                 die();   
     }
 
-    // public function gridAction($id=NULL,Request  $request) 
-    // {
-    //     $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
-    //     $parent_id=0;
-    //     $allCategories = CategoryModel::pluck('status')->all();
-    //     // print_r($allCategories);
-    //     if($id)
-    //     {
-    //          $categoryData = Category::editAction($id,$request);
-    //          $parent_id = $categoryData[0]->id;
-    //        return view('category.grid',compact('parentcategories','allCategories','categoryData','parent_id'));
-    //     }
-    //     return \view('category.grid',\compact('parentcategories','allCategories','parent_id'));
-    // }
+    
 
      public function gridAction($id=NULL,Request  $request) 
     {
@@ -79,6 +66,17 @@ class Category extends Controller
 
     public function deleteAction($id, Request $request)
     {
+        $categoryData = CategoryModel::find($id);
+        $parentPath = CategoryModel::where('id', $categoryData->parent_id)->get();
+        $childPath = $categoryData->child;
+        if (count($childPath)) {
+            if (count($parentPath)) {
+                foreach ($childPath as $child) {
+                    $child->parent_id = $parentPath[0]->id;
+                    $child->save();
+                }
+            }
+        }
         (new CategoryModel)->deleteValue($id);
         return redirect('/tree');
     } 

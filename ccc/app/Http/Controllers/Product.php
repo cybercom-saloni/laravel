@@ -52,8 +52,8 @@ class Product extends Controller
     {
         $products = new ProductModel;
         $this->setProducts($products->fetchAll());
-        $view = \view('product.product',['products'=>$this->getProducts(),'controller'=>$this])->render();
-
+        $pagination = ProductModel::paginate(2);
+        $view = \view('product.product',['products'=>$this->getProducts(),'controller'=>$this,'pagination'=>$pagination])->render();
         $response = [
             'element' => [
                 [
@@ -69,47 +69,7 @@ class Product extends Controller
         echo json_encode($response);
         die();
     }
-
-    // public function formAction($id = null)
-    // {
-    //     if (!$id) {
-    //         $view = \view('product.tabs.form')->with('product', $this)->render();
-    //         $response = [
-    //             'element' => [
-    //                 [
-    //                     'selector' => '#content',
-    //                     'html' => $view
-    //                 ]
-    //             ]
-    //         ];
     
-    //         header('content-type:application/json');
-    //         echo json_encode($response);
-    //     } else {
-    //         $product = new ProductModel;
-
-    //         $product = $product->load($id);
-
-    //         if ($product->getProducts()) {
-    //             $this->setProducts($product->getProducts());
-    //         }
-
-    //         $view = \view('product.tabs.form')->with('product', $this)->render();
-
-    //     $response = [
-    //         'element' => [
-    //             [
-    //                 'selector' => '#content',
-    //                 'html' => $view
-    //             ]
-    //         ]
-    //     ];
-
-    //     header('content-type:application/json');
-    //     echo json_encode($response);
-    //   }
-    // }
-
     public function formAction($id = null)
     {
         if (!$id) {

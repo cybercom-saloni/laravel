@@ -81,13 +81,13 @@
                     <div class="col-lg-6">
                     <select id="category" name="product[category_id]" class="form-control" required>
                         <option disabled selected>Choose Category</option>
-                        <option value="2">New Category</option>
                         @foreach ($product->getCategoryOptions() as $options)
-                                            <option value="{{ $options->id }}"
-                                                {{ $data ? ($data[0]->category_id == $options->id ? 'selected' : '') : '' }}>
-                                                {{ $options->name }}</option>
-                                        @endforeach
-                        </select>
+                        <option value="{{ $options->id }}"
+                            {{ $data ? ($data[0]->category_id == $options->id ? 'selected' : '') : '' }}>
+                            {{ $options->name }}
+                        </option>
+                        @endforeach
+                    </select>
                     </div>
                     </div>
 

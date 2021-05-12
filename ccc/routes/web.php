@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Product;
 use App\Http\Controllers\Product\Media;
 use App\Http\Controllers\Category;
+use App\Http\Controllers\Customer;
 use App\Http\Controllers\NewDashboard;
 /*
 |--------------------------------------------------------------------------
@@ -75,3 +76,9 @@ Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->na
 Route::get('/tree',[Category::class,'treeAction'])->name('tree');
 Route::get('/categoryAddnewSubCategory/{id}',[Category::class,'addnewSubCategory'])->name('addnewSubCategoryAction');
 Route::get('/dashboard',[NewDashboard::class,'dashboardAction'])->name('dashboard');
+
+//customer
+Route::get('/customerGrid',[Customer::class,'gridAction'])->name('customerGrid');
+Route::get('/customer/form/{id?}',[Customer::class,'formAction'])->whereNumber('id');
+Route::get('customer/status/{id}', [Customer::class, 'customerStatusAction']);
+Route::get('/productDelete/{id?}', [Customer::class, 'deleteAction'])->whereNumber('id');

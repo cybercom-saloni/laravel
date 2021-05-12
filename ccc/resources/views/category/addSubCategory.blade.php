@@ -18,7 +18,7 @@
             <ul id="tree1">
                 @foreach($parentcategories as $category)
 
-                <li> <a href="javascript:void(0)" onclick="object.setUrl('/category/{{$category->id}}').setMethod('get').load();">{{$category->name}}</a>
+                <li> <a style="color: {{ $category->status == 0 ? 'red' : '' }}" href="javascript:void(0)" onclick="object.setUrl('/category/{{$category->id}}').setMethod('get').load();">{{$category->name}}</a>
                     <ul>
                         @if(count($category->child))
                             @include('category.manageChild',['child' => $category->child])
@@ -29,9 +29,9 @@
             </ul>
             </div>
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
-               <form method="GET" action="/categoryAddnewSubCategory/{{$category_id}}" id="form">
+               <form method="GET" action="/categoryAddnewSubCategory/{{$parent_id}}" id="form">
                 @csrf
-                <button type="button"  onclick="object.setUrl('/categoryAddnewSubCategory/{{$category_id}}').setForm('form').load()" class="btn btn-md btn-success">UPDATE </button>
+                <button type="button"  onclick="object.setUrl('/categoryAddnewSubCategory/{{$parent_id}}').setForm('form').load()" class="btn btn-md btn-success">UPDATE </button>
                 <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                         <label>Category Name</label>

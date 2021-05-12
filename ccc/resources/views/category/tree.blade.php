@@ -16,7 +16,7 @@
             <ul id="tree1">
                 @foreach($parentcategories as $category)
 
-                <li> <a href="javascript:void(0)" onclick="object.setUrl('/category/{{$category->id}}').setMethod('get').load();">{{$category->name}}</a>
+                <li> <a href="javascript:void(0)" style="color: {{ $category->status == 0 ? 'red' : '' }}" onclick="object.setUrl('/category/{{$category->id}}').setMethod('get').load();">{{$category->name}}</a>
                     <ul>
                         @if(count($category->child))
                             @include('category.manageChild',['child' => $category->child])

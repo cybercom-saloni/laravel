@@ -7,5 +7,8 @@
           <li>
             <a  onclick="object.setUrl('<?php echo route('addnewRootCategory'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Category</a>
           </li>
+          <li>
+            <a onclick="object.setUrl('<?php echo route('customerGrid'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-user"></span> Customer</a>
+          </li>
         </ul>
     	</nav>

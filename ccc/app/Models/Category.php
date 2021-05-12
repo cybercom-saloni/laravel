@@ -72,7 +72,6 @@ class Category extends Model
     public function deleteValue($id)
     {
         $categories = DB::table($this->table)->where($this->primaryKey,"=",$id)->delete();
-        $parentcategories = DB::table($this->table)->where('parent_id','=',$id)->delete();
         return ($categories) ? true : false;
     }
 }

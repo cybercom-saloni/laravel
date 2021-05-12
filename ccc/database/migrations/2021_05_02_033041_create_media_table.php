@@ -22,9 +22,9 @@ class CreateMediaTable extends Migration
             $table->tinyInteger('thumb')->default(0);
             $table->tinyInteger('base')->default(0);
             $table->tinyInteger('gallery')->default(0);
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->timestamps();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

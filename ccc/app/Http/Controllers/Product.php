@@ -13,6 +13,7 @@ class Product extends Controller
 {
     protected $products = [];
     protected $medias = [];
+    protected $categories=[];
     protected $productModel = null;
     protected $categoryOptions = [];
     public $id = null;
@@ -195,11 +196,20 @@ class Product extends Controller
 
     public function getCategoryName($id)
     {
-        $category = new CategoryModel();
+        $categoryModel = new CategoryModel();
+        $categoryName =  $categoryModel->load($id);
+        // print_r($categoryName);
+        foreach($categoryName->getCategories() as $value)
+        {
+            $categoryName = $value->name;
+        }
+        // return $categoryName->getCategories()->id;
+        return $categoryName;
+    }
 
-        $categoryRow = (array)$category->load($id)->getCategories();
-
-        return $categoryRow['name'];
+    public function getCategories()
+    {
+        return $this->categories;
     }
 
     public function getProducts()
@@ -209,6 +219,7 @@ class Product extends Controller
         }
         return $this->products;
     }
+
 
     public function setProducts($products)
     {

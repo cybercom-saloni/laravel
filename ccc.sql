@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2021 at 02:33 PM
+-- Generation Time: May 12, 2021 at 05:26 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -54,7 +54,9 @@ INSERT INTO `categories` (`id`, `name`, `parent_id`, `description`, `status`, `c
 (18, 'category3child', 2, 'new', '1', NULL, NULL),
 (19, 'category3child', 2, 'new', '1', NULL, NULL),
 (20, 'childcat3', 2, 'des', '1', NULL, NULL),
-(21, ' cat2child2', 2, ' desc', '1', NULL, NULL);
+(21, ' cat2child2', 2, ' desc', '1', NULL, NULL),
+(22, 'category1', 0, 's', '1', NULL, NULL),
+(23, 'ne', 10, 'v', '1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -105,6 +107,13 @@ CREATE TABLE `media` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `media`
+--
+
+INSERT INTO `media` (`id`, `media`, `label`, `small`, `thumb`, `base`, `gallery`, `product_id`, `created_at`, `updated_at`) VALUES
+(5, '1620787567.png', 'label', 1, 1, 0, 0, 4, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -203,6 +212,7 @@ CREATE TABLE `products` (
   `quantity` int(11) NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
+  `category_id` bigint(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -211,8 +221,9 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `sku`, `price`, `discount`, `quantity`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(2, 'panel', 'panel', 100, 1, 1, 'nice', 1, '2021-05-04 22:38:58', '2021-05-04 22:43:36');
+INSERT INTO `products` (`id`, `name`, `sku`, `price`, `discount`, `quantity`, `description`, `status`, `category_id`, `created_at`, `updated_at`) VALUES
+(2, 'panel', 'panel', 100, 1, 1, 'nice', 1, 2, '2021-05-04 22:38:58', '2021-05-04 22:43:36'),
+(4, 'new', 'new2', 100, 10, 10, '10', 0, 2, '2021-05-12 02:45:35', '2021-05-12 02:45:47');
 
 -- --------------------------------------------------------
 
@@ -312,7 +323,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `cccprac1`
@@ -330,7 +341,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -360,7 +371,7 @@ ALTER TABLE `pots`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`

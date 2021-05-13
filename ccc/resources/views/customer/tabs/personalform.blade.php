@@ -1,8 +1,14 @@
+<?php $customerData = isset($customer) ? $customer : null ?>
+<?php $passwordData =isset($password)?$password :null?>
+
 <div class="row">
         <div class="col-sm-9">
-        <h3 style="font-weight:bold; font-size:32px;" class="mt-2"> Customer Details</h3>
-      {{ $customerData = isset($customer) ? $customer : ' ' }}
-        <form action="" method="POST" id="form">
+        @if($customerData)
+        @include('customer.tabs')
+        @endif
+        <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer Details</h3>
+        <form action="/customer/save/{{$customerData ? $customerData->id : ' '}}" method="POST" id="form">
+        @csrf
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> First Name</label>
@@ -26,7 +32,7 @@
                         <label for="email"> email</label>
                     </div>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control"  id="email" required placeholder="email" name="customer[email]" value="{{$customerData ? $customerData->email : ' '}}" required>
+                        <input type="text" class="form-control"  id="email"  placeholder="email" name="customer[email]" value="{{$customerData ? $customerData->email : ' '}}" required>
                     </div>
                 </div>
 
@@ -35,7 +41,7 @@
                         <label for="password"> Password</label>
                         </div>
                     <div class="col-lg-6">
-                    <input type="text" class="form-control"  id="password" required placeholder="password" name="customer[password]" value="{{$customerData ? $customerData->password : ' '}}"required>
+                    <input type="password" class="form-control"  id="password"  placeholder="password" name="customer[password]" value="{{$passwordData}}"required>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -43,7 +49,7 @@
                         <label for="contactno"> Contact Number</label>
                         </div>
                     <div class="col-lg-6">
-                        <input type="number" id="contactno" class="form-control"placeholder="contactno" name="customer[contactno]"  max="10"  value="{{$customerData ? $customerData->contactno : ' '}}" required>
+                        <input type="number" id="contactno" class="form-control"placeholder="contactno" name="customer[contactno]"   value="{{$customerData ? $customerData->contactno : ' '}}" required>
                     </div>
                     </div>
                    
@@ -67,7 +73,7 @@
                      <div class="col-lg-4">
                      </div>
                     <div class="col-lg-6">
-                    <button type="button" onclick="object.setUrl('').setForm('form').load();" class="btn btn-success btn-md">Product</button>
+                    <button type="button" onclick="object.setUrl('/customer/save/{{$customerData ? $customerData->id : ' '}}').setForm('form').load();" class="btn btn-success btn-md">Customer</button>
                 </div>
                 <div>
             </form>

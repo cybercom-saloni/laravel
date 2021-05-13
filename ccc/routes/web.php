@@ -8,6 +8,7 @@ use App\Http\Controllers\Product;
 use App\Http\Controllers\Product\Media;
 use App\Http\Controllers\Category;
 use App\Http\Controllers\Customer;
+use App\Http\Controllers\Customer\Address;
 use App\Http\Controllers\NewDashboard;
 /*
 |--------------------------------------------------------------------------
@@ -81,4 +82,9 @@ Route::get('/dashboard',[NewDashboard::class,'dashboardAction'])->name('dashboar
 Route::get('/customerGrid',[Customer::class,'gridAction'])->name('customerGrid');
 Route::get('/customer/form/{id?}',[Customer::class,'formAction'])->whereNumber('id');
 Route::get('customer/status/{id}', [Customer::class, 'customerStatusAction']);
-Route::get('/productDelete/{id?}', [Customer::class, 'deleteAction'])->whereNumber('id');
+Route::get('/customerDelete/{id?}', [Customer::class, 'deleteAction'])->whereNumber('id');
+Route::post('/customer/save/{id?}',[Customer::class,'saveAction'])->whereNumber('id');
+
+//customerAddress
+Route::get('/customer/addressform/{id}',[Address::class,'formAction'])->whereNumber('id');
+Route::post('/customerAdress/save/{customerId}',[Address::class,'saveAction'])->whereNumber('id');

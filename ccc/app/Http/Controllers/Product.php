@@ -52,8 +52,11 @@ class Product extends Controller
     {
         $products = new ProductModel;
         $this->setProducts($products->fetchAll());
-        $pagination = ProductModel::paginate(2);
-        $view = \view('product.product',['products'=>$this->getProducts(),'controller'=>$this,'pagination'=>$pagination])->render();
+        if(request()->ajax())
+        {
+            $pagination = ProductModel::paginate(2);
+        }
+        $view = \view('product.product',['products'=>$pagination,'controller'=>$this])->render();
         $response = [
             'element' => [
                 [

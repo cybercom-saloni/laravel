@@ -2,52 +2,60 @@
 <hr>
     <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
 
-    <table class="table table-bordered bg-light  table-hover">
-        <thead class="bg-dark text-white">
-            <tr>
-                <th>ID</th>
-                <th>Sku</th>
-                <th>Name</th>
-                <th>CategoryName</th>
-                <th>Price</th>
-                <th>Discount</th>
-                <th>Quantity</th>
-                <th>status</th>
-                <th colspan="2">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-     
-            @if (!$products)
-            
+    <div id="table_data">
+        <table class="table table-bordered bg-light  table-hover">
+            <thead class="bg-dark text-white">
                 <tr>
-                    <td colspan="12" class="text-center">No Records Found</td>
+                    <th>ID</th>
+                    <th>Sku</th>
+                    <th>Name</th>
+                    <th>CategoryName</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Quantity</th>
+                    <th>status</th>
+                    <th colspan="2">Actions</th>
                 </tr>
-            @else
-                @foreach ($products->getProducts() as $value)
-                <?php //echo $value;echo "<pre>";print_r($products);die;?>
+            </thead>
+            <tbody>
+        
+                @if (!$products)
+                
                     <tr>
-                       <td>{{$value->id}}</td>
-                       <td>{{$value->sku}}</td>
-                       <td>{{$value->name}}</td>
-                       <td>{{$controller->getCategoryName($value->category_id)}}</td>
-                       <td>{{$value->price}}</td>
-                       <td>{{$value->discount}}</td>
-                       <td>{{$value->quantity}}</td>
-                       <td>
-                       @if($value->status == 1)
-                       <a onclick="object.setUrl('/product/status/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-warning">Enable</a>
-                        @else
-                        <a onclick="object.setUrl('/product/status/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-danger"> Disable</a>
-                       @endif
-                       </td>
-                       <td><a onclick="object.setUrl('/product/form/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
-                       <td> <a onclick="object.setUrl('/productDelete/{{ $value->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
+                        <td colspan="12" class="text-center">No Records Found</td>
                     </tr>
-                @endforeach
-            @endif
-        </tbody>
-    </table>
+                @else
+                    @foreach ($products as $value)
+                    <?php //echo $value;echo "<pre>";print_r($products);die;?>
+                        <tr>
+                        <td>{{$value->id}}</td>
+                        <td>{{$value->sku}}</td>
+                        <td>{{$value->name}}</td>
+                        <td>{{$controller->getCategoryName($value->category_id)}}</td>
+                        <td>{{$value->price}}</td>
+                        <td>{{$value->discount}}</td>
+                        <td>{{$value->quantity}}</td>
+                        <td>
+                        @if($value->status == 1)
+                        <a onclick="object.setUrl('/product/status/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-warning">Enable</a>
+                            @else
+                            <a onclick="object.setUrl('/product/status/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-danger"> Disable</a>
+                        @endif
+                        </td>
+                        <td><a onclick="object.setUrl('/product/form/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
+                        <td> <a onclick="object.setUrl('/productDelete/{{ $value->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+     </div>
+     <!-- storing page no -->
+    <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+
+    <!-- vakues changes when user clicks -->
+    <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id"/>
+    {{$products->links()}}
     <!-- <form method="post" id="record">
         <label>Record per Page</p>
         <select name="selectpage">
@@ -57,4 +65,25 @@
             <option value="100">100</option>
         </select>
     </form> -->
+    <script>
+        $(document).ready(function()
+        {
+            $(document).on('click','.pagination a',function(event)
+            {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                gridAction(page);
+            });
+        });
+        function fetch_data(page)
+        {
+            $.ajax({
+                url:"http://127.0.0.1:8000/product?page="+page,
+                success:function(data)
+                {
+                    $('#table_data').html(data);
+                }
+            });
+        }
+    </script>
 

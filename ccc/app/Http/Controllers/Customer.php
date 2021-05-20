@@ -17,7 +17,7 @@ class Customer extends Controller
         // $customer  = CustomerModel::all();
         $pagination = CustomerModel::paginate(2);
         $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
-        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->get();
+        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate(2);
         $view = view('customer.grid',['customers'=>$pagination,'customerAddress'=>$customerAddress])->render();
         $response = [
             'element' =>[
@@ -33,10 +33,12 @@ class Customer extends Controller
     }
     public function fetch_data(Request $request)
     {
+        echo 1111;
         if($request->ajax())
         {
-            $pagination =  CustomerModel::paginate(2);
-            return view('product.product',['customers'=>$pagination,'controller'=>$this])->render();
+            $customerAddress = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
+            ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate(2);
+            return  view('customer.grid',['customerAddress'=>$customerAddress])->render();
         }
     }
     
@@ -86,18 +88,21 @@ class Customer extends Controller
             $customerModel->status = 1;
         }
         $customerModel->save();
-        return redirect('customerGrid');
+        return redirect('customerGrid')->with('custstatus','status Changed!!!');
     }
 
     public  function deleteAction($id)
     {
         $customerModel = CustomerModel::find($id);
         $customerModel->delete();
-        return redirect('customerGrid');
+        return redirect('customerGrid')->with('custDelete','customer Deleted!!!');;
     }
 
     public  function saveAction($id=null,Request $request)
     {
+        $request->validate([
+            'customer[firstname]' => 'required | max:20',
+        ]);
         $customerData = $request->customer;
         $password =  Crypt::encryptString($customerData['password']);
         $customerData['password'] = $password;
@@ -107,6 +112,6 @@ class Customer extends Controller
         CustomerModel::updateOrInsert(['id'=>$id],$customerData);
         
         // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
-        return redirect('customerGrid');
+        return redirect('customerGrid')->with('custSave','customer Saved!!!');
     }
 }

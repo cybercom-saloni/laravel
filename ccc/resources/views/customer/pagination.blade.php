@@ -56,7 +56,9 @@
                 </tr>
                 @endforeach
             @endif
+           
         </tbody>
     </table>
+    {!! $customerAddress->links()!!}
 
     

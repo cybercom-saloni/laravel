@@ -6,16 +6,21 @@
         @if($customerData)
         @include('customer.tabs')
         @endif
+
+       
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer Details</h3>
-        <form action="/customer/save/{{$customerData ? $customerData->id : ' '}}" method="POST" id="form">
+        <form action="/customer/save/{{$customerData ? $customerData->id : ' '}}"  method="POST" id="form">
         @csrf
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> First Name</label>
+                       
                     </div>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" id="name" placeholder="firstname"  value="{{$customerData ? $customerData->firstname : ' '}}" name="customer[firstname]" required>
+                        <input type="text" class="form-control" id="name" placeholder="firstname" pattern="[A-Za-z].{2,}" title="Please write your name more than 2 letter"  value="{{$customerData ? $customerData->firstname : ' '}}" name="customer[firstname]" required>
+                        <div class="alert-danger">{{$errors->first('firstname')}}</div>
                     </div>
+                    <span id="username" class="text-danger font-weight-bold"> </span>
                 </div>
 
                 <div class=" form-group row">
@@ -79,4 +84,8 @@
             </form>
         </div>
     </div>
+
+   
+
+        
 

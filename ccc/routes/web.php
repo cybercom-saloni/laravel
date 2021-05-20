@@ -94,7 +94,7 @@ Route::post('/customer/save/{id?}',[Customer::class,'saveAction'])->whereNumber(
 //customerAddress
 Route::get('/customer/addressform/{id}',[Address::class,'formAction'])->whereNumber('id');
 Route::post('/customerAdress/save/{customerId}',[Address::class,'saveAction'])->whereNumber('id');
-
+Route::get('/customerGrid/fetch_data',[Customer::class,'fetch_data']);
 //cart
 Route::get('/cart/{id}',[Cart::class,'addToCartAction'])->whereNumber('id');
 Route::post('/cart/customer',[Cart::class,'saveCustomerAction']);

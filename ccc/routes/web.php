@@ -10,6 +10,8 @@ use App\Http\Controllers\Category;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Customer\Address;
 use App\Http\Controllers\NewDashboard;
+use App\Http\Controllers\Cart;
+use App\Http\Controllers\Cart\Address as CartAddress;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,6 +55,7 @@ Route::get('/admin/category/selectPath',[CategoryController::class,'selectPath']
 Route::post('/admin/product/media/imageUpload/{id}', [MediaController::class, 'saveAction'])->whereNumber('id');
 Route::post('/admin/product/media/mediaUpdate', [MediaController::class, 'updateAction']);
 
+
 //laravel start
 Route::get('/product', [Product::class, 'gridAction'])->name('productGrid');
 Route::post('/productSave/{id?}', [Product::class, 'saveAction'])->whereNumber('id')->name('productSave');
@@ -63,6 +66,9 @@ Route::post('/product/imageUpload/{id}', [Media::class, 'saveAction'])->whereNum
 Route::post('/media/update/{id}', [Media::class,'updateAction']);
 Route::post('/media/delete/{id?}', [Media::class, 'deleteAction'])->whereNumber('id');
 Route::get('product/status/{id}', [Product::class, 'productStatusAction']);
+Route::get('/product/fetch_data',[Product::class,'fetch_data']);
+// Route::get('product/',[Product::class,'fetch_data']);
+
 //category
 Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
 Route::get('/categoryDelete/{id}', [Category::class, 'deleteAction'])->name('categoryDelete');
@@ -88,3 +94,8 @@ Route::post('/customer/save/{id?}',[Customer::class,'saveAction'])->whereNumber(
 //customerAddress
 Route::get('/customer/addressform/{id}',[Address::class,'formAction'])->whereNumber('id');
 Route::post('/customerAdress/save/{customerId}',[Address::class,'saveAction'])->whereNumber('id');
+
+//cart
+Route::get('/cart/{id}',[Cart::class,'addToCartAction'])->whereNumber('id');
+Route::post('/cart/customer',[Cart::class,'saveCustomerAction']);
+Route::post('/cart/customer/addressSave/{id?}',[CartAddress::class,'AddressAction'])->whereNumber('id');

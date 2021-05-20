@@ -78,4 +78,9 @@ class Address extends Controller
         $shippingAddress->save();
         return redirect('customerGrid');
     }
+
+    public function AddressAction()
+    {
+        echo 'in Address';
+    }
 }

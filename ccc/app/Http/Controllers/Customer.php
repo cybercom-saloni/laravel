@@ -6,16 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Customer as CustomerModel;
 use App\Models\Customer\Address as AddressModel;
 use Crypt;
+use Facade\FlareClient\View;
+use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Controller
 {
     protected $customer=[];
     public function gridAction() 
     {
-        $customer  = CustomerModel::all();
+        // $customer  = CustomerModel::all();
+        $pagination = CustomerModel::paginate(2);
         $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
-        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.addressId','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->get();
-        $view = view('customer.grid',['customers'=>$customer,'customerAddress'=>$customerAddress])->render();
+        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->get();
+        $view = view('customer.grid',['customers'=>$pagination,'customerAddress'=>$customerAddress])->render();
         $response = [
             'element' =>[
                 [
@@ -28,6 +31,15 @@ class Customer extends Controller
         echo json_encode($response);
         die();
     }
+    public function fetch_data(Request $request)
+    {
+        if($request->ajax())
+        {
+            $pagination =  CustomerModel::paginate(2);
+            return view('product.product',['customers'=>$pagination,'controller'=>$this])->render();
+        }
+    }
+    
 
     public function formAction($id=null)
     {

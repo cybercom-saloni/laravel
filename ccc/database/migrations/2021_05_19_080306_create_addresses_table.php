@@ -14,7 +14,7 @@ class CreateAddressesTable extends Migration
     public function up()
     {
         Schema::create('addresses', function (Blueprint $table) {
-            $table->increments('addressId');
+            $table->id();
             $table->unsignedBigInteger('customerId');
             $table->string('address');
             $table->string('area');
@@ -36,5 +36,6 @@ class CreateAddressesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('addresses');
+        
     }
 }

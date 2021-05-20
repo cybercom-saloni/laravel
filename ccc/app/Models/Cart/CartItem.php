@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Customer;
+namespace App\Models\Cart;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Address extends Model
+class CartItem extends Model
 {
     use HasFactory;
-    protected $table = 'addresses';
+   
 }

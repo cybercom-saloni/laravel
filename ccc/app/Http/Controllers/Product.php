@@ -52,10 +52,7 @@ class Product extends Controller
     {
         $products = new ProductModel;
         $this->setProducts($products->fetchAll());
-        if(request()->ajax())
-        {
-            $pagination = ProductModel::paginate(2);
-        }
+        $pagination = ProductModel::paginate(2);
         $view = \view('product.product',['products'=>$pagination,'controller'=>$this])->render();
         $response = [
             'element' => [
@@ -73,6 +70,14 @@ class Product extends Controller
         die();
     }
     
+    public function fetch_data(Request $request)
+    {
+        if($request->ajax())
+        {
+            $pagination =  ProductModel::paginate(2);
+            return view('product.product',['products'=>$pagination,'controller'=>$this])->render();
+        }
+    }
     public function formAction($id = null)
     {
         if (!$id) {
@@ -119,6 +124,7 @@ class Product extends Controller
     {
         $product = $this->getProductModel();
         $formData = $request->get('product');
+        print_r($formData);
         date_default_timezone_set('Asia/Kolkata');
         if ($id) {
             $formData['id'] = $id;

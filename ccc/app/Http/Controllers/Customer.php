@@ -101,7 +101,7 @@ class Customer extends Controller
     public  function saveAction($id=null,Request $request)
     {
         $request->validate([
-            'customer[firstname]' => 'required | max:20',
+            'customer[firstname]' => 'required',
         ]);
         $customerData = $request->customer;
         $password =  Crypt::encryptString($customerData['password']);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart as CartModel;
 use App\Models\Cart\CartAddress as CartAddress;
+use App\Models\Cart\CartItem as CartItem;
 use App\Models\Customer\Address as AddressModel;
 use Illuminate\Support\Facades\Session;
 use App\Models\Payment;
@@ -18,6 +19,27 @@ class Address extends Controller
         $sessioncartId = SESSION::get('cartId');
         $cartBillingAddressData = $request->get('billing');
         $cartShippingAddressData = $request->get('shipping');
+
+
+       if($request->quantityCart)
+       {
+            print_r($request->quantityCart);
+            foreach($request->quantityCart as $cartItem =>$values)
+            {
+              $cartItem = CartItem::find($cartItem);
+              $cartItemId = $cartItem->id;
+              $cartItem->quantity = $values;
+            $cartItem->save();
+            }   
+            // $cartItem = CartItem::find($cartItemId);
+
+            //     foreach ($values as $key => $value) {
+            //         $cartItem->$key = $value;
+            //     }
+
+            //     $cartItem->save();
+            // }
+       }
         // print_r($cartShippingAddressData);
         $cartBillingAddress = CartAddress::where([['cartId',$sessioncartId],['addressType','billing']])->first();
         if(!$cartBillingAddress)

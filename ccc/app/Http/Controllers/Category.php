@@ -69,6 +69,8 @@ class Category extends Controller
         $categoryData = CategoryModel::find($id);
         $parentPath = CategoryModel::where('id', $categoryData->parent_id)->get();
         $childPath = $categoryData->child;
+        echo count($childPath);
+        echo count($parentPath);
         if (count($childPath)) {
             if (count($parentPath)) {
                 foreach ($childPath as $child) {
@@ -80,6 +82,33 @@ class Category extends Controller
         (new CategoryModel)->deleteValue($id);
         return redirect('/tree');
     } 
+
+
+    // public function deleteAction($id, Request $request)
+    // {
+       
+    //     $categoryData = CategoryModel::find($id);
+    //     $parentPath = CategoryModel::where('id', $categoryData->parent_id)->get();
+   
+    //     $childPath = $categoryData->child;
+    //     echo count($childPath);
+    //     echo count($parentPath);
+    //     if (count($childPath)) {
+    //         if (count($parentPath)) {
+    //             echo 222;
+    //             foreach ($childPath as $child) {
+    //                 $child->parent_id = $parentPath[0]->id;
+    //                 $child->save();
+    //             }
+    //         }
+    //         // if(count($parentPath)==0)
+    //         // {
+    //         //     echo 1111;
+    //         // }
+    //     }
+    //     // (new CategoryModel)->deleteValue($id);
+    //     // return redirect('/tree');
+    // } 
 
     public function editAction($id,Request $request)
     {

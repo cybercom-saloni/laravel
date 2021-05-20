@@ -5,15 +5,17 @@
         @endif
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Media </h3>
-        <form action="/media/update/{{ request()->id }}" id="formupdate" method="POST">
-                 <!-- <button type="button" name="update"   value="update" onclick="object.setForm('formupdate').setUrl('/media/update/{{ request()->id }}').setMethod('post').load();"  class="btn btn-md btn-success"> <i
+        <form action="" id="formupdate" method="POST">
+                 <button type="button" name="update"  id="updatebtn"  value="update"   class="btn btn-md btn-success"> <i
                         class="fa fa-pencil"></i></button> 
-                 <button type="button" name="delete" onclick="object.setForm('formupdate').setUrl('/media/delete/{{ request()->id }}').setMethod('post').load();" value="delete" class="btn btn-md btn-secondary"> <i
-                        class="fa fa-trash"  value="delete"></i></button>  -->
-                        <button type="submit" name="update"   value="update"  name="update" value="update" class="btn btn-md btn-success"> <i
+                <button type="button" name="delete" id="deletebtn" value="delete" class="btn btn-md btn-secondary"> <i 
+                        class="fa fa-trash"  value="delete"></i></button>    
+                 <!-- <button type="button" name="delete" onclick="object.setForm('formupdate').setUrl('/media/delete/{{ request()->id }}').setMethod('post').load();" value="delete" class="btn btn-md btn-secondary"> <i -->
+                        <!-- class="fa fa-trash"  value="delete"></i></button>  --> 
+                        <!-- <button type="submit" name="update"   value="update"  name="update" value="update" class="btn btn-md btn-success"> <i
                         class="fa fa-pencil"></i></button>
                 <button type="submit" name="delete"  value="delete" class="btn btn-md btn-secondary"> <i
-                        class="fa fa-trash"  value="delete"></i></button> 
+                        class="fa fa-trash"  value="delete"></i></button>  -->
                 @csrf
                 <div class="row">
                     <table class="table table-bordered bg-light  table-hover">
@@ -111,3 +113,54 @@
 
             </form>
         </div>
+
+        <script>
+                        $(function () {
+                         
+                            $('#updatebtn').on('click', function (e) {
+                                e.preventDefault();
+                                $.ajax({
+                                    type: 'post',
+                                    url: '/media/update/{{ request()->id }}',
+                                    data: $('#formupdate').serializeArray(),
+                                    success: function (response) {
+                                        if (typeof response.element == 'undefined') {
+                                            return false;
+                                        }
+                                        if(typeof response.element == 'object') {
+                                            $(response.element).each(function(i, element) {
+                                                $('#content').html(element.html);
+                                            })
+                                        }
+                                        else{
+                                            $(response.element.selector).html(response.element.html);
+                                        }
+                                    }
+                                });
+                            });
+                        });
+
+                        $(function () {
+                            $('#deletebtn').on('click', function (e) {
+                                e.preventDefault();
+                                $.ajax({
+                                    type: 'post',
+                                    url: '/media/delete/{{ request()->id }}',
+                                    data: $('#formupdate').serializeArray(),
+                                    success: function (response) {
+                                        if (typeof response.element == 'undefined') {
+                                            return false;
+                                        }
+                                        if(typeof response.element == 'object') {
+                                            $(response.element).each(function(i, element) {
+                                                $('#content').html(element.html);
+                                            })
+                                        }
+                                        else{
+                                            $(response.element.selector).html(response.element.html);
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                        </script>

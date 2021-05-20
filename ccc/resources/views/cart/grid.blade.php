@@ -192,17 +192,21 @@
             <th>Product Name</th>
             <th>Product Price</th>
             <th>Product Quantity</th>
+            <th>Row Total </th>
             <th>Product Discount</th>
             <th>Product Total Price</th>
             <th>Action</th>
        </thead>
        <tbody>
-            <tr>
-                <td>{{$controller->getProductName($productId)}}</td>
-                <td>{{$controller->getCartItem($cartId)}}</td>
-                <td>{{$productId}}</td>
-               
-            </tr>
+                @foreach($cartItems as $cartItem)
+                <tr>
+                    <td>{{$controller->getProductName($cartItem->productId)}}</td>
+                    <td>{{$cartItem->price}}</td>
+                    <td><input type="text" class="form-control" name="quantityCart[{{ $cartItem->id }}]" value="{{ $cartItem->quantity }}"></td>
+                    <td>@php  echo $total = $cartItem->price*$cartItem->quantity @endphp</td>
+                    <td>{{$cartItem->discount}}</td>
+                </tr>
+                @endforeach
        </tbody>
     </table>
 </div>

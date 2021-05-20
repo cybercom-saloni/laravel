@@ -55,7 +55,8 @@ class Cart extends Controller
         {
           $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
           $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-          $view = view('cart.grid',['productId'=> $productId,'customers'=>$customers,'customerId'=>$customerId,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
+          $cartItems = CartItem::where('cartId',$cartId)->get();
+          $view = view('cart.grid',['productId'=> $productId,'customers'=>$customers,'cartItems'=>$cartItems,'customerId'=>$customerId,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
         }else
         {
             $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();

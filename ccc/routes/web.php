@@ -63,7 +63,7 @@ Route::get('/productDelete/{id?}', [Product::class, 'deleteAction'])->whereNumbe
 Route::get('/product/form/{id?}', [Product::class, 'formAction'])->whereNumber('id')->name('productForm');
 Route::get('/product/media/{id?}', [Product::class, 'mediaAction'])->whereNumber('id');
 Route::post('/product/imageUpload/{id}', [Media::class, 'saveAction'])->whereNumber('id');
-Route::post('/media/update/{id}', [Media::class,'updateAction']);
+Route::post('/media/update/{id}', [Media::class,'productUpdateAction']);
 Route::post('/media/delete/{id?}', [Media::class, 'deleteAction'])->whereNumber('id');
 Route::get('product/status/{id}', [Product::class, 'productStatusAction']);
 Route::get('/product/fetch_data',[Product::class,'fetch_data']);

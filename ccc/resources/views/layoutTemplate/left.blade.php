@@ -10,5 +10,8 @@
           <li>
             <a onclick="object.setUrl('<?php echo route('customerGrid'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-user"></span> Customer</a>
           </li>
+          <li>
+            <a onclick="object.setUrl('/cart/1').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-user"></span> Cart</a>
+          </li>
         </ul>
     	</nav>

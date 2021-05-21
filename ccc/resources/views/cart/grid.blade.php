@@ -1,4 +1,44 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">View Cart</h3>
+<div id="productId">
+    <form action="" method="POST" id="productList">
+    <div id="table_data">
+    <h5 style="font-weight:bold; font-size:32px;" class="mt-2">Add New Product</h5>
+    <hr>
+    <table class="table table-bordered bg-light  table-hover">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th>Sku</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+            
+                    @if (!$products)
+                    
+                        <tr>
+                            <td colspan="12" class="text-center">No Records Found</td>
+                        </tr>
+                    @else
+                        @foreach ($products as $value)
+                            <tr>
+                            <td>{{$value->sku}}</td>
+                            <td>{{$value->name}}</td>
+                            <td>{{$value->price}}</td>
+                            <td>{{$value->discount}}</td>
+                            <td> <a onclick="object.setUrl('/cart/{{ $value->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Add to Cart</a></td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+
+                {!! $products->links()!!}
+        </div>
+        </form>
+    </div>
 <hr>
 <form action="/cart/customer" method="post" id="customerId">
     @csrf
@@ -15,6 +55,25 @@
         </select>
     </div>
 </form> 
+
+<!-- <form action="/cart/customer" method="post" id="customerIdform">
+    @csrf
+    <div class="form-group">
+        <label for="customer">Select Customer</label>
+        <select name="customer" id="customer" class="form-control col-lg-5">
+          
+                @foreach ($customers as $customer)
+                    <option value="{{ $customer->id }}" 
+                        {{ Session::has('customerId') ? (Session::get('customerId') == $customer->id ? 'selected' : '') : '' }}>
+                        {{ $customer->firstname . ' ' . $customer->lastname }}
+                    </option>
+                @endforeach 
+        </select>
+    <button type="button" id="customerIdbtn" class="btn btn-danger btn-md">GO</button> 
+    </div>
+</form> -->
+
+
 <form method="POST" action="/cart/customer/addressSave" id="form">
 @csrf
 
@@ -166,8 +225,9 @@
              <table class="table-responsive">
                 @foreach($controller->getPayment() as $key => $value)
                 <tr>
-                    <td><h6><input type="radio" name="payment" value="{{$value->id}}">{{$value->name}}</h6></td>
+                    <td><h6><input type="radio" name="payment" value="{{$value->id}}" <?php if($cart->paymentId == $value->id) echo 'checked';?>>{{$value->name}}</h6></td>
                 </tr>
+               
                 @endforeach
             </table>
          </div>
@@ -176,7 +236,7 @@
              <table class="table-responsive">
              @foreach($controller->getShipping() as $key => $value)
                 <tr>
-                   <td><h6><input type="radio" name="shippingMethod" value="{{$value->id}}">{{$value->name}}</h6></td>
+                   <td><h6><input type="radio" name="shippingMethod" value="{{$value->id}}" <?php if($cart->shippingId == $value->id) echo 'checked';?>>{{$value->name}}</h6></td>
                    <td><h6>{{$value->amount}}</h6></td>
                 </tr>
              @endforeach 
@@ -186,6 +246,11 @@
     
 </div>
 <button type="button"  id="addressUpdate" class="btn btn-md btn-success">UPDATE</button>
+</form>
+
+<form method="POST" id="cartItemUpdate" action="/cartItem/update">
+<button type="button"  id="cartItemUpdatebtn" class="btn btn-md btn-success">UPDATE CART</button>
+<button id="cartItemAdd" class="btn btn-secondary">ADD NEW PRODUCT</button>
 <div class="col-12">
     <table class="table table-bordered bg-light  table-hover">
         <thead class="bg-dark text-white">
@@ -201,18 +266,59 @@
                 @foreach($cartItems as $cartItem)
                 <tr>
                     <td>{{$controller->getProductName($cartItem->productId)}}</td>
-                    <td>{{$cartItem->price}}</td>
-                    <td><input type="text" class="form-control" name="quantityCart[{{ $cartItem->id }}]" value="{{ $cartItem->quantity }}"></td>
-                    <td>@php  echo $total = $cartItem->price*$cartItem->quantity @endphp</td>
-                    <td>{{$cartItem->discount}}</td>
+                    <td>Rs.{{$cartItem->price}}</td>
+                    <td><input type="text" class="form-control" name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"></td>
+                    <td>Rs.@php  echo $rowtotal = $cartItem->quantity*$cartItem->price @endphp .00</td>
+                    <td>Rs.{{$discounttotal = $cartItem->discount * $cartItem->quantity}}.00</td>
+                    <td>Rs.{{$rowtotal - $discounttotal}}.00</td>       
+                    <td><a href="javascript:void(0)" onclick="object.setUrl('/cartItem/delete/{{$cartItem->id}}').setMethod('get').load();" class="btn btn-secondary">DELETE</a></td>               
                 </tr>
                 @endforeach
+                <tr>
+                <td colspan="5">Shipping Charge</td>
+                <td>Rs.{{$cart->shippingAmount}}</td>
+                <td></td>
+                </tr>
+                <tr>
+                <td colspan="5">Total</td>
+                <td>Rs.{{$cart->total}}</td>
+                <td></td>
+                </tr>
        </tbody>
     </table>
 </div>
 </form>
 </div> 
  <script>
+   $(function(){
+        $('#cartItemUpdatebtn').on('click',function(e){
+           
+            e.preventDefault();
+            $.ajax({
+                type: 'post',
+                url: '/cartItem/update',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                        .attr('content')
+                },
+                data: $('#cartItemUpdate').serializeArray(),
+                success: function(response) {
+                    if (typeof response.element == 'undefined') {
+                        return false;
+                    }
+                    if (typeof response.element == 'object') {
+                        $(response.element).each(
+                            function(i, element) {
+                                $('#content').html(element.html);
+                            })
+                    } else {
+                        $(response.element.selector).html(response
+                            .element.html);
+                    }
+                }
+            });
+        });
+    });
     $(function() {
         $('#customer').on('change', function(e) {
             e.preventDefault();
@@ -241,10 +347,10 @@
             });
         });
     });
+    
 
     $(function(){
         $('#addressUpdate').on('click',function(e){
-            alert('address');
             e.preventDefault();
             $.ajax({
                 type : 'POST',
@@ -276,6 +382,34 @@
             });
         });
     });  
+
+    $(function() {
+        $('#customerIdbtn').on('click', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'post',
+                url: '/cart/customer',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                        .attr('content')
+                },
+                data: $('#customerIdform').serializeArray(),
+                success: function(response) {
+                    if (typeof response.element == 'undefined') {
+                        return false;
+                    }
+                    if (typeof response.element == 'object') {
+                        $(response.element).each(
+                            function(i, element) {
+                                $('#content').html(element.html);
+                            })
+                    } else {
+                        $(response.element.selector).html(response.element.html);
+                    }
+                }
+            });
+        });
+    });
 
     function sameAsBillingFunction()
     {
@@ -360,3 +494,104 @@
     //     }
     // }
 </script>
+<script>
+        $(document).ready(function()
+        {  
+            $(document).on('click','.pagination a',function(event)
+            {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                $.ajax({
+                    url:"/cartproduct/fetch_cartdata?page="+page,
+                    success:function(data)
+                    {
+                        $('#table_data').html(data);
+                        console.log(data);
+                    }
+                });
+
+            });
+        
+            function fetch_cartdata(page)
+            {
+                $.ajax({
+                    url:"/cartproduct/fetch_cartdata?page="+page,
+                    success:function(data)
+                    {
+                        $('#table_data').html(data);
+                        console.log(data);
+                    }
+                });
+            }
+        });
+
+        // $(document).ready(function(){
+        //     // $("#productId").hide();
+        //     $('.cartbtn').click(function(){
+        //         $.ajax({
+        //             url:"/cart/"+1,
+        //             success:function(response)
+        //             {
+        //                 if (typeof response.element == 'object') {
+        //                     $(response.element).each(
+        //                     function(i, element) {
+        //                         $('#productId').html(element.html);
+        //                         $("#productId").show();
+        //                     })
+        //                 }
+        //         }
+        //         });
+        //      });
+        //  });
+
+        //  $(document).ready(function(){
+        //     $("#productId").hide();
+        //     $('.cartbtn').click(function(){
+        //         $.ajax({
+        //         type:'GET',
+        //         url:'/cart/1',
+        //         success:function(data) {
+        //             $("#productId").show();
+        //             $("#productId").html(data.productId);
+        //         }
+        //         });
+        //      });
+        //  });  
+        $(document).ready(function(){
+        $('#productId').hide();
+        $('#cartItemAdd').on('click',function(e){
+            
+            e.preventDefault();
+            $('#productId').show();
+            $.ajax({
+                type : 'POST',
+                url : '/cart/1',
+                headers : {
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('productId')
+                },
+                data : $('#cartItemUpdate').serializeArray(),
+                success : function(response)
+                {
+                    if(typeof response.element == 'undefined')
+                    {
+                        return false;
+                    }
+                    if(typeof response.element == 'object')
+                    {
+                        $(response.element).each(
+                            function(i,element)
+                            {
+                                $('#productId').html(element.html);
+                            }
+                        )
+                    }
+                    else
+                    {
+                        $(response.element.selector).html(response.element.html);
+                    }
+                }
+            });
+        });
+    });  
+
+    </script>

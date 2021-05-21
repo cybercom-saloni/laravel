@@ -11,6 +11,7 @@ use App\Http\Controllers\Customer;
 use App\Http\Controllers\Customer\Address;
 use App\Http\Controllers\NewDashboard;
 use App\Http\Controllers\Cart;
+use App\Http\Controllers\Cart\CartItem;
 use App\Http\Controllers\Cart\Address as CartAddress;
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +97,9 @@ Route::get('/customer/addressform/{id}',[Address::class,'formAction'])->whereNum
 Route::post('/customerAdress/save/{customerId}',[Address::class,'saveAction'])->whereNumber('id');
 Route::get('/customerGrid/fetch_data',[Customer::class,'fetch_data']);
 //cart
-Route::get('/cart/{id}',[Cart::class,'addToCartAction'])->whereNumber('id');
+Route::get('/cart/{id?}',[Cart::class,'addToCartAction'])->whereNumber('id')->name('cart');
 Route::post('/cart/customer',[Cart::class,'saveCustomerAction']);
 Route::post('/cart/customer/addressSave/{id?}',[CartAddress::class,'AddressAction'])->whereNumber('id');
+Route::post('/cartItem/update',[CartItem::class,'ItemAction']);
+Route::get('/cartItem/delete/{id}',[CartItem::class,'ItemDeleteAction']);
+Route::get('/cartproduct/fetch_cartdata',[Cart::class,'fetch_cartdata']);

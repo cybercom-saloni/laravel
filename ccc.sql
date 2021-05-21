@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2021 at 07:47 AM
+-- Generation Time: May 21, 2021 at 03:36 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -48,9 +48,6 @@ CREATE TABLE `addresses` (
 
 INSERT INTO `addresses` (`id`, `customerId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `created_at`, `updated_at`) VALUES
 (1, 1, 'rt', 'r', 'r', 'r', 'r', 'r', 'billing', NULL, '2021-05-19 10:44:43'),
-(2, 2, 'ratiban', 'ab', 'ab', 'ab', 'ab', 'ab', 'billing', '2021-05-19 03:44:13', '2021-05-19 07:38:16'),
-(3, 2, 'rrrrrrrrr', 'ab', 'ab', 'ab', 'ab', 'ab', 'shipping', '2021-05-19 03:44:13', '2021-05-19 07:38:16'),
-(4, 3, 'rati', 'ab', 'ab', 'ab', 'ab', 'ab', 'billing', '2021-05-19 07:27:54', '2021-05-19 07:27:54'),
 (5, 1, 'rrrrrrrrr', 'ab', 'ab', 'ab', 'ab', 'ab', 'shipping', '2021-05-19 07:31:59', '2021-05-19 07:31:59');
 
 -- --------------------------------------------------------
@@ -76,10 +73,9 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `customerId`, `total`, `discount`, `paymentId`, `shippingId`, `shippingAmount`, `created_at`, `updated_at`) VALUES
-(4, 1, '0.00', '0.00', 2, 2, '100.00', '2021-05-19 02:51:06', '2021-05-19 23:14:00'),
-(5, 2, '0.00', '0.00', 1, 1, '0.00', '2021-05-19 02:51:20', '2021-05-19 02:51:20'),
-(8, 3, '0.00', '0.00', 1, 1, '0.00', '2021-05-19 03:06:56', '2021-05-19 03:06:56'),
-(9, 6, '0.00', '0.00', 1, 1, '0.00', '2021-05-19 05:54:14', '2021-05-19 05:54:14');
+(4, 1, '598.00', '34.00', 2, 1, '400.00', '2021-05-19 02:51:06', '2021-05-21 06:41:27'),
+(10, 7, '400.00', '0.00', 2, 1, '400.00', '2021-05-20 03:01:17', '2021-05-21 07:58:38'),
+(11, 8, '0.00', '0.00', 2, 1, '400.00', '2021-05-20 09:01:35', '2021-05-20 10:24:52');
 
 -- --------------------------------------------------------
 
@@ -108,12 +104,12 @@ CREATE TABLE `cart_addresses` (
 --
 
 INSERT INTO `cart_addresses` (`id`, `cartId`, `addressId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `sameAsBilling`, `created_at`, `updated_at`) VALUES
-(1, 8, NULL, 'rati', 'ab', 'ab', 'ab', 'ab', 'ab', 'billing', '0', '2021-05-19 03:51:28', '2021-05-19 07:28:30'),
-(2, 8, NULL, 'ab', 'ab', 'ab', 'ab', 'ab', 'ab', 'shipping', '0', '2021-05-19 04:00:47', '2021-05-19 07:28:30'),
-(7, 4, 1, 'rt', 'r', 'r', 'r', 'r', 'r', 'billing', '0', '2021-05-19 04:52:21', '2021-05-19 23:13:59'),
-(9, 4, 5, 'rrrrrrrrr', 'ab', 'ab', 'ab', 'ab', 'ab', 'shipping', '0', '2021-05-19 04:53:50', '2021-05-19 23:13:59'),
-(10, 5, 2, 'ratiban', 'ab', 'ab', 'ab', 'ab', 'ab', 'billing', '0', '2021-05-19 06:08:07', '2021-05-19 07:39:52'),
-(11, 5, 3, 'rrrrrrrrr', 'ab', 'ab', 'ab', 'ab', 'ab', 'shipping', '0', '2021-05-19 06:08:07', '2021-05-19 07:39:52');
+(7, 4, 1, 'newaddresss', 'ahmedabad', 'ahmedabad', 'guj', '12345', 'india', 'billing', '0', '2021-05-19 04:52:21', '2021-05-21 00:42:09'),
+(9, 4, 5, 'ahmedabad', 'ahmedabad', 'ahmedabad', 'guj', '12345', 'india', 'shipping', '0', '2021-05-19 04:53:50', '2021-05-21 00:42:09'),
+(17, 10, NULL, 'newaddresss', 'ahmedabad', 'ahmedabad', 'guj', '12345', 'india', 'billing', '0', '2021-05-20 03:01:25', '2021-05-21 03:14:22'),
+(18, 10, NULL, 'ahmedabad', 'ahmedabad', 'ahmedabad', 'guj', '12345', 'india', 'shipping', '0', '2021-05-20 03:01:25', '2021-05-21 03:14:22'),
+(19, 11, NULL, 'ahmedabad', 'ahmedabad', 'ahmedabad', 'guj', '12345', 'india', 'billing', '0', '2021-05-20 10:24:10', '2021-05-20 10:24:52'),
+(20, 11, NULL, 'ahmedabad', 'ahmedabad', 'ahmedabad', 'guj', '12345', 'india', 'shipping', '0', '2021-05-20 10:24:10', '2021-05-20 10:24:52');
 
 -- --------------------------------------------------------
 
@@ -138,8 +134,9 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`id`, `cartId`, `productId`, `quantity`, `basePrice`, `price`, `discount`, `created_at`, `updated_at`) VALUES
-(1, 4, 2, 1, '100.00', '100.00', '1.00', '2021-05-19 23:56:00', '2021-05-20 00:05:01'),
-(2, 4, 7, 1, '1.00', '1.00', '1.00', '2021-05-19 23:56:15', '2021-05-20 00:03:52');
+(32, 4, 2, 3, '100.00', '100.00', '1.00', '2021-05-21 06:45:22', '2021-05-21 08:00:03'),
+(37, 4, 10, 4, '2.00', '2.00', '2.00', '2021-05-21 07:29:42', '2021-05-21 08:00:03'),
+(38, 4, 7, 2, '10.00', '10.00', '1.00', '2021-05-21 07:58:18', '2021-05-21 07:58:27');
 
 -- --------------------------------------------------------
 
@@ -162,8 +159,14 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `parent_id`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'category1', 0, 'cat1', '1', NULL, NULL),
-(2, 'child2', 1, 'child', '0', NULL, NULL);
+(1, 'category1', 0, 'cat1', '2', NULL, NULL),
+(3, 'RootCategory', 0, 'ssss', '1', NULL, NULL),
+(7, 'abc1', 6, 'ac', '1', NULL, NULL),
+(10, 'f', 9, 'w', '1', NULL, NULL),
+(13, 'root', 0, 'root', '1', NULL, NULL),
+(15, 'root2', 3, 'f', '1', NULL, '2021-05-20 05:50:19'),
+(16, 'new', 3, 'w', '1', NULL, '2021-05-20 05:52:47'),
+(18, 'new2', 17, 'w', '1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -203,10 +206,9 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `firstname`, `lastname`, `email`, `password`, `contactno`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'saloni', 'maheshwari', 'saloni01@gmail.com', 'eyJpdiI6Imlrc2FHQzBPQzNuRVE1a2hWUzlIY0E9PSIsInZhbHVlIjoibWpBSzhZQldtNUVLS0p4WkQySElWQT09IiwibWFjIjoiOTc3ODc3NmZkYzJmYmZiYTU0OGUwNGM5MTgxNDZhYmQ3MDhiMTkxZDc5OTQyOWM4MjA1OWNlOWQ1NWY5ODY3ZSJ9', '94131233', 1, NULL, '2021-05-13 04:35:05'),
-(2, 'anshul', 'parwal', 'ansh@gmail.com', 'eyJpdiI6IkNDejIwL05SN3ZJSkViZWN4Zkxpcnc9PSIsInZhbHVlIjoiMTNPNkZYRVJBbmkzQ2VXWFZPbEtxdz09IiwibWFjIjoiNGRlMzMzYzIxMzY1MTE3ZGIwNTliYjI3NTk1YmRmYzI1MGRhMDEyYjUxMTRjMzQ0ZjljYmNmZWM0ZjgyZTA5NSJ9', '941314553', 1, NULL, '2021-05-19 03:43:39'),
-(3, 'newcust', 'cust', 'cust@gmail.com', 'eyJpdiI6Ind0bW05a202Yks1akcrd2tKRkNuWFE9PSIsInZhbHVlIjoiS29xWDV4WEpyc0IwMkR2M0wzOEdGZz09IiwibWFjIjoiOTQ1ZmRlZmNhM2I1ZDY4NzZiZGI4ODdlNTZiZDI4NzY1YjdmZmEyNTZlMmJhYmVlZGQ4ZjQ4ZDQ4ZmRmYjI3ZSJ9', '941314552', 1, NULL, '2021-05-13 06:39:59'),
-(6, 'x', 'x', 'x', 'eyJpdiI6IkdFWVdtc2liSjUzTmVTWGlWaVRsYUE9PSIsInZhbHVlIjoiWjdYNnpQM3ljRDdTclBVWXF1Rk1xdz09IiwibWFjIjoiYTBjYjk4YjBmMmJiYjEzYTY2YTI4NGMyNmQ4OTA4NmI5ZWMxYTY3OTMzODM0NDE0MDZlZGNmYmIxMzRlNjRjNCJ9', '1', 1, NULL, NULL);
+(1, 'saloni', 'maheshwari', 'saloni01@gmail.com', 'eyJpdiI6IjgrTkZDWHBCa1FadWh6QUV5T2ZXK3c9PSIsInZhbHVlIjoiNWhScUJ0TGxmTG9DSzR2T0JtdVVJZz09IiwibWFjIjoiNGFjMjk2NzkyMzAwZDVhY2M4NGVhMzEzOTVmMThkOTI4NTRhYWYwMjliNjUyOTM5ZDgwOTgwNTNjOGVlYjZkNiJ9', '94131233', 1, NULL, '2021-05-20 01:01:04'),
+(7, 'mahi', 'm', 'saloni@gmail.com', 'eyJpdiI6IjRJN3lwM21yYnIvdUVtMkw1RXB1SFE9PSIsInZhbHVlIjoiN202TXBFeGFYbTV0Y1JzS2pISEt5Zz09IiwibWFjIjoiYTA1MGYzNTBiYTkzYWRiOTJlMjI5MDI1NDM3ZjJmZjExMTdmNzkzMDJmYTJjNDk3MGE2MTY1YjU4MGZlYTI5NiJ9', '12', 1, NULL, NULL),
+(8, 'raj', 'd', 'dd', 'eyJpdiI6ImZNL2loK1NtTjY2aERtQzJZQWx3MEE9PSIsInZhbHVlIjoiK3dkc0RTZUV5LzhOZjBxZ0hLVEc3QT09IiwibWFjIjoiZTVmNTk2NzI1NTQ4YzI2MjEyYzM4MDY4OWMxODlkMjcyNThhZGFmNDU3ZGM2M2MxNTcxNmNhOWM5MjM5YTE2MiJ9', '1', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -248,8 +250,7 @@ CREATE TABLE `media` (
 --
 
 INSERT INTO `media` (`id`, `media`, `label`, `small`, `thumb`, `base`, `gallery`, `product_id`, `created_at`, `updated_at`) VALUES
-(6, '1620798786.png', 'qw', 1, 0, 1, 1, 2, NULL, NULL),
-(7, '1620917391.jpg', 'label', 0, 0, 0, 0, 2, NULL, NULL);
+(7, '1620917391.jpg', 'qqq', 1, 1, 0, 1, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -428,8 +429,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `sku`, `price`, `discount`, `quantity`, `description`, `status`, `category_id`, `created_at`, `updated_at`) VALUES
-(2, 'panel', 'panel', 100, 1, 1, 'nice', 1, 2, '2021-05-04 22:38:58', '2021-05-04 22:43:36'),
-(7, '1', '1', 1, 1, 1, '1', 1, 1, '2021-05-13 04:28:24', NULL),
+(2, 'panel', 'panel', 100, 1, 1, 'nice', 1, 13, '2021-05-04 22:38:58', '2021-05-21 02:09:49'),
+(7, 'bed', 'bed', 10, 1, 1, '1', 1, 1, '2021-05-13 04:28:24', '2021-05-19 22:39:45'),
 (8, '2', 'second pro', 2, 2, 2, '2', 1, 1, '2021-05-13 04:28:39', '2021-05-17 06:50:17'),
 (9, '1', '2', 1, 1, 1, '1', 1, 1, '2021-05-17 04:41:32', '2021-05-17 06:57:22'),
 (10, '2', '2', 2, 2, 2, '1', 0, 1, '2021-05-17 04:41:57', '2021-05-17 01:18:04'),
@@ -646,25 +647,25 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `cart_addresses`
 --
 ALTER TABLE `cart_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `cccprac1`
@@ -676,7 +677,7 @@ ALTER TABLE `cccprac1`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -688,7 +689,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `migrations`

@@ -150,9 +150,15 @@ class Address extends Controller
             $shippingamount = $shipping->amount;
 
             $cartupdate = CartModel::where('id',$sessioncartId)->first();
-            $cartupdate->paymentId =  $payment;
+            $cartupdate->paymentId = $payment;
             $cartupdate->shippingId = $shippingMethod;
             $cartupdate->shippingAmount = $shippingamount;
             $cartupdate->save();
+            return \redirect('cart/'.$sessioncartId);
     }
+
+    // public function ItemAction(Request $request)
+    // {
+    
+    // }
 }

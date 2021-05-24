@@ -294,7 +294,7 @@ class Cart extends Controller
         $cart = CartModel::where('id',$cartId)->first();
         if(!$cart)
         {
-            return true;
+            return true;    
         }
         if($cart)
         {

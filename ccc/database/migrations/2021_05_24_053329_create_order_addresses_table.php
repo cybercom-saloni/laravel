@@ -15,7 +15,7 @@ class CreateOrderAddressesTable extends Migration
     {
         Schema::create('order_addresses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customerId');
+            $table->unsignedBigInteger('addressId');
             $table->unsignedBigInteger('orderId');
             $table->string('address');
             $table->string('area');
@@ -25,7 +25,7 @@ class CreateOrderAddressesTable extends Migration
             $table->string('country');
             $table->string('addressType');
             $table->timestamps();
-            $table->foreign('customerId')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('addressId')->references('id')->on('addresses')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('orderId')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
         });
     }

@@ -275,10 +275,10 @@
                     <tr>
                         <td>{{$controller->getProductName($cartItem->productId)}}</td>
                         <td>Rs.{{$cartItem->price}}</td>
-                        <td><input type="text" class="form-control" name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"></td>
+                        <td><input type="text" class="form-control" min=0  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"></td>
                         <td>Rs.@php  echo $rowtotal = $cartItem->quantity*$cartItem->price @endphp .00</td>
                         <td>{{$cartItem->discount}}%</td>
-                        <td>Rs.{{$rowtotal - $rowtotal*($cartItem->discount/100)}}</td>      
+                        <td>Rs.{{$rowtotal - $rowtotal*($cartItem->discount/100)}}.00</td>      
                         <td><a href="javascript:void(0)" onclick="object.setUrl('/cartItem/delete/{{$cartItem->id}}').setMethod('get').load();" class="btn btn-secondary">DELETE</a></td>               
                     </tr>
                     @endforeach
@@ -289,7 +289,7 @@
                     </tr>
                     <tr>
                     <td colspan="5">Total</td>
-                    <td>Rs.{{$controller->getTotal()}}</td>
+                    <td>Rs.{{$controller->getTotal()}}.00</td>
                     <td></td>
                     </tr>
         </tbody>

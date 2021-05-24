@@ -40,7 +40,7 @@ class CartItem extends Controller
         {
              $cartItem->productId;
             $discount = $cartItem->discount;
-            echo $price = $cartItem->price;
+            $price = $cartItem->price;
             $quantity = $cartItem->quantity;
             $discountTotal +=$discount * $quantity;
             $total += ($price - ($discount * $price/ 100)) * $quantity;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2021 at 06:10 AM
+-- Generation Time: May 24, 2021 at 11:35 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -73,9 +73,9 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `customerId`, `total`, `discount`, `paymentId`, `shippingId`, `shippingAmount`, `created_at`, `updated_at`) VALUES
-(16, 7, '0.00', '0.00', 1, 1, '0.00', '2021-05-22 00:29:22', '2021-05-23 22:30:12'),
-(17, 8, '503.84', '6.00', 2, 2, '100.00', '2021-05-22 00:35:33', '2021-05-23 22:35:23'),
-(18, 1, '0.00', '0.00', 1, 1, '0.00', '2021-05-23 22:26:47', '2021-05-23 22:30:10');
+(19, 8, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 00:17:56', '2021-05-24 00:17:56'),
+(44, 7, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 02:49:13', '2021-05-24 02:49:13'),
+(45, 1, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 03:13:24', '2021-05-24 03:13:24');
 
 -- --------------------------------------------------------
 
@@ -99,14 +99,6 @@ CREATE TABLE `cart_addresses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `cart_addresses`
---
-
-INSERT INTO `cart_addresses` (`id`, `cartId`, `addressId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `sameAsBilling`, `created_at`, `updated_at`) VALUES
-(23, 17, NULL, 'navavadaj', 'navavadaj', 'ahmedabad', 'gujarat', '327001', 'india', 'billing', '0', '2021-05-22 03:51:28', '2021-05-23 10:04:30'),
-(24, 17, NULL, 'banswara', 'near rswm', 'banswara', 'rajasthan', '327001', 'india', 'shipping', '0', '2021-05-22 03:51:28', '2021-05-23 10:04:30');
-
 -- --------------------------------------------------------
 
 --
@@ -124,14 +116,6 @@ CREATE TABLE `cart_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cart_items`
---
-
-INSERT INTO `cart_items` (`id`, `cartId`, `productId`, `quantity`, `basePrice`, `price`, `discount`, `created_at`, `updated_at`) VALUES
-(42, 17, 8, 2, '2.00', '4.00', '2.00', '2021-05-23 08:12:31', '2021-05-23 08:12:31'),
-(46, 17, 2, 2, '100.00', '200.00', '1.00', '2021-05-23 08:16:10', '2021-05-23 08:17:02');
 
 -- --------------------------------------------------------
 
@@ -305,7 +289,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (153, '2021_05_24_022859_create_orders_table', 25),
 (154, '2021_05_24_023029_create_order_addresses_table', 26),
 (155, '2021_05_24_023644_create_order_addresses_table', 27),
-(156, '2021_05_24_023813_create_order_items_table', 28);
+(156, '2021_05_24_023813_create_order_items_table', 28),
+(157, '2021_05_24_053329_create_order_addresses_table', 29);
 
 -- --------------------------------------------------------
 
@@ -331,11 +316,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customerId`, `total`, `shippingId`, `shippingAmount`, `paymentId`, `discount`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, '510.88', 1, '400.00', 1, '2.00', 'Pending', '2021-05-23 22:19:00', '2021-05-23 22:19:00'),
-(2, 1, '510.88', 1, '400.00', 1, '2.00', 'Pending', '2021-05-23 22:25:04', '2021-05-23 22:25:04'),
-(3, 8, '503.84', 2, '100.00', 2, '6.00', 'Pending', '2021-05-23 22:30:23', '2021-05-23 22:30:23'),
-(4, 8, '503.84', 2, '100.00', 2, '6.00', 'Pending', '2021-05-23 22:35:28', '2021-05-23 22:35:28'),
-(5, 8, '503.84', 2, '100.00', 2, '6.00', 'Pending', '2021-05-23 22:37:38', '2021-05-23 22:37:38');
+(20, 7, '598.00', 1, '400.00', 1, '2.00', 'Pending', '2021-05-24 01:31:03', '2021-05-24 02:07:27'),
+(21, 1, '499.00', 1, '400.00', 1, '1.00', 'Pending', '2021-05-24 01:32:09', '2021-05-24 02:51:32');
 
 -- --------------------------------------------------------
 
@@ -345,7 +327,7 @@ INSERT INTO `orders` (`id`, `customerId`, `total`, `shippingId`, `shippingAmount
 
 CREATE TABLE `order_addresses` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `customerId` bigint(20) UNSIGNED NOT NULL,
+  `addressId` bigint(20) UNSIGNED NOT NULL,
   `orderId` bigint(20) UNSIGNED NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `area` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -357,6 +339,16 @@ CREATE TABLE `order_addresses` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_addresses`
+--
+
+INSERT INTO `order_addresses` (`id`, `addressId`, `orderId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `created_at`, `updated_at`) VALUES
+(7, 1, 20, 'banswara', 'Rajasthan', 'Raj', 'Raj', '327001', 'in', 'billing', '2021-05-24 01:31:03', '2021-05-24 02:07:27'),
+(8, 1, 20, 'banswara', 'Rajasthan', 'Raj', 'Raj', '327001', 'in', 'shipping', '2021-05-24 01:31:03', '2021-05-24 01:33:38'),
+(9, 1, 21, 'ratlam', 'ratlam', 'ratlam', 'mp', '321009', 'in', 'billing', '2021-05-24 01:32:09', '2021-05-24 02:51:33'),
+(10, 1, 21, 'ratlam', 'ratlam', 'ratlam', 'mp', '320011', 'in', 'shipping', '2021-05-24 01:32:09', '2021-05-24 02:51:33');
 
 -- --------------------------------------------------------
 
@@ -375,6 +367,14 @@ CREATE TABLE `order_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `orderId`, `productId`, `quantity`, `basePrice`, `price`, `discount`, `created_at`, `updated_at`) VALUES
+(53, 20, 2, 2, '100.00', '100.00', '1.00', '2021-05-24 02:07:27', '2021-05-24 02:07:27'),
+(54, 21, 2, 1, '100.00', '100.00', '1.00', '2021-05-24 02:51:32', '2021-05-24 02:51:32');
 
 -- --------------------------------------------------------
 
@@ -655,7 +655,7 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `order_addresses`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `order_addresses_customerid_foreign` (`customerId`),
+  ADD KEY `order_addresses_addressid_foreign` (`addressId`),
   ADD KEY `order_addresses_orderid_foreign` (`orderId`);
 
 --
@@ -741,19 +741,19 @@ ALTER TABLE `addresses`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `cart_addresses`
 --
 ALTER TABLE `cart_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -789,25 +789,25 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `order_addresses`
 --
 ALTER TABLE `order_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -913,7 +913,7 @@ ALTER TABLE `orders`
 -- Constraints for table `order_addresses`
 --
 ALTER TABLE `order_addresses`
-  ADD CONSTRAINT `order_addresses_customerid_foreign` FOREIGN KEY (`customerId`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_addresses_addressid_foreign` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `order_addresses_orderid_foreign` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

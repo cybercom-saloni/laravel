@@ -13,6 +13,7 @@ use App\Http\Controllers\NewDashboard;
 use App\Http\Controllers\Cart;
 use App\Http\Controllers\Cart\CartItem;
 use App\Http\Controllers\Cart\Address as CartAddress;
+use App\Http\Controllers\Order;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -103,3 +104,6 @@ Route::post('/cart/customer/addressSave/{id?}',[CartAddress::class,'AddressActio
 Route::post('/cartItem/update',[CartItem::class,'ItemAction']);
 Route::get('/cartItem/delete/{id}',[CartItem::class,'ItemDeleteAction']);
 Route::get('/cartproduct/fetch_cartdata',[Cart::class,'fetch_cartdata']);
+Route::post('/cartItem/addItem',[CartItem::class,'addItemAction']);
+
+Route::get('/order/{cartId?}',[Order::class,'displayOrderAction']);

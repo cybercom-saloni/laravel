@@ -14,7 +14,7 @@
                     <th>Discount</th>
                     <th>Quantity</th>
                     <th>status</th>
-                    <th colspan="3">Actions</th>
+                    <th colspan="2">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,7 +44,6 @@
                         </td>
                         <td><a onclick="object.setUrl('/product/form/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
                         <td> <a onclick="object.setUrl('/productDelete/{{ $value->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
-                        <td> <a onclick="object.setUrl('/cart/{{ $value->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Add to Cart</a></td>
                         </tr>
                     @endforeach
                 @endif

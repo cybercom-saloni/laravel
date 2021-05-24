@@ -17,93 +17,42 @@ use App\Models\Category as CategoryModel;
 class Cart extends Controller
 {
     protected $customerId = null;
-    public function addToCartAction(Request $request)
+    public function addToCartAction($id=null,Request $request)
     {
-        $productId = $request->id;
+        //  $customerId = $request->id;
         $customers = CustomerModel::all();
-        $customer = CustomerModel::first();
-        $customerId = $customer->id;
-        
+        // Session::put('customerId', $request->customer);
+       $customerId = Session::get('customerId');
+        if(!$customerId)
+        {
+            $customer = CustomerModel::first();
+            $customerId = $customer->id;
+            Session::put('customerId',$customerId);
+        }
         if($customerId)
         {
             $cart = CartModel::where('customerId',$customerId)->first();
-            $cartId = $cart->id;
-            $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-            $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
-            // echo $cartBillingAddress;
-        }else
-        {
-            $cartId = Session::get('cartId');
-        }
-            $cartItemAdd = CartItem::where([['cartId', $cartId], ['productId', $productId]])->first();
-            if($cartItemAdd)
-            {
-                $cartItemAdd->quantity += 1;
-                $cartItemAdd->save();
-            }
-            if(!$cartItemAdd)
-            {
-                $cartItemAdd = new CartItem;
-                $productData = Product::where('id',$productId)->first();
-                if($productData)
-                {
-                    $cartItemAdd->productId = $productId;
-                    $cartItemAdd->cartId = $cartId;
-                    $cartItemAdd->quantity = 1;
-                    $cartItemAdd-> basePrice = $productData->price;
-                    $cartItemAdd-> price = $productData->price;
-                    $cartItemAdd-> discount = $productData->discount;
-                    $cartItemAdd->save();
-                }
-               
-            }
             
-                // echo $cartId;
-        // if($productId)
-        // {
-        //     // $cartItem = CartItem::where([['cartId', $cart->id], ['productId', $productId]])->first();
-        //     $cartItemAdd = CartItem::where([['cartId', $cartId], ['productId', $productId]])->first();
-        //     if(!$cartItemAdd)
-        //     {
-        //         echo 1111;
-        //         // $cartItemAdd = new CartItem;
-        //         // $productData = Product::where('id',$productId)->first();
-        //         // $cartItemAdd->productId = $productId;
-        //         // $cartItemAdd->cartId = $cartId;
-        //         // $cartItemAdd->quantity = 1;
-        //         // $cartItemAdd-> basePrice = $productData->price;
-        //         // $cartItemAdd-> price = $productData->price;
-        //         // $cartItemAdd-> discount = $productData->discount;
-        //         // $cartItemAdd->save();
-        //     }else
-        //     {
-
-        //     }
-        
-        //     $productData = Product::where('id',$productId)->first();
-        //         $cartItemAdd->productId = $productId;
-        //         $cartItemAdd->cartId = $cartId;
-        //         $cartItemAdd->quantity = $productData->quantity;
-        //         $cartItemAdd-> basePrice = $productData->price;
-        //         $cartItemAdd-> price = $productData->price;
-        //         $cartItemAdd-> discount = $productData->discount;
-        //         $cartItemAdd->save();
-        // }
-        if($cartId)
-        {
+            if(!$cart)
+            {
+                $cart = new CartModel;
+                $cart->customerId = $customerId;
+                $cart->total = 0;
+                $cart->discount = 0;
+                $cart->paymentId = 1;
+                $cart->shippingId = 1;
+                $cart->shippingAmount = 0;
+                $cart->save();
+            }
+           $cartId = $cart->id;
+        } 
           $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
           $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
+         
+          $cartView = CartModel::where('id',$cartId)->get();
+          $pagination = ProductModel::where('status', 1)->paginate(2);  
           $cartItems = CartItem::where('cartId',$cartId)->get();
-          $cartView = CartModel::where('id',$cartId)->first();
-          $pagination = ProductModel::paginate(2);  
-          $view = view('cart.grid',['productId'=> $productId,'products'=>$pagination,'customers'=>$customers,'cart'=>$cartView,'cartItems'=>$cartItems,'customerId'=>$customerId,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
-        }else
-        {
-            $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
-            $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-            $view = view('cart.grid',['productId'=> $productId,'customers'=>$customers,'controller'=>$this])->render();
-        }
-       
+          $view = view('cart.grid',['products'=>$pagination,'customers'=>$customers,'cart'=>$cartView,'cartItems'=>$cartItems,'customerId'=>$customerId,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
        $response =[
         'element'=>[
             [
@@ -195,7 +144,7 @@ class Cart extends Controller
             {
               $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
               $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-              $cartItems = CartItem::where('cartId',$cartId)->get();
+              echo $cartItems = CartItem::where('cartId',$cartId)->get();
               $cartView = CartModel::where('id',$cartId)->first();
               $pagination =  ProductModel::paginate(2);
             }
@@ -234,12 +183,12 @@ class Cart extends Controller
 
     public function saveCustomerAction($cartId=null,Request $request)
     {
+        echo $request->customer;
         Session::put('customerId', $request->customer);
-        // Session::put('cartId', $cartId);
-      $customerId =Session::get('customerId');
-
+    //     // Session::put('cartId', $cartId);
+      echo $customerId =Session::get('customerId');
         //echo $customerId = $request->customer;
-         $cart = CartModel::where('customerId', $customerId)->first();
+         echo $cart = CartModel::where('customerId', $customerId)->first();
         if(!$cart)
         {
            $cart = new CartModel;
@@ -248,6 +197,8 @@ class Cart extends Controller
            $cart->shippingId = 1;
            $cart->save();
         }     
+        // Session::put('customerId', $request->customer);
+        // echo $customerId =Session::get('customerId');
         $cartId = $cart->id;
         Session::put('cartId',$cartId);
         return \redirect('cart/'.$cartId);
@@ -302,5 +253,56 @@ class Cart extends Controller
     public function getCartItem($id)
     {
         echo $id;
+    }
+
+    public function getShippingAmount()
+    {
+        $cartId = Session::get('cartId');
+       
+       if(!$cartId)
+       {
+           return true;
+       }
+       if($cartId)
+       {
+           $cart = CartModel::where('id',$cartId)->first();
+           if(!$cart)
+           {
+            return true;
+           }
+           return $cart->shippingAmount; 
+       }
+    }
+
+    public function getTotal()
+    {
+        $total =0;
+        $discountTotal=0;
+        $cartId = Session::get('cartId');
+        $cartItems = CartItem::where('cartId',$cartId)->get();
+        // print_r($cartItems);
+        foreach($cartItems as $cartItemId=>$cartItem)
+        {
+             $cartItem->productId;
+            $discount = $cartItem->discount;
+            $price = $cartItem->price;
+            $quantity = $cartItem->quantity;
+            $discountTotal +=$discount * $quantity;
+            $total += ($price - ($discount * $price/ 100)) * $quantity;
+        }
+        
+        $cart = CartModel::where('id',$cartId)->first();
+        if(!$cart)
+        {
+            return true;
+        }
+        if($cart)
+        {
+           $cart->discount = $discountTotal;
+           $cart->total = $total+$cart->shippingAmount;
+           $cart->save();
+
+        }
+        return  $cart->total;
     }
 }

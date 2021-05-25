@@ -1,6 +1,5 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
 <hr>
-
 <div class="col-12">
     <div class ="row">
         <div class ="col-12">
@@ -56,7 +55,7 @@
                     <td>{{$orderBillingAddressDetails[0]->zipcode}}</td>
                 </tr>
                 <tr>
-                    <td>Area :-</td>
+                    <td>Country :-</td>
                     <td>{{$orderBillingAddressDetails[0]->country}}</td>
                 </tr>
             </table>
@@ -85,7 +84,7 @@
                     <td>{{$orderShippingAddressDetails[0]->zipcode}}</td>
                 </tr>
                 <tr>
-                    <td>Area :-</td>
+                    <td>Country :-</td>
                     <td>{{$orderShippingAddressDetails[0]->country}}</td>
                 </tr>
             </table>

@@ -95,7 +95,7 @@ class Customer extends Controller
     {
         $customerModel = CustomerModel::find($id);
         $customerModel->delete();
-        return redirect('customerGrid')->with('custDelete','customer Deleted!!!');;
+        return redirect('customerGrid')->with('custDelete','customer Deleted!!!');
     }
 
     public  function saveAction($id=null,Request $request)

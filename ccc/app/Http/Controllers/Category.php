@@ -32,15 +32,14 @@ class Category extends Controller
 
         //     header('content-type:application/json');
         //     echo json_encode($response);
-          
-        $category_id=$id;
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
+           $category_id=$request->id;
+         $parentcategories = CategoryModel::whereNull('parent_id')->get();
         $parent_id=0;
         $allCategories = CategoryModel::pluck('status')->all();
-    //     // print_r($allCategories);
-    //         //  $categoryData = Category::editAction($id,$request);
+    // //     // print_r($allCategories);
+    // //         //  $categoryData = Category::editAction($id,$request);
             $categoryData = (new CategoryModel)->load($id)->getCategories();
-    //        $view = view('category.grid',\compact('parentcategories','allCategories','categoryData','parent_id'))->render();
+        //    $view = view('category.grid',\compact('parentcategories','allCategories','categoryData','parent_id'))->render();
        $view = view('category.grid',['parentcategories'=>$parentcategories,'allCategories'=>$allCategories,'categoryData'=>$categoryData,'parent_id'=>$parent_id,'category_id'=>$category_id])->render();
            $response = [
             'element' => [
@@ -143,7 +142,7 @@ class Category extends Controller
         
         $category_id=$request->id;
         $parent_id=$request->id;
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
+        $parentcategories = CategoryModel::whereNull('parent_id')->get();
         $allCategories = CategoryModel::pluck('name','id')->all();
         $view = view('category.addSubCategory',\compact('parentcategories','allCategories','parent_id','category_id'))->render();
         $response = [
@@ -176,10 +175,10 @@ class Category extends Controller
     }
     public function addRootCategoryAction()
     {
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
-        $parent_id=0;
+        $parentcategories = CategoryModel::whereNull('parent_id')->get();
+        // echo $parent_id=$parentcategories[0]->parent_id;
         $allCategories = CategoryModel::pluck('name','id')->all();
-        $view = view('category.addCategory',compact('parentcategories','allCategories','parent_id'))->render();
+        $view = view('category.addCategory',compact('parentcategories','allCategories'))->render();
         $response = [
             'element' => [
                 [
@@ -199,7 +198,7 @@ class Category extends Controller
     public function rootCategoryEditSave(Request $request)
     {
       $formData=$_GET['category'];
-      $formData['parent_id']=0;
+      $formData['parent_id']=null;
       $categoryModel = new CategoryModel;
       print_r($formData);
       $categoryModel->saveValue($formData);
@@ -208,8 +207,8 @@ class Category extends Controller
 
     public function treeAction(Request $request)
     {
-        $parentcategories = CategoryModel::where('parent_id', '=', 0)->get();
-        $parent_id=0;
+        $parentcategories = CategoryModel::whereNull('parent_id')->get();
+        $parent_id=null;
         $allCategories = CategoryModel::pluck('name','id')->all();
     
         $view = view('category.tree',compact('parentcategories','allCategories','parent_id'))->render();

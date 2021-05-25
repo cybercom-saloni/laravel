@@ -201,7 +201,7 @@ class Cart extends Controller
         // echo $customerId =Session::get('customerId');
         $cartId = $cart->id;
         Session::put('cartId',$cartId);
-        return \redirect('cart/'.$cartId);
+        return \redirect('cart/'.$cartId)->with('changeCustomer','Customer Changed!!!');
         // if(Session::get('cartId'))
         // {
         //   $customers = CustomerModel::all();

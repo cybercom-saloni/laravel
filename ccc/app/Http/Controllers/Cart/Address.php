@@ -154,7 +154,7 @@ class Address extends Controller
             $cartupdate->shippingId = $shippingMethod;
             $cartupdate->shippingAmount = $shippingamount;
             $cartupdate->save();
-            return \redirect('cart/'.$sessioncartId);
+            return \redirect('cart/'.$sessioncartId)->with('AddressUpdated','Cart Address Updated');
     }
 
     // public function ItemAction(Request $request)

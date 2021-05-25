@@ -50,8 +50,36 @@
             </tbody>
         </table>
 
-            {!! $products->links()!!}
+            <!-- {!! $products->links()!!} -->
+            <!-- pagination -->
+        
      </div>
+     <div>
+     <div>
+    <nav>
+        <ul class="pagination">
+            
+            @if($products->currentPage() != 1)
+            <li class="page-item">
+                <a class="page-link{{$products->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$products->previousPageUrl()}}').setMethod('get').load()">Previous</a>
+            </li>
+            @endif
+            @for($i=1;$i<=$products->lastPage();$i++)
+                <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
+                    <a class="page-link" onclick="object.setUrl('{{$products->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
+                </li>
+            @endfor
+            @if($products->currentPage() != $products->lastPage())
+            <li class="page-item">
+                <a class="page-link{{$products->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$products->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
+            </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+
+</div>
+
      <!-- storing page no -->
     <!-- <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
 
@@ -66,7 +94,7 @@
             <option value="100">100</option>
         </select>
 0    </form> -->
-    <script>
+    <!-- <script>
         $(document).ready(function()
         {  
             $(document).on('click','.pagination a',function(event)
@@ -97,5 +125,5 @@
                 });
             }
         });
-    </script>
+    </script> -->
 

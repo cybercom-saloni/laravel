@@ -1,5 +1,8 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">View Cart</h3>
 <hr>
+@if(session('changeCustomer'))
+<div class="alert alert-success">{{session('changeCustomer')}}</div>
+@endif
 
 <form action="/cart/customer" method="post" id="customerId">
     @csrf
@@ -16,6 +19,7 @@
         </select>
     </div>
 </form> 
+
 <form method="POST" action="/cart/customer/addressSave" id="form">
 @csrf
 
@@ -187,6 +191,9 @@
     </div>
     
 </div>
+@if(session('AddressUpdated'))
+<div class="alert alert-success">{{session('AddressUpdated')}}</div>
+@endif
 <button type="button"  id="addressUpdate" class="btn btn-md btn-success">UPDATE</button><br>
 </form>
 <br>
@@ -257,9 +264,22 @@
 </div>
 <form method="get" id="cartItemUpdate" action="">
 @csrf
+
     <button type="button"  id="cartItemUpdatebtn" class="btn btn-md btn-success">UPDATE CART</button>
     <button type="button"  id="cartItemAdd"  onclick="productListFunction();"  class="btn btn-secondary">ADD NEW PRODUCT</button>
     <div class="col-12">
+    @if(session('addItem'))
+         <div class ="alert alert-success">{{session('addItem')}}</div>
+    @endif
+    @if(session('updateqty'))
+        <div class ="alert alert-success">{{session('updateqty')}}</div>
+    @endif
+    @if(session('deletecartItem'))
+         <div class ="alert alert-success">{{session('deletecartItem')}}</div>
+    @endif
+    
+   
+
         <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">
                 <th>Product Name</th>
@@ -275,7 +295,7 @@
                     <tr>
                         <td>{{$controller->getProductName($cartItem->productId)}}</td>
                         <td>Rs.{{$cartItem->price}}</td>
-                        <td><input type="text" class="form-control" min=0  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"></td>
+                        <td><input type="number" class="form-control"  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"    min="1" step="0.01"  required></td>
                         <td>Rs.@php  echo $rowtotal = $cartItem->quantity*$cartItem->price @endphp .00</td>
                         <td>{{$cartItem->discount}}%</td>
                         <td>Rs.{{$rowtotal - $rowtotal*($cartItem->discount/100)}}.00</td>      

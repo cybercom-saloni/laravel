@@ -21,6 +21,7 @@ class Order extends Controller
         $customers = CustomerModel::all();
         $cartId = SESSION::get('cartId');
          $customerId = SESSION::get('customerId');
+      
         
         if($cartId)
         {
@@ -140,17 +141,36 @@ class Order extends Controller
 
     public function displayAllOrderAction()
     {
-        $customers = CustomerModel::all();
+        $customers = CustomerModel::Join('orders','customers.id','=','orders.customerId')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno')->get();
+        // $customers = CustomerModel::all();
         $orderId = Session::get('orderId');
          $customerId = Session::get('ordercustomerId');
+         if(!$customerId)
+         {
+             
+            $customer = CustomerModel::first();
+            $customerId = $customer->id;
+            Session::put('ordercustomerId',$customerId);
+            $customerDetails = CustomerModel::where('id',$customerId)->first();
+            $order = OrderModel::where('customerId',$customerId)->first();
+         }
+         if(!$orderId)
+         {
+           
+            $order = OrderModel::first();
+            $orderId = $order->id;
+            Session::put('orderId',$orderId);
+            $orderDetails = OrderModel::where('id',$orderId)->first();
+            // $customerDetails = CustomerModel::where('id',$orderId)->first();
+            // $order = OrderModel::where('orderId',$orderId)->first();
+         }
          $order = OrderModel::where('customerId',$customerId)->first();
             $orderDetails = OrderModel::where('id',$orderId)->first();
             $customerDetails = CustomerModel::where('id',$customerId)->first();
            $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
            $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->get();
            $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->get();
-    
-            $view = view('order.information',['controller'=>$this,'customerDetails'=>$customerDetails,'customers'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
+            $view = view('order.information',['controller'=>$this,'customerDetails'=>$customerDetails,'customers'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->with('changeCustomer','customer Changed!!!')->render();
             $response =[
              'element'=>[
                  [
@@ -173,12 +193,27 @@ class Order extends Controller
          echo $cart = OrderModel::where('customerId', $customerId)->first();
         if(!$cart)
         {
-           return false;
+            echo 111;
+            return \redirect('/order/Information')->with('notorder','Order Not Found!!!!');
+        }
+        if($cart)
+        {
+
+            echo   $orderId = $cart->id;
+              Session::put('orderId',$orderId);
+              return \redirect('/order/Information'.$cartId);
         }  
-      echo   $orderId = $cart->id;
-        Session::put('orderId',$orderId);
-        return \redirect('/order/Information'.$cartId);
     }
 
+
+    public function saveStatusAction(Request $request)
+    {
+      
+        print_r($request->get('status'));
+        echo $request->customer;
+        echo $request->status;
+      
+        
+    }
 }
 

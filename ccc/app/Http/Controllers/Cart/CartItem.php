@@ -52,9 +52,9 @@ class CartItem extends Controller
            $cart->discount = $discountTotal;
            echo $cart->total = $total+$cart->shippingAmount;
            $cart->save();
-
         }
-        return \redirect('cart/'.$cartId);   
+        return \redirect('cart/'.$cartId)->with('updateqty','cart Item quantity updated');  
+        // return \redirect('cart/'.$cartId);   
     }
 
     public function ItemDeleteAction(Request $request)
@@ -84,7 +84,7 @@ class CartItem extends Controller
            $cart->save();
 
         }
-        return \redirect('cart/'.$cartId);
+        return \redirect('cart/'.$cartId)->with('deletecartItem','cart Item deleted!!!'); 
         
         
     }
@@ -116,7 +116,7 @@ class CartItem extends Controller
             }
 
             }
-            return \redirect('cart/'.$cartId);
+            return \redirect('cart/'.$cartId)->with('addItem','cart Item added!!!'); 
     }
 
 

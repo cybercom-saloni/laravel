@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2021 at 11:35 AM
+-- Generation Time: May 25, 2021 at 08:07 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -74,8 +74,8 @@ CREATE TABLE `carts` (
 
 INSERT INTO `carts` (`id`, `customerId`, `total`, `discount`, `paymentId`, `shippingId`, `shippingAmount`, `created_at`, `updated_at`) VALUES
 (19, 8, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 00:17:56', '2021-05-24 00:17:56'),
-(44, 7, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 02:49:13', '2021-05-24 02:49:13'),
-(45, 1, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 03:13:24', '2021-05-24 03:13:24');
+(44, 7, '499.00', '1.00', 1, 1, '400.00', '2021-05-24 02:49:13', '2021-05-24 08:57:59'),
+(45, 1, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 03:13:24', '2021-05-24 06:35:36');
 
 -- --------------------------------------------------------
 
@@ -99,6 +99,14 @@ CREATE TABLE `cart_addresses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `cart_addresses`
+--
+
+INSERT INTO `cart_addresses` (`id`, `cartId`, `addressId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `sameAsBilling`, `created_at`, `updated_at`) VALUES
+(88, 44, NULL, 'a', 'a', 'a', 'a', 'a', 'a', 'billing', '0', '2021-05-24 06:37:29', '2021-05-24 06:38:10'),
+(89, 44, NULL, 'a', 'a', 'a', 'a', 'a', 'a', 'shipping', '0', '2021-05-24 06:37:29', '2021-05-24 06:38:10');
+
 -- --------------------------------------------------------
 
 --
@@ -117,6 +125,13 @@ CREATE TABLE `cart_items` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `cart_items`
+--
+
+INSERT INTO `cart_items` (`id`, `cartId`, `productId`, `quantity`, `basePrice`, `price`, `discount`, `created_at`, `updated_at`) VALUES
+(104, 44, 2, 1, '100.00', '100.00', '1.00', '2021-05-24 06:12:59', '2021-05-24 06:12:59');
+
 -- --------------------------------------------------------
 
 --
@@ -126,7 +141,7 @@ CREATE TABLE `cart_items` (
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `parent_id` int(11) NOT NULL,
+  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -138,13 +153,10 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `parent_id`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'category1', 0, 'cat1', '2', NULL, NULL),
-(7, 'abc1', 6, 'ac', '1', NULL, NULL),
-(10, 'f', 9, 'w', '1', NULL, NULL),
-(13, 'root', 0, 'root', '1', NULL, NULL),
-(16, 'new', 3, 'w', '1', NULL, '2021-05-20 05:52:47'),
-(18, 'new2', 17, 'w', '1', NULL, NULL),
-(19, 'a', 3, 's', '1', NULL, '2021-05-21 08:21:55');
+(4, 'cat1', NULL, 'abc', '0', NULL, NULL),
+(6, 'cat2', NULL, 's', '0', NULL, NULL),
+(7, 'cat3', NULL, 'cat3', '1', NULL, NULL),
+(10, 'cat4_2', NULL, 'a', '1', NULL, '2021-05-25 00:18:56');
 
 -- --------------------------------------------------------
 
@@ -290,7 +302,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (154, '2021_05_24_023029_create_order_addresses_table', 26),
 (155, '2021_05_24_023644_create_order_addresses_table', 27),
 (156, '2021_05_24_023813_create_order_items_table', 28),
-(157, '2021_05_24_053329_create_order_addresses_table', 29);
+(157, '2021_05_24_053329_create_order_addresses_table', 29),
+(158, '2021_05_24_125246_create_statuses_table', 30),
+(159, '2021_05_25_045950_create_categories_table', 31),
+(160, '2021_05_25_050742_create_categories_table', 32),
+(161, '2021_05_25_051317_create_categories_table', 33);
 
 -- --------------------------------------------------------
 
@@ -498,14 +514,15 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `sku`, `price`, `discount`, `quantity`, `description`, `status`, `category_id`, `created_at`, `updated_at`) VALUES
-(2, 'panel', 'panel', 100, 1, 1, 'nice', 1, 13, '2021-05-04 22:38:58', '2021-05-21 02:09:49'),
-(7, 'bed', 'bed', 10, 1, 1, '1', 1, 1, '2021-05-13 04:28:24', '2021-05-19 22:39:45'),
-(8, '2', 'second pro', 2, 2, 2, '2', 1, 1, '2021-05-13 04:28:39', '2021-05-17 06:50:17'),
-(9, '1', '2', 1, 1, 1, '1', 1, 1, '2021-05-17 04:41:32', '2021-05-17 06:57:22'),
-(10, '2', '2', 2, 2, 2, '1', 0, 1, '2021-05-17 04:41:57', '2021-05-17 01:18:04'),
-(11, 'new', 'new1', 100, 10, 1, '111', 1, 1, '2021-05-17 06:47:13', '2021-05-17 06:47:57'),
-(12, '1', '1', 1, 1, 1, '1', 0, 1, '2021-05-17 06:57:56', NULL),
-(14, 's', 's', 12, 1, 1, '1', 1, 1, '2021-05-17 20:35:01', NULL);
+(2, 'panel', 'panel', 100, 1, 1, 'nice', 1, 6, '2021-05-04 22:38:58', '2021-05-25 05:49:38'),
+(7, 'bed', 'bed', 10, 1, 1, '1', 1, 7, '2021-05-13 04:28:24', '2021-05-25 05:49:45'),
+(8, '2', 'second pro', 2, 2, 2, '2', 1, 4, '2021-05-13 04:28:39', '2021-05-25 05:49:54'),
+(9, '1', '2', 1, 1, 1, '1', 1, 10, '2021-05-17 04:41:32', '2021-05-25 05:50:05'),
+(10, '2', '2', 2, 2, 2, '1', 0, 6, '2021-05-17 04:41:57', '2021-05-25 05:50:20'),
+(11, 'new', 'new1', 100, 10, 1, '111', 1, 10, '2021-05-17 06:47:13', '2021-05-25 05:50:47'),
+(12, '1', '1', 1, 1, 1, '1', 0, 10, '2021-05-17 06:57:56', '2021-05-25 05:50:29'),
+(14, 's', 's', 12, 1, 1, '1', 1, 7, '2021-05-17 20:35:01', '2021-05-25 05:50:37'),
+(15, 'a', 'a', 1, 1, 1, 'a', 1, 4, '2021-05-25 05:21:12', NULL);
 
 -- --------------------------------------------------------
 
@@ -548,6 +565,20 @@ CREATE TABLE `shippings` (
 INSERT INTO `shippings` (`id`, `name`, `code`, `amount`, `description`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'fast Delivery', 'fast', '400.00', 'fast', 1, NULL, NULL),
 (2, 'express delivery', 'express', '100.00', 'express', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `statuses`
+--
+
+CREATE TABLE `statuses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `orderId` bigint(20) UNSIGNED NOT NULL,
+  `status` enum('Confirm','Pending','InProcess','Shipped','Cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -606,7 +637,8 @@ ALTER TABLE `cart_items`
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `categories_parent_id_foreign` (`parent_id`);
 
 --
 -- Indexes for table `cccprac1`
@@ -721,6 +753,13 @@ ALTER TABLE `shippings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `statuses`
+--
+ALTER TABLE `statuses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `statuses_orderid_foreign` (`orderId`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -747,19 +786,19 @@ ALTER TABLE `carts`
 -- AUTO_INCREMENT for table `cart_addresses`
 --
 ALTER TABLE `cart_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `cccprac1`
@@ -789,7 +828,7 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -843,7 +882,7 @@ ALTER TABLE `pots`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `shipping`
@@ -856,6 +895,12 @@ ALTER TABLE `shipping`
 --
 ALTER TABLE `shippings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `statuses`
+--
+ALTER TABLE `statuses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -896,6 +941,12 @@ ALTER TABLE `cart_items`
   ADD CONSTRAINT `cart_items_productid_foreign` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `categories`
+--
+ALTER TABLE `categories`
+  ADD CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
 -- Constraints for table `media`
 --
 ALTER TABLE `media`
@@ -922,6 +973,12 @@ ALTER TABLE `order_addresses`
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_orderid_foreign` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `order_items_productid_foreign` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `statuses`
+--
+ALTER TABLE `statuses`
+  ADD CONSTRAINT `statuses_orderid_foreign` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

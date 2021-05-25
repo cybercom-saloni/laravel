@@ -1,5 +1,8 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
 <hr>
+@if(session('changeCustomer'))
+<div class="alert alert-success">{{session('changeCustomer')}}</div>
+@endif
 <form action="/order/customer" method="post" id="customerId">
     @csrf
     <div class="form-group">
@@ -70,7 +73,7 @@
                     <td>{{$orderBillingAddressDetails[0]->zipcode}}</td>
                 </tr>
                 <tr>
-                    <td>Area :-</td>
+                    <td>Country :-</td>
                     <td>{{$orderBillingAddressDetails[0]->country}}</td>
                 </tr>
             </table>
@@ -99,7 +102,7 @@
                     <td>{{$orderShippingAddressDetails[0]->zipcode}}</td>
                 </tr>
                 <tr>
-                    <td>Area :-</td>
+                    <td>Country :-</td>
                     <td>{{$orderShippingAddressDetails[0]->country}}</td>
                 </tr>
             </table>
@@ -136,7 +139,34 @@
         </tr>
     </tbody>
 </table>
-
+<!-- <h3>Order Status</h3>
+<table class="table table-bordered bg-light  table-hover">
+<form action="" method="POST" id="form">
+    <thead>
+        <tr>
+            <td>Status</td>
+            <td> 
+                 <select class="form-control" name="orderStatus" id="orderStatus">
+                    <option selected disabled>Select Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="InProcess">InProcess</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </td>
+            <select name="customer" id="customer" class="form-control col-lg-5">
+                <option disabled selected>select</option>
+                <option value="Pending">Pending</option>
+                </select>
+        <tr>
+        <tr>
+            <td></td>
+            <td><button type="button" id="addressUpdate" class="btn btn-md btn-primary">Order Status</button></td>
+        </tr>
+    </thead>
+</form>
+</table> -->
 <script>
  $(function() {
         $('#customer').on('change', function(e) {
@@ -167,4 +197,40 @@
         });
     });
 
-</script>
+    // $(function(){
+    //     $('#addressUpdate').on('click',function(e){
+    //         e.preventDefault();
+    //         $.ajax({
+    //             type : 'POST',
+    //             url : '/saveStatus',
+    //             headers : {
+    //                 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+    //             },
+    //             data : $('#form').serializeArray(),
+    //             success : function(response)
+    //             {
+                   
+    //                 if(typeof response.element == 'undefined')
+    //                 {
+    //                     return false;
+    //                 }
+    //                 if(typeof response.element == 'object')
+    //                 {
+    //                     $(response.element).each(
+    //                         function(i,element)
+    //                         {
+    //                             $('#content').html(element.html);
+    //                         }
+    //                     )
+    //                 }
+    //                 else
+    //                 {
+    //                     $(response.element.selector).html(response.element.html);
+    //                 }
+    //             }
+    //         });
+    //     });
+    // });  
+ </script>
+
+

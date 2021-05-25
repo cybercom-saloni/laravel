@@ -59,6 +59,28 @@
            
         </tbody>
     </table>
-    {!! $customerAddress->links()!!}
+    <!-- {!! $customerAddress->links()!!} -->
+    <div>
+    <nav>
+        <ul class="pagination">
+            
+            @if($customerAddress->currentPage() != 1)
+            <li class="page-item">
+                <a class="page-link{{$customerAddress->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$customerAddress->previousPageUrl()}}').setMethod('get').load()">Previous</a>
+            </li>
+            @endif
+            @for($i=1;$i<=$customerAddress->lastPage();$i++)
+                <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
+                    <a class="page-link" onclick="object.setUrl('{{$customerAddress->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
+                </li>
+            @endfor
+            @if($customerAddress->currentPage() != $customerAddress->lastPage())
+            <li class="page-item">
+                <a class="page-link{{$customerAddress->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$customerAddress->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
+            </li>
+            @endif
+        </ul>
+    </nav>
+</div>
 
     

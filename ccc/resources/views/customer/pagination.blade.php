@@ -1,7 +1,42 @@
 <?php $customerAddress;?>
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer</h3>
 <hr>
-    <a onclick="object.setUrl('/customer/form').setMethod('get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New customer</a>
+<div class="col-12">
+    <div class = "row">
+        <div class="col-6">
+        <a onclick="object.setUrl('/customer/form').setMethod('get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New customer</a>
+        </div>
+        <div class="col-6">
+        <form action="/setPages/customerGrid" method="post" id="records">
+                        @csrf
+                        <div class="navbar-btn navbar-btn-right">
+                            <div class="form-group">
+                                <label for="recordPerPage">Record Per Page</label>
+                                <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
+                                    <option value="2"
+                                        {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
+                                        2
+                                    </option>
+                                    <option value="4"
+                                        {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
+                                        4
+                                    </option>
+                                    <option value="50"
+                                        {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
+                                        20
+                                    </option>
+                                    <option value="100"
+                                        {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
+                                        50
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+        </div>
+    </div>
+</div>
+    
     <table class="table table-bordered bg-light  table-hover">
         <thead class="bg-dark text-white">
             <tr>
@@ -82,5 +117,32 @@
         </ul>
     </nav>
 </div>
+
+<script>
+$(function() {
+    $('#recordPerPage').on('change', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: '/setPages/customerGrid',
+            data: $('#records').serializeArray(),
+            success: function(response) {
+                if (typeof response.element == 'undefined') {
+                    return false;
+                }
+                if (typeof response.element == 'object') {
+                    $(response.element).each(
+                        function(i, element) {
+                            $('#content').html(element.html);
+                        })
+                        } 
+                        else {
+                            $(response.element.selector).html(response.element.html);
+                        }
+                }
+        });
+    });
+});
+</script>
 
     

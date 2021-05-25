@@ -110,4 +110,4 @@ Route::get('/order',[Order::class,'displayOrderAction']);
 Route::get('/order/Information/{id?}',[Order::class,'displayAllOrderAction']);
 Route::post('/order/customer',[Order::class,'saveCustomerAction']);
 
-Route::post('/saveStatus',[Order::class,'saveStatusAction']);
+Route::post('/setPages/{page?}', [Product::class, 'setPageAction'])->name('setProductPage');

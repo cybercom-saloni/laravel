@@ -38,7 +38,7 @@
                         <label for="email"> email</label>
                     </div>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control"  id="email"  placeholder="email" name="customer[email]" value="{{$customerData ? $customerData->email : ' '}}" required>
+                        <input type="email" class="form-control"  id="email"  placeholder="email" name="customer[email]" value="{{$customerData ? $customerData->email : ' '}}" required>
                     </div>
                 </div>
 

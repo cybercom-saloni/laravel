@@ -8,6 +8,7 @@ use App\Models\Customer\Address as AddressModel;
 use Crypt;
 use Facade\FlareClient\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Customer extends Controller
 {
@@ -15,9 +16,15 @@ class Customer extends Controller
     public function gridAction() 
     {
         // $customer  = CustomerModel::all();
-        $pagination = CustomerModel::paginate(2);
+        $page = 2;
+        if (Session::has('page')) {
+            $page = Session::get('page');
+        } else {
+            Session::put('page', $page);
+        }
+        $pagination = CustomerModel::paginate($page);
         $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
-        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate(2);
+        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
         $view = view('customer.grid',['customers'=>$pagination,'customerAddress'=>$customerAddress])->render();
         $response = [
             'element' =>[

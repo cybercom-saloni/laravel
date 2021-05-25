@@ -8,6 +8,8 @@ use App\Models\Product\Media;
 use Facade\FlareClient\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 
 class Product extends Controller
 {
@@ -50,9 +52,15 @@ class Product extends Controller
 
     public function gridAction()
     {
+        $page = 2;
+        if (Session::has('page')) {
+            $page = Session::get('page');
+        } else {
+            Session::put('page', $page);
+        }
         $products = new ProductModel;
         $this->setProducts($products->fetchAll());
-        $pagination = ProductModel::paginate(2);
+        $pagination = ProductModel::paginate($page);
         $view = \view('product.product',['products'=>$pagination,'controller'=>$this])->render();
         $response = [
             'element' => [
@@ -263,5 +271,17 @@ class Product extends Controller
         }
         $product->save();
         return redirect('/product');
+    }
+
+
+    public function setPageAction(Request $request)
+    {
+        Session::put('page', $request->recordPerPage);
+
+       if ($request->page == 'customerGrid') {
+            return redirect('/customerGrid');
+        } else {
+            return redirect('/product');
+        }
     }
 }

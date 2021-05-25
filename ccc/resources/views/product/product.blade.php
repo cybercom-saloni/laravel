@@ -1,7 +1,41 @@
     <div id="table_data">
     <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Product</h3>
 <hr>
-    <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
+<div class="col-12">
+    <div class = "row">
+        <div class="col-6">
+            <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
+        </div>
+        <div class="col-6">
+        <form action="/setPages/product" method="post" id="records">
+                        @csrf
+                        <div class="navbar-btn navbar-btn-right">
+                            <div class="form-group">
+                                <label for="recordPerPage">Record Per Page</label>
+                                <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
+                                    <option value="2"
+                                        {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
+                                        2
+                                    </option>
+                                    <option value="4"
+                                        {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
+                                        4
+                                    </option>
+                                    <option value="50"
+                                        {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
+                                        20
+                                    </option>
+                                    <option value="100"
+                                        {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
+                                        50
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+        </div>
+    </div>
+</div>
 
 <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">
@@ -80,11 +114,41 @@
 
 </div>
 
+<script>
+$(function() {
+    $('#recordPerPage').on('change', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: '/setPages/product',
+            data: $('#records').serializeArray(),
+            success: function(response) {
+                if (typeof response.element == 'undefined') {
+                    return false;
+                }
+                if (typeof response.element == 'object') {
+                    $(response.element).each(
+                        function(i, element) {
+                            $('#content').html(element.html);
+                        })
+                        } 
+                        else {
+                            $(response.element.selector).html(response.element.html);
+                        }
+                }
+        });
+    });
+});
+</script>
+
      <!-- storing page no -->
     <!-- <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
 
     vakues changes when user clicks
-    <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id"/> -->
+    <input type="hid
+    
+    
+    den" name="hidden_column_name" id="hidden_column_name" value="id"/> -->
     <!-- <form method="post" id="record">
         <label>Record per Page</p>
         <select name="selectpage">

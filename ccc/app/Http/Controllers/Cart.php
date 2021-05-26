@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Customer as CustomerModel;
 use App\Models\Cart as CartModel;
+use App\Models\Customer\Address as AddressModel;
 use App\Models\Product as ProductModel;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -41,14 +42,22 @@ class Cart extends Controller
                 $cart->discount = 0;
                 $cart->paymentId = 1;
                 $cart->shippingId = 1;
-                $cart->shippingAmount = 0;
+                $cart->shippingAmount = 400;
                 $cart->save();
             }
            $cartId = $cart->id;
+
+           $cartBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
+           $cartShippingAddress = AddressModel::where([['customerId',$customerId],['addressType','shipping']])->first();
+           if(!$cartBillingAddress)
+           {
+               $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
+           }
+           if(!$cartShippingAddress)
+           {
+               $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
+           }
         } 
-          $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
-          $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-         
           $cartView = CartModel::where('id',$cartId)->get();
           $pagination = ProductModel::where('status', 1)->paginate(2);  
           $cartItems = CartItem::where('cartId',$cartId)->get();
@@ -183,12 +192,12 @@ class Cart extends Controller
 
     public function saveCustomerAction($cartId=null,Request $request)
     {
-        echo $request->customer;
+        // echo $request->customer;
         Session::put('customerId', $request->customer);
     //     // Session::put('cartId', $cartId);
-      echo $customerId =Session::get('customerId');
+        $customerId =Session::get('customerId');
         //echo $customerId = $request->customer;
-         echo $cart = CartModel::where('customerId', $customerId)->first();
+         $cart = CartModel::where('customerId', $customerId)->first();
         if(!$cart)
         {
            $cart = new CartModel;
@@ -201,6 +210,48 @@ class Cart extends Controller
         // echo $customerId =Session::get('customerId');
         $cartId = $cart->id;
         Session::put('cartId',$cartId);
+        echo $CustomerBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
+        $CustomerShippingAddress = AddressModel::where([['customerId',$customerId],['addressType','shipping']])->first();
+        if($CustomerBillingAddress)
+        {
+            $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
+            if(!$cartBillingAddress)
+            {
+                $cartBillingAddress = new CartAddress();
+                $cartBillingAddress->cartId = $cartId;
+                $cartBillingAddress->addressId = $CustomerBillingAddress->id;
+                $cartBillingAddress->address = $CustomerBillingAddress->address;
+                $cartBillingAddress->area = $CustomerBillingAddress->area;
+                $cartBillingAddress->city = $CustomerBillingAddress->city;
+                $cartBillingAddress->state = $CustomerBillingAddress->state;
+                $cartBillingAddress->city = $CustomerBillingAddress->city;
+                $cartBillingAddress->country = $CustomerBillingAddress->country;
+                $cartBillingAddress->state = $CustomerBillingAddress->state;
+                $cartBillingAddress->zipcode = $CustomerBillingAddress->zipcode;
+                $cartBillingAddress->addressType = $CustomerBillingAddress->addressType;
+                $cartBillingAddress->save();
+            }
+        }
+        if($CustomerShippingAddress)
+        {
+            $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
+            if(!$cartShippingAddress)
+            {
+                $cartShippingAddress = new CartAddress();
+                $cartShippingAddress->cartId = $cartId;
+                $cartShippingAddress->addressId = $CustomerShippingAddress->id;
+                $cartShippingAddress->address = $CustomerShippingAddress->address;
+                $cartShippingAddress->area = $CustomerShippingAddress->area;
+                $cartShippingAddress->city = $CustomerShippingAddress->city;
+                $cartShippingAddress->state = $CustomerShippingAddress->state;
+                $cartShippingAddress->city = $CustomerShippingAddress->city;
+                $cartShippingAddress->country = $CustomerShippingAddress->country;
+                $cartShippingAddress->state = $CustomerShippingAddress->state;
+                $cartShippingAddress->zipcode = $CustomerShippingAddress->zipcode;
+                $cartShippingAddress->addressType = $CustomerShippingAddress->addressType;
+                $cartShippingAddress->save();
+            }
+        }
         return \redirect('cart/'.$cartId)->with('changeCustomer','Customer Changed!!!');
         // if(Session::get('cartId'))
         // {
@@ -288,7 +339,7 @@ class Cart extends Controller
             $price = $cartItem->price;
             $quantity = $cartItem->quantity;
             $discountTotal +=$discount * $quantity;
-            $total += ($price - ($discount * $price/ 100)) * $quantity;
+            $total += (float)($price - ($discount * $price/ 100)) * $quantity;
         }
         
         $cart = CartModel::where('id',$cartId)->first();
@@ -303,6 +354,6 @@ class Cart extends Controller
            $cart->save();
 
         }
-        return  $cart->total;
+        return  (float)$cart->total;
     }
 }

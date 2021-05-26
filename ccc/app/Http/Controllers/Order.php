@@ -21,25 +21,27 @@ class Order extends Controller
         $customers = CustomerModel::all();
         $cartId = SESSION::get('cartId');
          $customerId = SESSION::get('customerId');
-      
+        
         
         if($cartId)
         {
-            $customer = CustomerModel::where('id',$customerId)->first();
+             $customer = CustomerModel::where('id',$customerId)->first();
            $cart = CartModel::where('id',$cartId)->first();
+        //    echo $cart[0]->customerId;
+        //    die;
             $order = OrderModel::where('customerId',$customerId)->first();
-            if(!$order)
-            {
-                $order = new OrderModel;
-            }
-            $order->customerId = $cart->customerId;
-            $order->total = $cart->total;
-            $order->discount = $cart->discount;
-            $order->paymentId = $cart->paymentId;
-            $order->shippingId = $cart->shippingId;
-            $order->shippingAmount = $cart->shippingAmount;
-            $order->status = 'pending';
-            $order->save();
+            // if(!$order)
+            // {
+            //     $order = new OrderModel;
+            // }
+            // $order->customerId = $cart->customerId;
+            // $order->total = $cart->total;
+            // $order->discount = $cart->discount;
+            // $order->paymentId = $cart->paymentId;
+            // $order->shippingId = $cart->shippingId;
+            // $order->shippingAmount = $cart->shippingAmount;
+            // $order->status = 'pending';
+            // $order->save();
             $orderId = $order->id;
             $cartItems = CartItem::where('cartId',$cartId)->get();
             // $orderItem = OrderItem::where('orderId',$orderId)->get();
@@ -99,14 +101,14 @@ class Order extends Controller
             $cartShippingAddressDelete = CartAddress::find($cartShippingAddress->id);
             $cartShippingAddressDelete->Delete();
 
-           $orderDetails = OrderModel::where('id',$orderId)->first();
+           $orderDetails = OrderModel::where('id',$orderId)->latest()->first();
            $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
            $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->get();
            $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->get();
         }
         $cartModel = CartModel::find($cartId);
             $cartModel->delete();
-            $view = view('order.grid',['controller'=>$this,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
+            $view = view('order.grid',['controller'=>$this,'customer'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
             $response =[
              'element'=>[
                  [

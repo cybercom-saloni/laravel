@@ -106,8 +106,8 @@ Route::get('/cartItem/delete/{id}',[CartItem::class,'ItemDeleteAction']);
 Route::get('/cartproduct/fetch_cartdata',[Cart::class,'fetch_cartdata']);
 Route::post('/cartItem/addItem',[CartItem::class,'addItemAction']);
 
-Route::get('/order',[Order::class,'displayOrderAction']);
-Route::get('/order/Information/{id?}',[Order::class,'displayAllOrderAction']);
+Route::get('/order/{id?}',[Order::class,'displayOrderAction']);
+Route::get('/order/Information',[Order::class,'displayAllOrderAction']);
 Route::post('/order/customer',[Order::class,'saveCustomerAction']);
 
 Route::post('/setPages/{page?}', [Product::class, 'setPageAction'])->name('setProductPage');

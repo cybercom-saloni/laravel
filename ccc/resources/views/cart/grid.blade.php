@@ -3,7 +3,7 @@
 @if(session('changeCustomer'))
 <div class="alert alert-success">{{session('changeCustomer')}}</div>
 @endif
-
+{{Session::get('cartId')}}
 <form action="/cart/customer" method="post" id="customerId">
     @csrf
     <div class="form-group">
@@ -295,10 +295,10 @@
                     <tr>
                         <td>{{$controller->getProductName($cartItem->productId)}}</td>
                         <td>Rs.{{$cartItem->price}}</td>
-                        <td><input type="number" class="form-control"  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"    min="1" step="0.01"  required></td>
+                        <td><input type="number" class="form-control"  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"    min="1" step="1"  required></td>
                         <td>Rs.@php  echo $rowtotal = $cartItem->quantity*$cartItem->price @endphp .00</td>
                         <td>{{$cartItem->discount}}%</td>
-                        <td>Rs.{{$rowtotal - $rowtotal*($cartItem->discount/100)}}.00</td>      
+                        <td>Rs.{{$rowtotal - $rowtotal*($cartItem->discount/100)}}</td>      
                         <td><a href="javascript:void(0)" onclick="object.setUrl('/cartItem/delete/{{$cartItem->id}}').setMethod('get').load();" class="btn btn-secondary">DELETE</a></td>               
                     </tr>
                     @endforeach
@@ -309,7 +309,7 @@
                     </tr>
                     <tr>
                     <td colspan="5">Total</td>
-                    <td>Rs.{{$controller->getTotal()}}.00</td>
+                    <td>Rs.{{$controller->getTotal()}}</td>
                     <td></td>
                     </tr>
         </tbody>

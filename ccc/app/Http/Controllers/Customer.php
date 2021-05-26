@@ -67,7 +67,7 @@ class Customer extends Controller
             echo json_encode($response);
             die();
         }
-        $customer = CustomerModel::find($id);
+       $customer = CustomerModel::find($id);
         $password=  Crypt::decryptString($customer->password);
        $view = view('customer.tabs.personalform',['customer'=>$customer,'password'=>$password])->render();
        $response=[
@@ -107,10 +107,11 @@ class Customer extends Controller
 
     public  function saveAction($id=null,Request $request)
     {
-        $request->validate([
-            'customer[firstname]' => 'required',
-        ]);
+        
         $customerData = $request->customer;
+        // $request->validate([
+        //     'customerData[firstname]' => 'required',
+        // ]);
         $password =  Crypt::encryptString($customerData['password']);
         $customerData['password'] = $password;
         // date_default_timezone_set('Asia/Kolkata');

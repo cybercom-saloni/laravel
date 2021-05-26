@@ -1,5 +1,6 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
 <hr>
+
 <div class="col-12">
     <div class ="row">
         <div class ="col-12">
@@ -7,15 +8,15 @@
             <table>
                 <tr>
                     <td>Customer Name :-</td>
-                    <td>{{$customer->firstname}} {{$customer->lastname}}</td>
+                    <td>{{$customer[0]->firstname}} {{$customer[0]->lastname}}</td>
                 </tr>
                 <tr>
                     <td>Email Address:-</td>
-                    <td>{{$customer->email}}</td>
+                    <td>{{$customer[0]->email}}</td>
                 </tr>
                 <tr>
                     <td>Contact Number:-</td>
-                    <td>{{$customer->contactno}}</td>
+                    <td>{{$customer[0]->contactno}}</td>
                 </tr>
                 <tr>
                     <td>Payment Details:-</td>

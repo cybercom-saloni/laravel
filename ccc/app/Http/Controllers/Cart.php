@@ -28,7 +28,7 @@ class Cart extends Controller
         if(!$customerId)
         {
             $customer = CustomerModel::first();
-            echo $customerId = $customer->id;
+            $customerId = $customer->id;
             Session::put('customerId',$customerId);
         }
         
@@ -48,6 +48,7 @@ class Cart extends Controller
                 $cart->save();
             }
            $cartId = $cart->id;
+           Session::put('cartId',$cartId);
 
            $cartBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
            $cartShippingAddress = AddressModel::where([['customerId',$customerId],['addressType','shipping']])->first();

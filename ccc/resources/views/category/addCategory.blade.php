@@ -65,4 +65,7 @@
     </div>
 </body>
 <script src="{{asset('js/categorytree.js')}}"></script>
+<script>
+
+</script>
 </html>

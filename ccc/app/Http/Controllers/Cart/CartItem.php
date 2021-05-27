@@ -92,7 +92,7 @@ class CartItem extends Controller
     
     public function addItemAction(Request $request)
     {
-       
+    
         $productIds = $request->products;
         $cartId = SESSION::get('cartId');
         foreach($productIds as $key=>$productId)

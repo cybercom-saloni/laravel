@@ -1,6 +1,5 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
 <hr>
-
 <div class="col-12">
     <div class ="row">
         <div class ="col-12">
@@ -8,15 +7,15 @@
             <table>
                 <tr>
                     <td>Customer Name :-</td>
-                    <td>{{$customer[0]->firstname}} {{$customer[0]->lastname}}</td>
+                    <td>{{$customer->firstname}} {{$customer->lastname}}</td>
                 </tr>
                 <tr>
                     <td>Email Address:-</td>
-                    <td>{{$customer[0]->email}}</td>
+                    <td>{{$customer->email}}</td>
                 </tr>
                 <tr>
                     <td>Contact Number:-</td>
-                    <td>{{$customer[0]->contactno}}</td>
+                    <td>{{$customer->contactno}}</td>
                 </tr>
                 <tr>
                     <td>Payment Details:-</td>
@@ -109,7 +108,7 @@
             <td>Rs.{{$orderItem->basePrice}}</td>
             <td>{{$orderItem->quantity}}</td>
             <td>{{$orderItem->discount}}%</td>
-            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price @endphp {{$rowtotal - $rowtotal*($orderItem->discount/100)}}.00</td>
+            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price @endphp {{$rowtotal - $rowtotal*($orderItem->discount/100)}}</td>
         </tr>
         @endforeach
         <tr>

@@ -14,6 +14,7 @@ use App\Http\Controllers\Cart;
 use App\Http\Controllers\Cart\CartItem;
 use App\Http\Controllers\Cart\Address as CartAddress;
 use App\Http\Controllers\Order;
+use App\Http\Controllers\OrderStatus;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -107,7 +108,10 @@ Route::get('/cartproduct/fetch_cartdata',[Cart::class,'fetch_cartdata']);
 Route::post('/cartItem/addItem',[CartItem::class,'addItemAction']);
 
 Route::get('/order/{id?}',[Order::class,'displayOrderAction']);
-Route::get('/order/Information',[Order::class,'displayAllOrderAction']);
+Route::get('/InformationCustomer/{id?}',[Order::class,'displayAllOrderAction']);
 Route::post('/order/customer',[Order::class,'saveCustomerAction']);
 
 Route::post('/setPages/{page?}', [Product::class, 'setPageAction'])->name('setProductPage');
+
+
+Route::post('saveComment/{id}', [OrderStatus::class, 'saveComment'])->name('saveComment');

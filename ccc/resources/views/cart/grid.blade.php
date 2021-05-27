@@ -3,7 +3,7 @@
 @if(session('changeCustomer'))
 <div class="alert alert-success">{{session('changeCustomer')}}</div>
 @endif
-{{Session::get('cartId')}}
+
 <form action="/cart/customer" method="post" id="customerId">
     @csrf
     <div class="form-group">

@@ -23,13 +23,15 @@ class Cart extends Controller
         //  $customerId = $request->id;
         $customers = CustomerModel::all();
         // Session::put('customerId', $request->customer);
-       $customerId = Session::get('customerId');
+        
+      $customerId = Session::get('customerId');
         if(!$customerId)
         {
             $customer = CustomerModel::first();
-            $customerId = $customer->id;
+            echo $customerId = $customer->id;
             Session::put('customerId',$customerId);
         }
+        
         if($customerId)
         {
             $cart = CartModel::where('customerId',$customerId)->first();
@@ -59,7 +61,7 @@ class Cart extends Controller
            }
         } 
           $cartView = CartModel::where('id',$cartId)->get();
-          $pagination = ProductModel::where('status', 1)->paginate(2);  
+          $pagination = ProductModel::where('status', 1)->paginate(4);  
           $cartItems = CartItem::where('cartId',$cartId)->get();
           $view = view('cart.grid',['products'=>$pagination,'customers'=>$customers,'cart'=>$cartView,'cartItems'=>$cartItems,'customerId'=>$customerId,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
        $response =[

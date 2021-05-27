@@ -14,7 +14,7 @@
             <a onclick="object.setUrl('/cart').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Cart</a>
           </li>
           <li>
-            <a onclick="object.setUrl('/order/Information').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Order</a>
+            <a onclick="object.setUrl('/InformationCustomer').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Order</a>
           </li>
         </ul>
     	</nav>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2021 at 08:07 AM
+-- Generation Time: May 27, 2021 at 07:07 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -48,7 +48,8 @@ CREATE TABLE `addresses` (
 
 INSERT INTO `addresses` (`id`, `customerId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `created_at`, `updated_at`) VALUES
 (1, 1, 'ratitali', 'nema', 'banswara', 'rajsthan', '327001', 'india', 'billing', NULL, '2021-05-22 03:46:43'),
-(5, 1, 'ratitali', 'nema', 'banswara', 'rajsthan', '327001', 'india', 'shipping', '2021-05-19 07:31:59', '2021-05-22 03:46:44');
+(5, 1, 'ratitali', 'nema', 'banswara', 'rajsthan', '327001', 'india', 'shipping', '2021-05-19 07:31:59', '2021-05-22 03:46:44'),
+(6, 7, 'a', 'a', 'in', 'a', 'a', 'a', 'billing', '2021-05-26 23:35:02', '2021-05-26 23:35:02');
 
 -- --------------------------------------------------------
 
@@ -74,7 +75,6 @@ CREATE TABLE `carts` (
 
 INSERT INTO `carts` (`id`, `customerId`, `total`, `discount`, `paymentId`, `shippingId`, `shippingAmount`, `created_at`, `updated_at`) VALUES
 (19, 8, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 00:17:56', '2021-05-24 00:17:56'),
-(44, 7, '499.00', '1.00', 1, 1, '400.00', '2021-05-24 02:49:13', '2021-05-24 08:57:59'),
 (45, 1, '0.00', '0.00', 1, 1, '0.00', '2021-05-24 03:13:24', '2021-05-24 06:35:36');
 
 -- --------------------------------------------------------
@@ -99,14 +99,6 @@ CREATE TABLE `cart_addresses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `cart_addresses`
---
-
-INSERT INTO `cart_addresses` (`id`, `cartId`, `addressId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `sameAsBilling`, `created_at`, `updated_at`) VALUES
-(88, 44, NULL, 'a', 'a', 'a', 'a', 'a', 'a', 'billing', '0', '2021-05-24 06:37:29', '2021-05-24 06:38:10'),
-(89, 44, NULL, 'a', 'a', 'a', 'a', 'a', 'a', 'shipping', '0', '2021-05-24 06:37:29', '2021-05-24 06:38:10');
-
 -- --------------------------------------------------------
 
 --
@@ -124,13 +116,6 @@ CREATE TABLE `cart_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cart_items`
---
-
-INSERT INTO `cart_items` (`id`, `cartId`, `productId`, `quantity`, `basePrice`, `price`, `discount`, `created_at`, `updated_at`) VALUES
-(104, 44, 2, 1, '100.00', '100.00', '1.00', '2021-05-24 06:12:59', '2021-05-24 06:12:59');
 
 -- --------------------------------------------------------
 
@@ -306,7 +291,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (158, '2021_05_24_125246_create_statuses_table', 30),
 (159, '2021_05_25_045950_create_categories_table', 31),
 (160, '2021_05_25_050742_create_categories_table', 32),
-(161, '2021_05_25_051317_create_categories_table', 33);
+(161, '2021_05_25_051317_create_categories_table', 33),
+(162, '2021_05_26_172007_create_order_statuses_table', 34);
 
 -- --------------------------------------------------------
 
@@ -332,7 +318,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customerId`, `total`, `shippingId`, `shippingAmount`, `paymentId`, `discount`, `status`, `created_at`, `updated_at`) VALUES
-(20, 7, '598.00', 1, '400.00', 1, '2.00', 'Pending', '2021-05-24 01:31:03', '2021-05-24 02:07:27'),
+(20, 7, '805.90', 1, '400.00', 1, '3.00', 'Pending', '2021-05-24 01:31:03', '2021-05-26 23:35:14'),
 (21, 1, '499.00', 1, '400.00', 1, '1.00', 'Pending', '2021-05-24 01:32:09', '2021-05-24 02:51:32');
 
 -- --------------------------------------------------------
@@ -361,8 +347,8 @@ CREATE TABLE `order_addresses` (
 --
 
 INSERT INTO `order_addresses` (`id`, `addressId`, `orderId`, `address`, `area`, `city`, `state`, `zipcode`, `country`, `addressType`, `created_at`, `updated_at`) VALUES
-(7, 1, 20, 'banswara', 'Rajasthan', 'Raj', 'Raj', '327001', 'in', 'billing', '2021-05-24 01:31:03', '2021-05-24 02:07:27'),
-(8, 1, 20, 'banswara', 'Rajasthan', 'Raj', 'Raj', '327001', 'in', 'shipping', '2021-05-24 01:31:03', '2021-05-24 01:33:38'),
+(7, 1, 20, 'a', 'a', 'in', 'a', 'a', 'a', 'billing', '2021-05-24 01:31:03', '2021-05-26 23:35:14'),
+(8, 1, 20, 'a', 'a', 'a', 'a', 'a', 'a', 'shipping', '2021-05-24 01:31:03', '2021-05-26 23:35:15'),
 (9, 1, 21, 'ratlam', 'ratlam', 'ratlam', 'mp', '321009', 'in', 'billing', '2021-05-24 01:32:09', '2021-05-24 02:51:33'),
 (10, 1, 21, 'ratlam', 'ratlam', 'ratlam', 'mp', '320011', 'in', 'shipping', '2021-05-24 01:32:09', '2021-05-24 02:51:33');
 
@@ -390,7 +376,31 @@ CREATE TABLE `order_items` (
 
 INSERT INTO `order_items` (`id`, `orderId`, `productId`, `quantity`, `basePrice`, `price`, `discount`, `created_at`, `updated_at`) VALUES
 (53, 20, 2, 2, '100.00', '100.00', '1.00', '2021-05-24 02:07:27', '2021-05-24 02:07:27'),
-(54, 21, 2, 1, '100.00', '100.00', '1.00', '2021-05-24 02:51:32', '2021-05-24 02:51:32');
+(54, 21, 2, 1, '100.00', '100.00', '1.00', '2021-05-24 02:51:32', '2021-05-24 02:51:32'),
+(55, 20, 2, 2, '100.00', '200.00', '1.00', '2021-05-26 23:35:14', '2021-05-26 23:35:14'),
+(56, 20, 7, 1, '10.00', '10.00', '1.00', '2021-05-26 23:35:14', '2021-05-26 23:35:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_statuses`
+--
+
+CREATE TABLE `order_statuses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `orderId` bigint(20) UNSIGNED NOT NULL,
+  `comment` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('pending','inprocess','shipped','delivered') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_statuses`
+--
+
+INSERT INTO `order_statuses` (`id`, `orderId`, `comment`, `status`, `created_at`, `updated_at`) VALUES
+(1, 21, 'pending', 'pending', '2021-05-26 23:36:21', '2021-05-26 23:36:21');
 
 -- --------------------------------------------------------
 
@@ -699,6 +709,13 @@ ALTER TABLE `order_items`
   ADD KEY `order_items_productid_foreign` (`productId`);
 
 --
+-- Indexes for table `order_statuses`
+--
+ALTER TABLE `order_statuses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_statuses_orderid_foreign` (`orderId`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -774,7 +791,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `carts`
@@ -792,7 +809,7 @@ ALTER TABLE `cart_addresses`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -828,7 +845,7 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -846,7 +863,13 @@ ALTER TABLE `order_addresses`
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `order_statuses`
+--
+ALTER TABLE `order_statuses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -973,6 +996,12 @@ ALTER TABLE `order_addresses`
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_orderid_foreign` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `order_items_productid_foreign` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `order_statuses`
+--
+ALTER TABLE `order_statuses`
+  ADD CONSTRAINT `order_statuses_orderid_foreign` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `statuses`

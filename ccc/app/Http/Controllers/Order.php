@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Order as OrderModel;
+use App\Models\OrderStatus as Comments;
 use App\Models\Order\OrderItem as OrderItem;
 use App\Models\Order\OrderAddress as OrderAddress;
 use App\Models\Cart\CartAddress as CartAddress;
@@ -9,6 +10,7 @@ use App\Models\Cart\CartItem as CartItem;
 use App\Models\Customer as CustomerModel;
 use App\Models\Cart as CartModel;
 use App\Models\Product as ProductModel;
+
 use App\Models\Shipping;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Session;
@@ -20,31 +22,31 @@ class Order extends Controller
     {
         $customers = CustomerModel::all();
         $cartId = SESSION::get('cartId');
-         $customerId = SESSION::get('customerId');
+        $customerId = SESSION::get('customerId');
         
         
         if($cartId)
         {
              $customer = CustomerModel::where('id',$customerId)->first();
-           $cart = CartModel::where('id',$cartId)->first();
+             $cart = CartModel::where('id',$cartId)->first();
         //    echo $cart[0]->customerId;
-        //    die;
-            $order = OrderModel::where('customerId',$customerId)->first();
-            // if(!$order)
-            // {
-            //     $order = new OrderModel;
-            // }
-            // $order->customerId = $cart->customerId;
-            // $order->total = $cart->total;
-            // $order->discount = $cart->discount;
-            // $order->paymentId = $cart->paymentId;
-            // $order->shippingId = $cart->shippingId;
-            // $order->shippingAmount = $cart->shippingAmount;
-            // $order->status = 'pending';
-            // $order->save();
+             $order = OrderModel::where('customerId',$customerId)->first();
+        if(!$order)
+        {
+            $order = new OrderModel;
+        }
+         $order->customerId = $cart->customerId;
+       
+            $order->total = $cart->total;
+            $order->discount = $cart->discount;
+            $order->paymentId = $cart->paymentId;
+            $order->shippingId = $cart->shippingId;
+            $order->shippingAmount = $cart->shippingAmount;
+            $order->status = 'pending';
+            $order->save();
             $orderId = $order->id;
             $cartItems = CartItem::where('cartId',$cartId)->get();
-            // $orderItem = OrderItem::where('orderId',$orderId)->get();
+            $orderItem = OrderItem::where('orderId',$orderId)->get();
             foreach($cartItems as $cartItemId=>$cartItem)
             {
                
@@ -59,7 +61,7 @@ class Order extends Controller
                  $cartItemModel = CartItem::find($cartItem->id);
                    $cartItemModel->delete();
                    $productId =  $orderItem->productId;
-                //    $product = ProductModel::where('id',$productId)->first();
+                   $product = ProductModel::where('id',$productId)->first();
         
 
             }
@@ -108,7 +110,7 @@ class Order extends Controller
         }
         $cartModel = CartModel::find($cartId);
             $cartModel->delete();
-            $view = view('order.grid',['controller'=>$this,'customer'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
+            $view = view('order.grid',['controller'=>$this,'customer'=>$customer,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
             $response =[
              'element'=>[
                  [
@@ -141,38 +143,46 @@ class Order extends Controller
         return $shipping->name;
     }
 
+    
     public function displayAllOrderAction()
     {
         $customers = CustomerModel::Join('orders','customers.id','=','orders.customerId')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno')->get();
-        // $customers = CustomerModel::all();
         $orderId = Session::get('orderId');
          $customerId = Session::get('ordercustomerId');
-         if(!$customerId)
-         {
-             
-            $customer = CustomerModel::first();
-            $customerId = $customer->id;
-            Session::put('ordercustomerId',$customerId);
-            $customerDetails = CustomerModel::where('id',$customerId)->first();
-            $order = OrderModel::where('customerId',$customerId)->first();
-         }
-         if(!$orderId)
-         {
-           
-            $order = OrderModel::first();
-            $orderId = $order->id;
-            Session::put('orderId',$orderId);
-            $orderDetails = OrderModel::where('id',$orderId)->first();
-            // $customerDetails = CustomerModel::where('id',$orderId)->first();
-            // $order = OrderModel::where('orderId',$orderId)->first();
-         }
+         
          $order = OrderModel::where('customerId',$customerId)->first();
             $orderDetails = OrderModel::where('id',$orderId)->first();
             $customerDetails = CustomerModel::where('id',$customerId)->first();
+            if(!$customerDetails)
+            {
+                
+                $customerDetails = CustomerModel::first();
+                $customerId = $customerDetails->id;
+                Session::put('ordercustomerId',$customerId);
+            }
+            if(!$orderDetails)
+            {
+               
+                $orderDetails = OrderModel::where('customerId',$customerId)->first();
+                $orderId  = $orderDetails->id;
+            }
            $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
+           if(!$orderItemsDetails)
+           {
+                $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
+           }
            $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->get();
+           if(!$orderBillingAddressDetails)
+           {
+              echo $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->first();
+           }
            $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->get();
-            $view = view('order.information',['controller'=>$this,'customerDetails'=>$customerDetails,'customers'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->with('changeCustomer','customer Changed!!!')->render();
+           if(!$orderShippingAddressDetails)
+           {
+              echo $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->first();
+           }
+            $comments = Comments::where('orderId', $orderId)->get();
+            $view = view('order.information',['comments'=>$comments,'controller'=>$this,'customerDetails'=>$customerDetails,'customers'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
             $response =[
              'element'=>[
                  [
@@ -196,14 +206,14 @@ class Order extends Controller
         if(!$cart)
         {
             echo 111;
-            return \redirect('/order/Information')->with('notorder','Order Not Found!!!!');
+            return \redirect('/InformationCustomer')->with('notorder','Order Not Found!!!!');
         }
         if($cart)
         {
 
             echo   $orderId = $cart->id;
               Session::put('orderId',$orderId);
-              return \redirect('/order/Information'.$cartId);
+              return \redirect('/InformationCustomer'.$cartId);
         }  
     }
 

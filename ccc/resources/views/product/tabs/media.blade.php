@@ -1,7 +1,13 @@
-
         <?php $data = $product->getMedias(); ?>
-        @if($data)
         @include('product.tabs')
+        @if(session('productUpload'))
+            <div class ="alert alert-success">{{session('productUpload')}}</div>
+        @endif
+        @if(session('updateMedia'))
+            <div class ="alert alert-success">{{session('updateMedia')}}</div>
+        @endif
+        @if(session('deleteMedia'))
+            <div class ="alert alert-success">{{session('deleteMedia')}}</div>
         @endif
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Media </h3>
@@ -98,16 +104,16 @@
                     </table>
                 </div>
             </form>
-            <form action="/product/imageUpload/{{ $product->id }}" method="post" enctype="multipart/form-data">
+            <form action="" id="upload_form" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('post')
 
                 <div class="row">
                     <div class="col-10">
-                        <input type="file" class="form-control" id="image" name="image">
+                        <input type="file" class="form-control-file" id="image" name="image">
                     </div>
                     <div class="col-2">
-                        <button type="button" onclick="object.setUrl('/product/imageUpload/{{ $product->id }}').setMethod('post').uploadFile().resetParams();" class="btn btn-success">upload</i></button>
+                        <button type="submit"  name="upload" id="upload" class="btn btn-success btn-md">Upload</button>
                     </div>
                 </div>
 
@@ -162,5 +168,37 @@
                                     }
                                 });
                             });
+                            
                         });
+
+                       
+                            $(document).ready(function(){
+                            $('#upload_form').on('submit', function(event){
+                            event.preventDefault();
+                            $.ajax({
+                            url:"/product/imageUpload/{{ $product->id }}",
+                            method:"POST",
+                            data:new FormData(this),
+                            dataType:'JSON',
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                                success: function (response) {
+                                        if (typeof response.element == 'undefined') {
+                                            return false;
+                                        }
+                                        if(typeof response.element == 'object') {
+                                            $(response.element).each(function(i, element) {
+                                                $('#content').html(element.html);
+                                            })
+                                        }
+                                        else{
+                                            $(response.element.selector).html(response.element.html);
+                                        }
+                                    }
+                                
+                            });
+                            });
+                            });
+
                         </script>

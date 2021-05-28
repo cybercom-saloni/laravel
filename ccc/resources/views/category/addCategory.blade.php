@@ -30,7 +30,7 @@
             <div class="col-md-8 col-sm-8 col-lg-8 col-xl-8">
                <form method="GET" id="form" action="/rootCategoryEditSave">
                 @csrf
-                <button  type="button" onclick="object.setUrl('/rootCategoryEditSave').setForm('form').load();" class="btn btn-md btn-success">Add</button>
+                <button  type="button" onclick="object.setUrl('/rootCategoryEditSave').setForm('form').load();" class="btn btn-md btn-success">Add Category</button>
                 <div class="form-group row">
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                         <label>Category Name</label>

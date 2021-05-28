@@ -8,16 +8,21 @@
                 @include('product.tabs')
                 @endif
                 @csrf
+              
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="sku"> Sku</label>
                     </div>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" value="{{ $data ? $data[0]->sku : '' }}" id="name"
+                        <input type="text" class="form-control" value="{{ $data ? $data[0]->sku : '' }}" id="sku"
                             placeholder="PRODUCT SKU" name="product[sku]" required>
                     </div>
+                  
                 </div>
-
+                @if($errors->formValue->first('sku'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('sku')}}</div>
+                 @endif
+                 
                 <div class=" form-group row">
                     <div class="form-group col-lg-4">
                         <label for="name"> Name</label>
@@ -26,27 +31,37 @@
                         <input type="text" class="form-control" value="{{ $data ? $data[0]->name : '' }}" id="name"
                             placeholder="PRODUCT NAME" name="product[name]" required>
                     </div>
+                   
                 </div>
+                @if($errors->formValue->first('name'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('name')}}</div>
+                @endif
 
                 <div class="form-group row">
                      <div class="col-lg-4">
-                        <label for="price"> Price</label>
+                        <label for="price"> Price( in Rs.)</label>
                     </div>
                     <div class="col-lg-6">
                         <input type="number" class="form-control" value="{{ $data ? $data[0]->price : '' }}" id="price"
                         required  min="1" step="0.01" placeholder="PRODUCT PRICE" name="product[price]" required>
                     </div>
                 </div>
+                @if($errors->formValue->first('price'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('price')}}</div>
+                     @endif
 
                 <div class="form-group row">
                      <div class="col-lg-4">
-                        <label for="discount"> Discount</label>
+                        <label for="discount"> Discount(in %)</label>
                         </div>
                     <div class="col-lg-6">
                         <input type="number" class="form-control" value="{{ $data ? $data[0]->discount : '' }}" id="price"
                             placeholder="PRODUCT DISCOUNT" name="product[discount]" required max="100" min="0" step="0.01">
                     </div>
                 </div>
+                @if($errors->formValue->first('discount'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('discount')}}</div>
+                     @endif
                 <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="price"> Quantity</label>
@@ -54,10 +69,12 @@
                     <div class="col-lg-6">
                         <input type="number" id="quantity" class="form-control"
                             value="{{ $data ? $data[0]->quantity : '' }}" placeholder="PRODUCT QUANTITY"
-                            name="product[quantity]" required max="100" min="0" required>
+                            name="product[quantity]" required max="100" min="1" required>
                     </div>
                     </div>
-                   
+                    @if($errors->formValue->first('quantity'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('quantity')}}</div>
+                     @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="status"> Status</label>
@@ -73,6 +90,9 @@
                             </option>
                         </select>
                     </div>
+                    @if($errors->formValue->first('status'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('status')}}</div>
+                     @endif
                     </div>
                     <div class="form-group row">
                      <div class="col-lg-4">
@@ -90,7 +110,9 @@
                     </select>
                     </div>
                     </div>
-
+                    @if($errors->formValue->first('category_id'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('category_id')}}</div>
+                     @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="description"> Description</label>
@@ -101,6 +123,9 @@
                             placeholder="PRODUCT DESCRIPTION">{{ $data ? $data[0]->description : '' }}</textarea>
                     </div>
                     </div>
+                    @if($errors->formValue->first('description'))
+                    <div class ="alert alert-success">{{$errors->formValue->first('description')}}</div>
+                     @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                      </div>

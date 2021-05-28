@@ -119,7 +119,7 @@
                      <div class="col-lg-4">
                      </div>
                     <div class="col-lg-6">
-                    <button type="button" onclick="object.setUrl('/customerAdress/save/{{$customerId}}').setForm('form').load();" class="btn btn-success btn-md">Customer</button>
+                    <button type="button" onclick="object.setUrl('/customerAdress/save/{{$customerId}}').setForm('form').load();" class="btn btn-success btn-md">Save Customer Address Details</button>
                 </div>
                 <div>
             </form>

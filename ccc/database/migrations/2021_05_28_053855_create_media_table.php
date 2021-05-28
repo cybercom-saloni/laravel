@@ -13,11 +13,10 @@ class CreateMediaTable extends Migration
      */
     public function up()
     {
-        
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->string('media');
-            $table->string('label')->default('label');
+            $table->string('label')->default('productLabel')->nullable();
             $table->tinyInteger('small')->default(0);
             $table->tinyInteger('thumb')->default(0);
             $table->tinyInteger('base')->default(0);

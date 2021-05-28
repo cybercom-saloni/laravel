@@ -2,15 +2,12 @@
 
 namespace App\Models\Product;
 
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
 class Media extends Model
 {
     use HasFactory;
-
     protected $medias = [];
 
     public function __construct()

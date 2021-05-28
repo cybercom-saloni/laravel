@@ -25,6 +25,7 @@ class Customer extends Controller
         $pagination = CustomerModel::paginate($page);
         $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
         ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
+        $customerAddress = CustomerModel::
         $view = view('customer.grid',['customers'=>$pagination,'customerAddress'=>$customerAddress])->render();
         $response = [
             'element' =>[

@@ -9,7 +9,7 @@ use Facade\FlareClient\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Validator;
 
 class Product extends Controller
 {
@@ -130,9 +130,26 @@ class Product extends Controller
     
     public function saveAction($id = null,Request $request)
     {
+
         $product = $this->getProductModel();
         $formData = $request->get('product');
-        print_r($formData);
+        // print_r($formData);
+        $validator = Validator::make($request->all(), [
+            'sku' => 'required',
+            'name' => 'required',
+            'price' =>'required',
+            'discount' => 'required',
+            'quantity' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            'category_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect('product/form')
+                        ->withErrors($validator,'formValue')
+                        ->withInput();
+        }
+
         date_default_timezone_set('Asia/Kolkata');
         if ($id) {
             $formData['id'] = $id;
@@ -144,7 +161,7 @@ class Product extends Controller
         if (!$product->saveData($formData)) {
             return redirect()->back()->withInput();
         }
-         return redirect('/product');
+        //  return redirect('/product')->with('productSave', 'Product Saved successfully!!!');
         // if (array_key_exists('created_at', $formData)) {
         //     //return redirect()->back();
         //     return redirect('/product');
@@ -161,7 +178,7 @@ class Product extends Controller
         if (!$product->deleteData([$id])) {
             return redirect('/product')->with('error', 'ERROR WHILE DELETING');
         }
-        return redirect('/product')->with('success', 'DELETED');
+        return redirect('/product')->with('productDelete', 'Product Deleted successfully!!!');;
     }
 
     public function getCategoryOptions($id = null)
@@ -270,7 +287,7 @@ class Product extends Controller
             $product->status = 0;
         }
         $product->save();
-        return redirect('/product');
+        return redirect('/product')->with('productStatus', 'Product Status Changed successfully!!!');
     }
 
 

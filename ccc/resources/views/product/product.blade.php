@@ -7,35 +7,18 @@
             <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
         </div>
         <div class="col-6">
-        <form action="/setPages/product" method="post" id="records">
-                        @csrf
-                        <div class="navbar-btn navbar-btn-right">
-                            <div class="form-group">
-                                <label for="recordPerPage">Record Per Page</label>
-                                <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
-                                    <option value="2"
-                                        {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
-                                        2
-                                    </option>
-                                    <option value="4"
-                                        {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
-                                        4
-                                    </option>
-                                    <option value="50"
-                                        {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
-                                        20
-                                    </option>
-                                    <option value="100"
-                                        {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
-                                        50
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
         </div>
     </div>
 </div>
+@if(session('productStatus'))
+<div class ="alert alert-success">{{session('productStatus')}}</div>
+@endif
+@if(session('productSave'))
+<div class ="alert alert-success">{{session('productSave')}}</div>
+@endif
+@if(session('productDelete'))
+<div class ="alert alert-success">{{session('productDelete')}}</div>
+@endif
 
 <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">
@@ -89,31 +72,66 @@
         
      </div>
      <div>
-     <div>
-    <nav>
-        <ul class="pagination">
-            
-            @if($products->currentPage() != 1)
-            <li class="page-item">
-                <a class="page-link{{$products->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$products->previousPageUrl()}}').setMethod('get').load()">Previous</a>
-            </li>
-            @endif
-            @for($i=1;$i<=$products->lastPage();$i++)
-                <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
-                    <a class="page-link" onclick="object.setUrl('{{$products->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
-                </li>
-            @endfor
-            @if($products->currentPage() != $products->lastPage())
-            <li class="page-item">
-                <a class="page-link{{$products->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$products->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
-            </li>
-            @endif
-        </ul>
-    </nav>
-</div>
-
-</div>
-
+     <div class ="col-12">
+        <div class ="row">
+            <div class="col-6">
+                <nav>
+                    <ul class="pagination">
+                        
+                        @if($products->currentPage() != 1)
+                        <li class="page-item">
+                            <a class="page-link{{$products->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$products->previousPageUrl()}}').setMethod('get').load()">Previous</a>
+                        </li>
+                        @endif
+                        @for($i=1;$i<=$products->lastPage();$i++)
+                            <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
+                                <a class="page-link" onclick="object.setUrl('{{$products->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
+                            </li>
+                        @endfor
+                        @if($products->currentPage() != $products->lastPage())
+                        <li class="page-item">
+                            <a class="page-link{{$products->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$products->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
+                        </li>
+                        @endif
+                    </ul>
+                </nav>
+            </div>
+            <div class ="col-6">
+                    <form action="/setPages/product" method="post" id="records">
+                        @csrf
+                        <div class="navbar-btn navbar-btn-right">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="recordPerPage">Record Per Page</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
+                                            <option value="2"
+                                                {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
+                                                2
+                                            </option>
+                                            <option value="4"
+                                                {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
+                                                4
+                                            </option>
+                                            <option value="20"
+                                                {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
+                                                20
+                                            </option>
+                                            <option value="50"
+                                                {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
+                                                50
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
 <script>
 $(function() {
     $('#recordPerPage').on('change', function(e) {

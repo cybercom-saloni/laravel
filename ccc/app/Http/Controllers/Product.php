@@ -133,23 +133,37 @@ class Product extends Controller
 
         $product = $this->getProductModel();
         $formData = $request->get('product');
-        // print_r($formData);
-        $validator = Validator::make($request->all(), [
-            'sku' => 'required',
-            'name' => 'required',
-            'price' =>'required',
-            'discount' => 'required',
-            'quantity' => 'required',
-            'description' => 'required',
-            'status' => 'required',
-            'category_id' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return redirect('product/form')
-                        ->withErrors($validator,'formValue')
-                        ->withInput();
-        }
-
+        // // $validator = Validator::make($request->all(), [
+        // //     'sku' => 'required',
+        // //     'name' => 'required',
+        // //     'price' =>'required',
+        // //     'discount' => 'required',
+        // //     'quantity' => 'required',
+        // //     'description' => 'required',
+        // //     'status' => 'required',
+        // //     'category_id' => 'required',
+        // // ]);
+        // // if ($validator->fails()) {
+        // //         return redirect('product/form')
+        // //                     ->withErrors($validator,'formValue')
+        // //                     ->withInput();
+        // //     }
+        // if(!$id)
+        // {
+        //     // if ($validator->fails()) {
+        //     //     return redirect('product/form')
+        //     //                 ->withErrors($validator,'formValue')
+        //     //                 ->withInput();
+        //     // }
+        // }
+        // else
+        // {
+        //     if ($validator->fails()) {
+        //         // return redirect('product/form/'.$id)
+        //         //             ->withErrors($validator,'formValue')
+        //         //             ->withInput();
+        //     }
+        // }
         date_default_timezone_set('Asia/Kolkata');
         if ($id) {
             $formData['id'] = $id;
@@ -161,15 +175,13 @@ class Product extends Controller
         if (!$product->saveData($formData)) {
             return redirect()->back()->withInput();
         }
-        //  return redirect('/product')->with('productSave', 'Product Saved successfully!!!');
+         return redirect('/product')->with('productSave', 'Product Saved successfully!!!');
         // if (array_key_exists('created_at', $formData)) {
         //     //return redirect()->back();
         //     return redirect('/product');
         // } else {
         //     return redirect('/product/form/' . $id);
         // }
-       
-
     }
 
     public function deleteAction($id)
@@ -190,15 +202,15 @@ class Product extends Controller
 
     public function getCategoryName($id)
     {
-        $categoryModel = new CategoryModel();
-        $categoryName =  $categoryModel->load($id);
-        // print_r($categoryName);
-        foreach($categoryName->getCategories() as $value)
-        {
-            $categoryName = $value->name;
-        }
+        // $categoryModel = new CategoryModel();
+        // $categoryName =  $categoryModel->load($id);
+        // // print_r($categoryName);
+        // foreach($categoryName->getCategories() as $value)
+        // {
+        //     $categoryName = $value->name;
+        // }
         // return $categoryName->getCategories()->id;
-        return $categoryName;
+        return 'category';
     }
     
 

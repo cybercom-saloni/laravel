@@ -24,8 +24,10 @@ class Customer extends Controller
         }
         $pagination = CustomerModel::paginate($page);
         $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
-        ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
-        $customerAddress = CustomerModel::
+        ->where('addresses.addressType','=','billing')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
+        // $customerAddress = CustomerModel::leftJoin('addresses',function($join){
+        //     $join->on('addresses','customers.id','=','addresses.customerId')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page)
+        // });
         $view = view('customer.grid',['customers'=>$pagination,'customerAddress'=>$customerAddress])->render();
         $response = [
             'element' =>[
@@ -118,9 +120,22 @@ class Customer extends Controller
         // date_default_timezone_set('Asia/Kolkata');
         // $customerData['created_at']= date('d-m-Y H:i');
         // print_r($customerData);
-        CustomerModel::updateOrInsert(['id'=>$id],$customerData);
         
-        // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
+        
+        CustomerModel::updateOrInsert(['id'=>$id],$customerData);
+        $lastRecord = CustomerModel::orderBy('id', 'DESC')->first();
+        $lastRecordId = $lastRecord->id;
+        $billingAddress = AddressModel::where([['customerId',$id],['addressType','billing']])->first();
+        if(!$billingAddress)
+        {
+            $id = $lastRecordId;
+            $billingAddress = new AddressModel;
+            
+        }
+        $billingAddress->customerId = $id;
+        $billingAddress->addressType = 'billing';
+        $billingAddress->save();
+        // // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
         return redirect('customerGrid')->with('custSave','customer Saved!!!');
     }
 }

@@ -1,39 +1,53 @@
 <?php $customerAddress;?>
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer</h3>
 <hr>
+@if(session('custstatus'))
+<div class ="alert alert-success">{{session('custstatus')}}</div>
+@endif
+@if(session('custDelete'))
+<div class ="alert alert-success">{{session('custDelete')}}</div>
+@endif
+@if(session('custSave'))
+<div class ="alert alert-success">{{session('custSave')}}</div>
+@endif
+@if(session('custAddressSave'))
+<div class ="alert alert-success">{{session('custAddressSave')}}</div>
+@endif
 <div class="col-12">
     <div class = "row">
         <div class="col-6">
         <a onclick="object.setUrl('/customer/form').setMethod('get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New customer</a>
         </div>
-        <div class="col-6">
-        <form action="/setPages/customerGrid" method="post" id="records">
-                        @csrf
-                        <div class="navbar-btn navbar-btn-right">
-                            <div class="form-group">
-                                <label for="recordPerPage">Record Per Page</label>
-                                <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
-                                    <option value="2"
-                                        {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
-                                        2
-                                    </option>
-                                    <option value="4"
-                                        {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
-                                        4
-                                    </option>
-                                    <option value="50"
-                                        {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
-                                        20
-                                    </option>
-                                    <option value="100"
-                                        {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
-                                        50
-                                    </option>
-                                </select>
+       
+            <div class="col-6">
+            <form action="/setPages/customerGrid" method="post" id="records">
+                            @csrf
+                            <div class="navbar-btn navbar-btn-right">
+                                <div class="form-group">
+                                    <label for="recordPerPage">Record Per Page</label>
+                                    <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
+                                        <option value="2"
+                                            {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
+                                            2
+                                        </option>
+                                        <option value="4"
+                                            {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
+                                            4
+                                        </option>
+                                        <option value="20"
+                                            {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
+                                            20
+                                        </option>
+                                        <option value="50"
+                                            {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
+                                            50
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                    </form>
-        </div>
+                        </form>
+            </div>
+        
     </div>
 </div>
     
@@ -143,6 +157,10 @@ $(function() {
         });
     });
 });
+
+
+
+
 </script>
 
     

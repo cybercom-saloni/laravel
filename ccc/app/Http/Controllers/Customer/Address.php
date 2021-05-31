@@ -76,7 +76,8 @@ class Address extends Controller
             $shippingAddress->$key = $value;
         }
         $shippingAddress->save();
-        return redirect('customerGrid');
+        
+        return redirect('customerGrid')->with('custAddressSave','Customer Address Saved!!!');
     }
 
     public function AddressAction()

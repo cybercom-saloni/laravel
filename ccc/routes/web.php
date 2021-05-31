@@ -73,17 +73,25 @@ Route::get('/product/fetch_data',[Product::class,'fetch_data']);
 // Route::get('product/',[Product::class,'fetch_data']);
 
 //category
-Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
-Route::get('/categoryDelete/{id}', [Category::class, 'deleteAction'])->name('categoryDelete');
-Route::get('/categorEditSave/{id}',[Category::class,'editSaveAction'])->name('categorEditSave');
-Route::get('/categoryAddSubCategory/{id}',[Category::class,'addSubCategoryAction'])->name('addSubCategory');
-Route::get('/addRootCategory',[Category::class,'addRootCategoryAction'])->name('addnewRootCategory');
-Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->name('addRootCategory');
-// Route::get('/categoryAddnewSubCategory/{$id}',function($id)
+// Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
+// Route::get('/categoryDelete/{id}', [Category::class, 'deleteAction'])->name('categoryDelete');
+// Route::get('/categorEditSave/{id}',[Category::class,'editSaveAction'])->name('categorEditSave');
+// Route::get('/categoryAddSubCategory/{id}',[Category::class,'addSubCategoryAction'])->name('addSubCategory');
+// Route::get('/addRootCategory',[Category::class,'addRootCategoryAction'])->name('addnewRootCategory');
+// Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->name('addRootCategory');
+// // Route::get('/categoryAddnewSubCategory/{$id}',function($id)
 // {
 //     return $id;
 // });
 Route::get('/tree',[Category::class,'treeAction'])->name('tree');
+Route::get('/category/{id?}', [Category::class, 'gridAction'])->name('formEdit');
+
+Route::post('/addCategory/{id?}',[Category::class,'addAction'])->name('addRoot');
+
+Route::post('/updateCategory/{id}', [Category::class, 'updateAction'])->name('updateCategory');
+
+Route::post('/deleteCategory/{id?}', [Category::class, 'deleteAction'])->name('deleteCategory');
+
 Route::get('/categoryAddnewSubCategory/{id}',[Category::class,'addnewSubCategory'])->name('addnewSubCategoryAction');
 Route::get('/dashboard',[NewDashboard::class,'dashboardAction'])->name('dashboard');
 

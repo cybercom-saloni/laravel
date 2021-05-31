@@ -9,5 +9,5 @@ class CartAddress extends Model
 {
     use HasFactory;
     protected $table = 'cart_addresses';
-}
 
+}

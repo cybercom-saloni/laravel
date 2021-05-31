@@ -1,12 +1,4 @@
-@if(session('custstatus'))
-<div class ="alert alert-success">{{session('custstatus')}}</div>
-@endif
-@if(session('custDelete'))
-<div class ="alert alert-success">{{session('custDelete')}}</div>
-@endif
-@if(session('custSave'))
-<div class ="alert alert-success">{{session('custSave')}}</div>
-@endif
+
 <div id="table_data">
 @include('customer.pagination')
 </div>

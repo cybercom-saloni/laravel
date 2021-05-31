@@ -53,7 +53,7 @@
                         <label for="contactno"> Contact Number</label>
                         </div>
                     <div class="col-lg-6">
-                        <input type="number" id="contactno" class="form-control"placeholder="contactno" name="customer[contactno]"   value="{{$customerData ? $customerData->contactno : ' '}}" required>
+                        <input type="text" id="contactno" class="form-control"placeholder="contactno" name="customer[contactno]"   value="{{$customerData ? $customerData->contactno : ' '}}" required>
                     </div>
                     </div>
                    

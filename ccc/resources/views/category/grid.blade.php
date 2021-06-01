@@ -112,7 +112,7 @@
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                                     <ul id="tree1">
                                         @foreach ($categories as $category)
-                                        <li style="color: {{ $category->status == 0 ? 'red' : '' }}">
+                                        <li><i class="fas fa-cloud"></i>
                                             <a  style="color: {{ $category->status == 0 ? 'red' : '' }} href="javascript:void(0);" onclick="object.setUrl('<?php echo  route('formEdit', $category->id) ?>').setMethod('get').load();" style="color: {{ $category->status == 0 ? 'grey' : '' }}">{{ $category->name }}</a>
                                             <ul>
                                             @if (count($category->childs))

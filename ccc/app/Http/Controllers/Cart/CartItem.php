@@ -24,12 +24,6 @@ class CartItem extends Controller
            $cartItemUpdate->save();
            $cartTotal = 0;
             $discountTotal = 0;
-        // $discount = $cartItemUpdate->discount;
-        // // $price = $cartItemUpdate->price;
-        // $quantity = $cartItemUpdate->quantity;
-
-        // echo $discountTotal += $discount*$quantity;
-        
         }
         // echo $cartId;
         $total =0;
@@ -40,11 +34,12 @@ class CartItem extends Controller
         {
              $cartItem->productId;
             $discount = $cartItem->discount;
-            $price = $cartItem->price;
+            $price = $cartItem->basePrice;
             $quantity = $cartItem->quantity;
             $discountTotal +=$discount * $quantity;
             $total += ($price - ($discount * $price/ 100)) * $quantity;
         }
+       
         
         $cart = CartModel::where('id',$cartId)->first();
         if($cart)
@@ -70,7 +65,7 @@ class CartItem extends Controller
         {
              $cartItem->productId;
             $discount = $cartItem->discount;
-            echo $price = $cartItem->price;
+            $price = $cartItem->price;
             $quantity = $cartItem->quantity;
             $discountTotal +=$discount * $quantity;
             $total += ($price - ($discount * $price/ 100)) * $quantity;
@@ -93,8 +88,10 @@ class CartItem extends Controller
     public function addItemAction(Request $request)
     {
     
-        $productIds = $request->products;
+         $productIds = $request->products;
+        //  print_r($productIds);
         $cartId = SESSION::get('cartId');
+       
         foreach($productIds as $key=>$productId)
         {
             $cartItem = CartItemModel::where([['cartId', $cartId], ['productId', $productId]])->first();
@@ -115,8 +112,8 @@ class CartItem extends Controller
                 $cartItem->save();
             }
 
-            }
-            return \redirect('cart/'.$cartId)->with('addItem','cart Item added!!!'); 
+        }
+        return \redirect('cart/'.$cartId)->with('addItem','cart Item added!!!'); 
     }
 
 

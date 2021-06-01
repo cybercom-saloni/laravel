@@ -14,6 +14,17 @@ class Address extends Controller
     public function formAction(Request $request)
     {
         try{
+            $validator = Validator::make($request->all(), [
+                "billing.address" => "required",
+                "billing.area" => "required",
+                "billing.city" => "required",
+                "billing.state" => "required",
+                "billing.zipcode" => "required",
+                "billing.country" => "required",
+            ]);
+            if ($validator->fails()) {
+                Session::put('billingError',$validator->errors());
+            }
            
         $customerId = $request->id;
         $billingAddress = AddressModel::where([['addressType','billing'],['customerId',$customerId]])->first();

@@ -20,109 +20,126 @@ class Order extends Controller
 {
     public function displayOrderAction(Request $request)
     {
-        $customers = CustomerModel::all();
-        $cartId = SESSION::get('cartId');
-        $customerId = SESSION::get('customerId');
-        
-        
-        if($cartId)
+        try
         {
-             $customer = CustomerModel::where('id',$customerId)->first();
-             $cart = CartModel::where('id',$cartId)->first();
-        //    echo $cart[0]->customerId;
-             $order = OrderModel::where('customerId',$customerId)->first();
-        if(!$order)
-        {
-            $order = new OrderModel;
-        }
-         $order->customerId = $cart->customerId;
-       
-            $order->total = $cart->total;
-            $order->discount = $cart->discount;
-            $order->paymentId = $cart->paymentId;
-            $order->shippingId = $cart->shippingId;
-            $order->shippingAmount = $cart->shippingAmount;
-            $order->status = 'pending';
-            $order->save();
-            $orderId = $order->id;
-            $cartItems = CartItem::where('cartId',$cartId)->get();
-            $orderItem = OrderItem::where('orderId',$orderId)->get();
-            foreach($cartItems as $cartItemId=>$cartItem)
+            $cartId = SESSION::get('cartId');
+            $customerId = SESSION::get('customerId');
+            if(!$cartId)
             {
+              throw new Exception('cartId Not Found!!!');  
+            }
+            if(!$customerId)
+            {
+              throw new Exception('customer Id Not Found!!!');  
+            }
+            if($cartId)
+            {
+                $customer = CustomerModel::where('id',$customerId)->first();
+                $cart = CartModel::where('id',$cartId)->first();
+                $order = new OrderModel;
+                $order->customerId = $cart->customerId;
+                $order->total = $cart->total;
+                $order->discount = $cart->discount;
+                $order->paymentId = $cart->paymentId;
+                $order->shippingId = $cart->shippingId;
+                $order->shippingAmount = $cart->shippingAmount;
+                $order->status = 'pending';
+                $order->save();
+                $order = OrderModel::where('customerId',$customerId)->latest()->first();
+                if(!$order)
+                {
+                    throw new Exception('customer Id Not Found!!!');  
+                }
+                $orderId = $order->id;
+                $orderItem = OrderItem::where('orderId',$orderId)->get();
+                $cartItems = CartItem::where('cartId',$cartId)->get();
+                foreach($cartItems as $cartItemId=>$cartItem)
+                {
+                   
+                     $orderItem = new OrderItem;
+                     $orderItem->productId =$cartItem->productId;
+                     $orderItem->orderId = $orderId;
+                     $orderItem->discount = $cartItem->discount;
+                     $orderItem->basePrice = $cartItem->basePrice;
+                     $orderItem->price = $cartItem->price;
+                     $orderItem->quantity = $cartItem->quantity;
+                     $orderItem->save();
+                     $cartItemModel = CartItem::find($cartItem->id);
+                     $cartItemModel->delete();
+                     $productId =  $orderItem->productId;
+                     $product = ProductModel::where('id',$productId)->first();
+                }
+                echo $cartId;
+                echo $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->latest()->first();
+                if(!$cartShippingAddress)
+                {
+                    echo 1234;
+                }
+                die;
+                $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->latest()->first();
+               $orderBillingAddress = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->latest()->first();
                
-                    $orderItem = new OrderItem;
-                 $orderItem->productId =$cartItem->productId;
-                 $orderItem->orderId = $orderId;
-                 $orderItem->discount = $cartItem->discount;
-                 $orderItem->basePrice = $cartItem->basePrice;
-                 $orderItem->price = $cartItem->price;
-                 $orderItem->quantity = $cartItem->quantity;
-                 $orderItem->save();
-                 $cartItemModel = CartItem::find($cartItem->id);
-                   $cartItemModel->delete();
-                   $productId =  $orderItem->productId;
-                   $product = ProductModel::where('id',$productId)->first();
-        
-
-            }
-             $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
-             $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-            $orderBillingAddress = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->first();
-            if(!$orderBillingAddress)
-            {
-                $orderBillingAddress = new OrderAddress;
-            }
-            $orderBillingAddress->addressId = 1;
-            $orderBillingAddress->orderId = $orderId;
-            $orderBillingAddress->address = $cartBillingAddress->address;
-            $orderBillingAddress->area = $cartBillingAddress->area;
-            $orderBillingAddress->city = $cartBillingAddress->city;
-            $orderBillingAddress->state = $cartBillingAddress->state;
-            $orderBillingAddress->zipcode = $cartBillingAddress->zipcode;
-            $orderBillingAddress->country = $cartBillingAddress->country;
-            $orderBillingAddress->addressType = $cartBillingAddress->addressType;
-            $orderBillingAddress->save();
-            $cartBillingAddressDelete = CartAddress::find($cartBillingAddress->id);
-            $cartBillingAddressDelete->Delete();
             
-            $orderShippingAddress = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->first();
-            if(!$orderShippingAddress)
-            {
-                $orderShippingAddress = new OrderAddress;
-            }
-            $orderShippingAddress->addressId = 1;
-            $orderShippingAddress->orderId = $orderId;
-            $orderShippingAddress->address = $cartShippingAddress->address;
-            $orderShippingAddress->area = $cartShippingAddress->area;
-            $orderShippingAddress->city = $cartShippingAddress->city;
-            $orderShippingAddress->state = $cartShippingAddress->state;
-            $orderShippingAddress->zipcode = $cartShippingAddress->zipcode;
-            $orderShippingAddress->country = $cartShippingAddress->country;
-            $orderShippingAddress->addressType = $cartShippingAddress->addressType;
-            $orderShippingAddress->save();
-            $cartShippingAddressDelete = CartAddress::find($cartShippingAddress->id);
-            $cartShippingAddressDelete->Delete();
+               $orderBillingAddress = new OrderAddress;   
+               $orderBillingAddress->addressId = 1;
+               $orderBillingAddress->orderId = $orderId;    
+               $orderBillingAddress->address = $cartBillingAddress->address;
+               $orderBillingAddress->area = $cartBillingAddress->area;
+               $orderBillingAddress->city = $cartBillingAddress->city;
+               $orderBillingAddress->state = $cartBillingAddress->state;
+               $orderBillingAddress->zipcode = $cartBillingAddress->zipcode;
+               $orderBillingAddress->country = $cartBillingAddress->country;
+               $orderBillingAddress->addressType = $cartBillingAddress->addressType;
+               $orderBillingAddress->save();
+               $cartBillingAddressDelete = CartAddress::find($cartBillingAddress->id);
+               $cartBillingAddressDelete->Delete();
+               
+               $orderShippingAddress = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->latest()->first();
+               if(!$orderShippingAddress)
+               {
+                   $orderShippingAddress = new OrderAddress;
+               }
+               $orderShippingAddress->addressId = 1;
+               $orderShippingAddress->orderId = $orderId;
+               $orderShippingAddress->address = $cartShippingAddress->address;
+               $orderShippingAddress->area = $cartShippingAddress->area;
+               $orderShippingAddress->city = $cartShippingAddress->city;
+               $orderShippingAddress->state = $cartShippingAddress->state;
+               $orderShippingAddress->zipcode = $cartShippingAddress->zipcode;
+               $orderShippingAddress->country = $cartShippingAddress->country;
+               $orderShippingAddress->addressType = $cartShippingAddress->addressType;
+               $orderShippingAddress->save();
+               $cartShippingAddressDelete = CartAddress::find($cartShippingAddress->id);
+               $cartShippingAddressDelete->Delete();
+   
+              $orderDetails = OrderModel::where('id',$orderId)->latest()->first();
+              $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
+              $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->get();
+              $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->get();
+           }
+           $cartModel = CartModel::find($cartId);
+               $cartModel->delete();
+               $view = view('order.grid',['controller'=>$this,'customer'=>$customer,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
+               $response =[
+                'element'=>[
+                    [
+                        'selector'=>'#content',
+                        'html'=>$view
+                    ]
+                ]
+               ];
+               header('content-type:application/json');
+               echo json_encode($response);
+               die();
+            
 
-           $orderDetails = OrderModel::where('id',$orderId)->latest()->first();
-           $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
-           $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->get();
-           $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->get();
+
+
         }
-        $cartModel = CartModel::find($cartId);
-            $cartModel->delete();
-            $view = view('order.grid',['controller'=>$this,'customer'=>$customer,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
-            $response =[
-             'element'=>[
-                 [
-                     'selector'=>'#content',
-                     'html'=>$view
-                 ]
-             ]
-            ];
-            header('content-type:application/json');
-            echo json_encode($response);
-            die();
-
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
     }
 
     public function getProductName($id)
@@ -141,91 +158,6 @@ class Order extends Controller
     {
         $shipping = Shipping::where('id', $id)->first();
         return $shipping->name;
-    }
-
-    
-    public function displayAllOrderAction()
-    {
-        $customers = CustomerModel::Join('orders','customers.id','=','orders.customerId')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno')->get();
-        $orderId = Session::get('orderId');
-         $customerId = Session::get('ordercustomerId');
-         
-         $order = OrderModel::where('customerId',$customerId)->first();
-            $orderDetails = OrderModel::where('id',$orderId)->first();
-            $customerDetails = CustomerModel::where('id',$customerId)->first();
-            if(!$customerDetails)
-            {
-                
-                $customerDetails = CustomerModel::first();
-                $customerId = $customerDetails->id;
-                Session::put('ordercustomerId',$customerId);
-            }
-            if(!$orderDetails)
-            {
-               
-                $orderDetails = OrderModel::where('customerId',$customerId)->first();
-                $orderId  = $orderDetails->id;
-            }
-           $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
-           if(!$orderItemsDetails)
-           {
-                $orderItemsDetails = OrderItem::where('orderId',$orderId)->get();
-           }
-           $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->get();
-           if(!$orderBillingAddressDetails)
-           {
-              echo $orderBillingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','billing']])->first();
-           }
-           $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->get();
-           if(!$orderShippingAddressDetails)
-           {
-              echo $orderShippingAddressDetails = OrderAddress::where([['orderId',$orderId],['addressType','shipping']])->first();
-           }
-            $comments = Comments::where('orderId', $orderId)->get();
-            $view = view('order.information',['comments'=>$comments,'controller'=>$this,'customerDetails'=>$customerDetails,'customers'=>$customers,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
-            $response =[
-             'element'=>[
-                 [
-                     'selector'=>'#content',
-                     'html'=>$view
-                 ]
-             ]
-            ];
-            header('content-type:application/json');
-            echo json_encode($response);
-            die();
-
-    }
-
-    public function saveCustomerAction($cartId=null,Request $request)
-    {
-        echo $request->customer;
-        Session::put('ordercustomerId', $request->customer);
-      echo $customerId =Session::get('ordercustomerId');
-         echo $cart = OrderModel::where('customerId', $customerId)->first();
-        if(!$cart)
-        {
-            echo 111;
-            return \redirect('/InformationCustomer')->with('notorder','Order Not Found!!!!');
-        }
-        if($cart)
-        {
-
-            echo   $orderId = $cart->id;
-              Session::put('orderId',$orderId);
-              return \redirect('/InformationCustomer'.$cartId);
-        }  
-    }
-
-
-    public function saveStatusAction(Request $request)
-    {
-      
-        print_r($request->get('status'));
-        echo $request->customer;
-        echo $request->status;
-      
-        
     }
 }
 

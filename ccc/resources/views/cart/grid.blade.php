@@ -35,6 +35,14 @@
                                 <textarea class="form-control" id="billingaddress" name="billing[address]"  placeholder="address"  required>{{$billing ? $billing->address : ' '}}</textarea>
                             </div>
                         </div>
+                        @if(Session::get('billingCartError'))
+                        <div class ="alert alert-danger">
+                        <?php $output=Session::get('billingCartError');
+                            Session::forget('AddressUpdated');
+                            print_r($output->getMessages()['billing.address'][0]);?>
+                        </div>
+                        @endif
+
 
                         <div class=" form-group row">
                             <div class="col-lg-4">
@@ -44,6 +52,13 @@
                                 <input type="text" class="form-control" id="billingarea"  value="{{$billing ? $billing->area : ' '}}" name="billing[area]" placeholder="area"   required>
                             </div>
                         </div>
+                         @if(Session::get('billingCartError'))
+                        <div class ="alert alert-danger">
+                        <?php $output=Session::get('billingCartError');
+                            Session::forget('AddressUpdated');
+                            print_r($output->getMessages()['billing.area'][0]);?>
+                        </div>
+                        @endif
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> City</label>
@@ -52,6 +67,14 @@
                                 <input type="text" class="form-control" id="billingcity" value="{{$billing ? $billing->city : ' '}}" name="billing[city]" placeholder="city"  required>
                             </div>
                         </div>
+                        @if(Session::get('billingCartError'))
+                        <div class ="alert alert-danger">
+                        <?php $output=Session::get('billingCartError');
+                            Session::forget('AddressUpdated');
+                            print_r($output->getMessages()['billing.city'][0]);?>
+                        </div>
+                        @endif
+                      
 
                         <div class=" form-group row">
                             <div class="col-lg-4">
@@ -61,6 +84,13 @@
                                 <input type="text" class="form-control" id="billingstate" value="{{$billing ? $billing->state : ' '}}" name="billing[state]" placeholder="state"  required>
                             </div>
                         </div>
+                        @if(Session::get('billingCartError'))
+                        <div class ="alert alert-danger">
+                        <?php $output=Session::get('billingCartError');
+                            Session::forget('AddressUpdated');
+                            print_r($output->getMessages()['billing.state'][0]);?>
+                        </div>
+                        @endif
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Zipcode</label>
@@ -69,6 +99,13 @@
                                 <input type="text" class="form-control" id="billingzipcode" value="{{$billing ? $billing->zipcode : ' '}}" name="billing[zipcode]" placeholder="zipcode"  required>
                             </div>
                         </div>
+                        @if(Session::get('billingCartError'))
+                        <div class ="alert alert-danger">
+                        <?php $output=Session::get('billingCartError');
+                            Session::forget('AddressUpdated');
+                            print_r($output->getMessages()['billing.zipcode'][0]);?>
+                        </div>
+                        @endif
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Country</label>
@@ -77,6 +114,13 @@
                                 <input type="text" class="form-control" id="billingcountry" name="billing[country]" value="{{$billing ? $billing->country : ' '}}" placeholder="country"   required>
                             </div>
                         </div>
+                        @if(Session::get('billingCartError'))
+                        <div class ="alert alert-danger">
+                        <?php $output=Session::get('billingCartError');
+                            Session::forget('AddressUpdated');
+                            print_r($output->getMessages()['billing.country'][0]);?>
+                        </div>
+                        @endif
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 

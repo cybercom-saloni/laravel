@@ -9,16 +9,34 @@ use App\Models\Cart\CartAddress as CartAddress;
 use App\Models\Cart\CartItem as CartItem;
 use App\Models\Customer\Address as AddressModel;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Exception;
 use App\Models\Payment;
 use App\Models\Shipping;
 class Address extends Controller
 {
     public function AddressAction($id=null,Request $request)
-    {
-        $customerId = SESSION::get('customerId');
+    {  
+    try{
+        Session::put('billing.state ', 'required field');
+        $validator = Validator::make($request->all(), [
+            "billing.address" => "required",
+            "billing.area" => "required",
+            "billing.city" => "required",
+            "billing.state" => "required",
+            "billing.zipcode" => "required",
+            "billing.country" => "required",
+        ]);
+        if ($validator->fails()) {
+            Session::put('billingCartError',$validator->errors());
+        }
+         $customerId = SESSION::get('customerId');
         $sessioncartId = SESSION::get('cartId');
         $cartBillingAddressData = $request->get('billing');
         $cartShippingAddressData = $request->get('shipping');
+        // print_r($cartBillingAddressData);
+        // print_r($cartShippingAddressData);
+        // die;
 
 
        if($request->quantityCart)
@@ -31,6 +49,7 @@ class Address extends Controller
               $cartItem->quantity = $values;
             $cartItem->save();
             }   
+           
             // $cartItem = CartItem::find($cartItemId);
 
             //     foreach ($values as $key => $value) {
@@ -51,19 +70,19 @@ class Address extends Controller
         $cartBillingAddress->address = $cartBillingAddressData['address'];
         $cartBillingAddress->area = $cartBillingAddressData['area'];
         $cartBillingAddress->city = $cartBillingAddressData['city'];
-        $cartBillingAddress->state = $cartBillingAddressData['state'];
+        $cartBillingAddress->state = $cartBillingAddressData['state'];     
         $cartBillingAddress->zipcode = $cartBillingAddressData['zipcode'];
         $cartBillingAddress->country = $cartBillingAddressData['country'];
         $cartBillingAddress->addressType = 'billing';
         $cartBillingAddress->sameAsBilling = 1;
         $cartBillingAddress->save();
-        
+      
 
         if(array_key_exists('sameAsBilling',$cartShippingAddressData))
         {
             echo 122;
             $cartShippingAddress = CartAddress::where([['cartId',$sessioncartId],['addressType','shipping']])->first();
-            echo $cartShippingAddress;
+          
             if(!$cartShippingAddress)
             {
                 $cartShippingAddress = new CartAddress;
@@ -155,10 +174,11 @@ class Address extends Controller
             $cartupdate->shippingAmount = $shippingamount;
             $cartupdate->save();
             return \redirect('cart/'.$sessioncartId)->with('AddressUpdated','Cart Address Updated');
-    }
-
-    // public function ItemAction(Request $request)
-    // {
-    
-    // }
+    }catch (\Exception $e) {
+        echo  $e->getMessage();
+     //    die;
+         //     die;
+       
+     }
+ }
 }

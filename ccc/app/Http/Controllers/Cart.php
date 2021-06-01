@@ -14,12 +14,27 @@ use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Shipping;
 use App\Models\Category as CategoryModel;
+use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class Cart extends Controller
 {
     protected $customerId = null;
     public function addToCartAction($id=null,Request $request)
     {
+    try{
+        Session::put('billingCartError', 'required field');
+        $validator = Validator::make($request->all(), [
+            "billing.address" => "required",
+            "billing.area" => "required",
+            "billing.city" => "required",
+            "billing.state" => "required",
+            "billing.zipcode" => "required",
+            "billing.country" => "required",
+        ]);
+        if ($validator->fails()) {
+            Session::put('billingCartError',$validator->errors());
+        }
         //  $customerId = $request->id;
         $customers = CustomerModel::all();
         // Session::put('customerId', $request->customer);
@@ -52,13 +67,18 @@ class Cart extends Controller
 
            $cartBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
            $cartShippingAddress = AddressModel::where([['customerId',$customerId],['addressType','shipping']])->first();
-           if(!$cartBillingAddress)
+           if($cartId)
            {
                $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-           }
-           if(!$cartShippingAddress)
-           {
+               if(!$cartBillingAddress)
+               {
+                $cartBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
+               }
                $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
+               if(!$cartShippingAddress)
+               {
+                   $cartShippingAddress = AddressModel::where([['customerId',$customerId],['addressType','shipping']])->first();
+               }
            }
         } 
           $cartView = CartModel::where('id',$cartId)->get();
@@ -76,6 +96,9 @@ class Cart extends Controller
        header('content-type:application/json');
        echo json_encode($response);
        die();
+    }catch (\Exception $e) {
+        echo  $e->getMessage();
+     }
     }
 
     public function fetch_cartdata(Request $request)
@@ -161,6 +184,7 @@ class Cart extends Controller
               $pagination =  ProductModel::paginate(2);
             }
             return view('cart.grid',['productId'=> $productId,'products'=>$pagination,'customers'=>$customers,'cart'=>$cartView,'cartItems'=>$cartItems,'customerId'=>$customerId,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
+       
         }
     }
 
@@ -195,12 +219,25 @@ class Cart extends Controller
 
     public function saveCustomerAction($cartId=null,Request $request)
     {
+        try{
+            $validator = Validator::make($request->all(), [
+                "billing.address" => "required",
+                "billing.area" => "required",
+                "billing.city" => "required",
+                "billing.state" => "required",
+                "billing.zipcode" => "required",
+                "billing.country" => "required",
+            ]);
+            if ($validator->fails()) {
+                Session::put('billingCartError',$validator->errors());
+            }
+        
         // echo $request->customer;
         Session::put('customerId', $request->customer);
     //     // Session::put('cartId', $cartId);
         $customerId =Session::get('customerId');
         //echo $customerId = $request->customer;
-         $cart = CartModel::where('customerId', $customerId)->first();
+        $cart = CartModel::where('customerId', $customerId)->first();
         if(!$cart)
         {
            $cart = new CartModel;
@@ -213,7 +250,8 @@ class Cart extends Controller
         // echo $customerId =Session::get('customerId');
         $cartId = $cart->id;
         Session::put('cartId',$cartId);
-        echo $CustomerBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
+        
+        $CustomerBillingAddress = AddressModel::where([['customerId',$customerId],['addressType','billing']])->first();
         $CustomerShippingAddress = AddressModel::where([['customerId',$customerId],['addressType','shipping']])->first();
         if($CustomerBillingAddress)
         {
@@ -235,6 +273,7 @@ class Cart extends Controller
                 $cartBillingAddress->save();
             }
         }
+        
         if($CustomerShippingAddress)
         {
             $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
@@ -255,44 +294,13 @@ class Cart extends Controller
                 $cartShippingAddress->save();
             }
         }
-        return \redirect('cart/'.$cartId)->with('changeCustomer','Customer Changed!!!');
-        // if(Session::get('cartId'))
-        // {
-        //   $customers = CustomerModel::all();
-        //   $cartId = Session::get('cartId');
-        //   $cartShippingAddress = CartAddress::where([['cartId',$cartId],['addressType','shipping']])->first();
-        //   $cartBillingAddress = CartAddress::where([['cartId',$cartId],['addressType','billing']])->first();
-        //   $view = view('cart.grid',['customers'=>$customers,'controller'=>$this,'cartId'=>$cartId,'shipping'=>$cartShippingAddress,'billing'=>$cartBillingAddress])->render();
-        //   $response =[
-        //     'element'=>[
-        //         [
-        //             'selector'=>'#content',
-        //             'html'=>$view
-        //         ]
-        //     ]
-        //    ];
-        //    header('content-type:application/json');
-        //    echo json_encode($response);
-        //    die();
-        // }
-        // if($customerId)
-        // {
-        //     $cartIdData = CartModel::where('customerId','=',$customerId)->get();
-          
-        //     // if($cartIdData[0]->customerId == $customerId)
-        //     // {
-        //     //     $cartIdData->update();
-        //     // }
-        //     $cartIdData = new CartModel;
-        //     $cartIdData->customerId = $customerId;
-        //     $cartIdData->paymentId = 0;
-        //     $cartIdData->shippingId = 0;
-        //     $cartIdData->save();
-        // }
-        // $cartId= $cartIdData[0]->cartId;
-        // echo 'in session';
        
-        // $cartData = CartModel::updateOrInsert(['cartId'=>$cartId],['total'=>0,'discount'=>0,'paymentId'=>0,'shippingId'=>0,'shippingAmount'=>0,'customerId'=>$value]);
+        return \redirect('cart/'.$cartId)->with('changeCustomer','Customer Changed!!!');
+  
+    }  catch (\Exception $e) {
+        echo  $e->getMessage();
+     }
+        
     }
    
     public function getPayment()

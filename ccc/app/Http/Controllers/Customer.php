@@ -9,6 +9,8 @@ use Crypt;
 use Facade\FlareClient\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class Customer extends Controller
 {
@@ -53,37 +55,67 @@ class Customer extends Controller
     }
     
 
-    public function formAction($id=null)
+    public function formAction($id=null,Request $request)
     {
-        if(!$id)
-        {
-            $view =view('customer.tabs.personalform')->render();
-            $response = [
-                        'element' =>[
-                            [
-                                'selector' => '#content',
-                                'html' => $view
+        try{
+            
+        
+                if(!$id)
+                {
+                    $validator = Validator::make($request->all(), [
+                        "customer.firstname" => "required",
+                        "customer.lastname" => "required",
+                        "customer.email" => "required",
+                        "customer.password" => "required",
+                        "customer.contactno" => "required",
+                        "customer.status" => "required",
+                    ]);
+                    if ($validator->fails()) {
+                        Session::put('customerError',$validator->errors());
+                    }
+                    $view =view('customer.tabs.personalform')->render();
+                    $response = [
+                                'element' =>[
+                                    [
+                                        'selector' => '#content',
+                                        'html' => $view
+                                    ]
+                                ]
+                            ];
+                    header('content-type:application/json');
+                    echo json_encode($response);
+                    die();
+                }else
+                {
+                    $validator = Validator::make($request->all(), [
+                        "customer.firstname" => "required",
+                        "customer.lastname" => "required",
+                        "customer.email" => "required",
+                        "customer.password" => "required",
+                        "customer.contactno" => "required",
+                        "customer.status" => "required",
+                    ]);
+                    if ($validator->fails()) {
+                        Session::put('customerError',$validator->errors());
+                    }
+            $customer = CustomerModel::find($id);
+                $password=  Crypt::decryptString($customer->password);
+            $view = view('customer.tabs.personalform',['customer'=>$customer,'password'=>$password])->render();
+            $response=[
+                            'element'=>[
+                                [
+                                    'selector' => '#content',
+                                    'html' => $view
+                                ]
                             ]
-                        ]
-                    ];
+            ];
             header('content-type:application/json');
             echo json_encode($response);
             die();
+            }
+        } catch (\Exception $e) {
+            echo  $e->getMessage();
         }
-       $customer = CustomerModel::find($id);
-        $password=  Crypt::decryptString($customer->password);
-       $view = view('customer.tabs.personalform',['customer'=>$customer,'password'=>$password])->render();
-       $response=[
-                    'element'=>[
-                        [
-                            'selector' => '#content',
-                            'html' => $view
-                        ]
-                    ]
-       ];
-       header('content-type:application/json');
-       echo json_encode($response);
-       die();
     }
 
     public function customerStatusAction($id,Request $request)
@@ -110,7 +142,22 @@ class Customer extends Controller
 
     public  function saveAction($id=null,Request $request)
     {
-        
+    try{
+        $validator = Validator::make($request->all(), [
+            "customer.firstname" => "required",
+            "customer.lastname" => "required",
+            "customer.email" => "required",
+            "customer.password" => "required",
+            "customer.contactno" => "required",
+            "customer.status" => "required",
+        ]);
+        if ($validator->fails()) {
+            // return redirect('product/form')
+            //             ->withErrors($validator,'formValue')
+            //             ->withInput();
+            Session::put('customerError',$validator->errors());
+            throw new Exception($validator->errors());
+        }
         $customerData = $request->customer;
         // $request->validate([
         //     'customerData[firstname]' => 'required',
@@ -137,5 +184,16 @@ class Customer extends Controller
         $billingAddress->save();
         // // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
         return redirect('customerGrid')->with('custSave','customer Saved!!!');
+        }
+        catch (\Exception $e) {
+            echo  $e->getMessage();
+         //    die;
+             
+             return redirect()->back()->withInput();
+         //     die;
+           
+         }
+
+
     }
 }

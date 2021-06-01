@@ -18,6 +18,10 @@ class Product extends Model
         $this->setTable('products');
     }
 
+    public function getCategories()
+    {
+        return $this->categories;
+    }
     public function getProducts()
     {
         return $this->products;

@@ -81,7 +81,7 @@ Route::get('/product/fetch_data',[Product::class,'fetch_data']);
 // Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->name('addRootCategory');
 // // Route::get('/categoryAddnewSubCategory/{$id}',function($id)
 // {
-//     return $id;
+//     return $id;f
 // });
 Route::get('/tree',[Category::class,'treeAction'])->name('tree');
 Route::get('/category/{id?}', [Category::class, 'gridAction'])->name('formEdit');

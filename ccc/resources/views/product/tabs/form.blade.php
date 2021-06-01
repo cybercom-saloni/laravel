@@ -3,13 +3,14 @@
         
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">{{ $data ? 'Edit' : 'Add' }} Product Details</h3>
-        <form action="/productSave{{ $data ? '/' . $data[0]->id : '' }}" method="POST" id="form">
+        <form action="" method="POST" id="form">
                 @if($data)
                 @include('product.tabs')
                 @endif
                 @csrf
-              
-                <div class=" form-group row">
+    
+                
+             <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="sku"> Sku</label>
                     </div>
@@ -19,10 +20,12 @@
                     </div>
                   
                 </div>
-                @if($errors->formValue->first('sku'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('sku')}}</div>
-                 @endif
-                 
+                @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.sku'][0]);?>
+                </div>
+                @endif
                 <div class=" form-group row">
                     <div class="form-group col-lg-4">
                         <label for="name"> Name</label>
@@ -33,10 +36,12 @@
                     </div>
                    
                 </div>
-                @if($errors->formValue->first('name'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('name')}}</div>
+                @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.name'][0]);?>
+                </div>
                 @endif
-
                 <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="price"> Price( in Rs.)</label>
@@ -46,9 +51,12 @@
                         required  min="1" step="0.01" placeholder="PRODUCT PRICE" name="product[price]" required>
                     </div>
                 </div>
-                @if($errors->formValue->first('price'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('price')}}</div>
-                     @endif
+                @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.price'][0]);?>
+                </div>
+                @endif
 
                 <div class="form-group row">
                      <div class="col-lg-4">
@@ -59,9 +67,12 @@
                             placeholder="PRODUCT DISCOUNT" name="product[discount]" required max="100" min="0" step="0.01">
                     </div>
                 </div>
-                @if($errors->formValue->first('discount'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('discount')}}</div>
-                     @endif
+                @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.discount'][0]);?>
+                </div>
+                @endif
                 <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="price"> Quantity</label>
@@ -72,9 +83,12 @@
                             name="product[quantity]" required max="100" min="1" required>
                     </div>
                     </div>
-                    @if($errors->formValue->first('quantity'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('quantity')}}</div>
-                     @endif
+                    @if(Session::get('productswe'))
+                        <div class ="alert alert-success">
+                        <?php $output=Session::get('productswe');
+                            print_r($output->getMessages()['product.quantity'][0]);?>
+                        </div>
+                    @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="status"> Status</label>
@@ -90,11 +104,15 @@
                             </option>
                         </select>
                     </div>
-                    @if($errors->formValue->first('status'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('status')}}</div>
-                     @endif
+                   
                     </div>
-                    <div class="form-group row">
+
+                    @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.status'][0]);?>
+                </div>
+                @endif                    <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="status"> Category</label>
                         </div>
@@ -110,9 +128,12 @@
                     </select>
                     </div>
                     </div>
-                    @if($errors->formValue->first('category_id'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('category_id')}}</div>
-                     @endif
+                    @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.category_id'][0]);?>
+                </div>
+                @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="description"> Description</label>
@@ -123,17 +144,46 @@
                             placeholder="PRODUCT DESCRIPTION">{{ $data ? $data[0]->description : '' }}</textarea>
                     </div>
                     </div>
-                    @if($errors->formValue->first('description'))
-                    <div class ="alert alert-success">{{$errors->formValue->first('description')}}</div>
-                     @endif
+                    @if(Session::get('productswe'))
+                <div class ="alert alert-success">
+                <?php $output=Session::get('productswe');
+                    print_r($output->getMessages()['product.description'][0]);?>
+                </div>
+                @endif
+                    
                     <div class="form-group row">
                      <div class="col-lg-4">
                      </div>
                     <div class="col-lg-6">
-                    <button type="button" onclick="object.setUrl('/productSave{{ $data ? '/' . $data[0]->id : '' }}').setForm('form').load();" class="btn btn-success btn-md">{{ $data ? 'Update' : 'Add' }} Product</button>
+                    <button type="button" id ="update" class="btn btn-success btn-md">{{ $data ? 'Update' : 'Add' }} Product</button>
                 </div>
                 <div>
             </form>
         </div>
     </div>
+    <script>
+        $(function () {
+             $('#update').on('click', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'post',
+                    url: '/productSave{{ $data ? '/' . $data[0]->id : '' }}',
+                    data: $('#form').serializeArray(),
+                    success: function (response) {
+                                        if (typeof response.element == 'undefined') {
+                                            return false;
+                                        }
+                                        if(typeof response.element == 'object') {
+                                            $(response.element).each(function(i, element) {
+                                                $('#content').html(element.html);
+                                            })
+                                        }
+                                        else{
+                                            $(response.element.selector).html(response.element.html);
+                                        }
+                                    }
+                });
+            });
+        });
+    </script>
 

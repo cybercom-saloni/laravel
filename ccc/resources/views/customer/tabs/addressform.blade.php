@@ -17,6 +17,12 @@
                         <textarea class="form-control" id="address" name="billing[address]" placeholder="address"  required>{{$billing ? $billing->address : ' '}}</textarea>
                     </div>
                 </div>
+                @if(Session::get('billingError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('billingError');
+                    print_r($output->getMessages()['billing.address'][0]);?>
+                </div>
+                @endif
 
                 <div class=" form-group row">
                     <div class="col-lg-4">
@@ -27,6 +33,12 @@
                     </div>
                 </div>
 
+                @if(Session::get('billingError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('billingError');
+                    print_r($output->getMessages()['billing.area'][0]);?>
+                </div>
+                @endif
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> City</label>
@@ -36,6 +48,12 @@
                     </div>
                 </div>
 
+                @if(Session::get('billingError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('billingError');
+                    print_r($output->getMessages()['billing.city'][0]);?>
+                </div>
+                @endif
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> State</label>
@@ -44,6 +62,12 @@
                         <input type="text" class="form-control" id="state" name="billing[state]" placeholder="state"   value="{{$billing ? $billing->state : ' '}}" required>
                     </div>
                 </div>
+                @if(Session::get('billingError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('billingError');
+                    print_r($output->getMessages()['billing.state'][0]);?>
+                </div>
+                @endif
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> Zipcode</label>
@@ -52,6 +76,12 @@
                         <input type="text" class="form-control" id="zipcode" name="billing[zipcode]" placeholder="zipcode"   value="{{$billing ? $billing->zipcode : ' '}}" required>
                     </div>
                 </div>
+                @if(Session::get('billingError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('billingError');
+                    print_r($output->getMessages()['billing.zipcode'][0]);?>
+                </div>
+                @endif
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> Country</label>
@@ -59,7 +89,14 @@
                     <div class="col-lg-6">
                         <input type="text" class="form-control" id="country" name="billing[country]" placeholder="country"   value="{{$billing ? $billing->country : ' '}}" required>
                     </div>
+                    
                 </div>
+                @if(Session::get('billingError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('billingError');
+                    print_r($output->getMessages()['billing.country'][0]);?>
+                </div>
+                @endif
 
 
                 <h2 style="font-weight:bold; font-size:16px;" class="mt-2">Customer Shipping Address Details</h2>

@@ -138,6 +138,12 @@
                                             <input type="text" class="form-control" name="category[name]" id="name" aria-describedby="helpId" placeholder="Category Name">
                                         </div>
                                     </div>
+                                    @if(Session::get('categoryError'))
+                                    <div class ="alert alert-danger">
+                                    <?php $output=Session::get('categoryError');
+                                        print_r($output->getMessages()['category.name'][0]);?>
+                                    </div>
+                                    @endif
                                 
                                         <div class="form-group col-lg-12">
                                             <label for="name">Select Status</label>

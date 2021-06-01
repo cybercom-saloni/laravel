@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category as CategoryModel;
 use Illuminate\Support\Facades\Redirect;
-
+use Illuminate\Support\Facades\Session;
 class Category extends Controller
 {
     protected $model = null;
@@ -88,23 +88,32 @@ class Category extends Controller
             }
 
             $this->getModel()->insert($data);
+            Session::forget('error');
             return redirect(route('formEdit'))->with('Added','Category Added!!!');
 
         } catch (\Exception $e) {
             $e->getMessage();
-            // return Redirect::back()->with('error','Category Field Empty!!!')
-            return redirect(route('formEdit'))->with('error','Category Fields Empty!!!');
+            Session::put('error', 'category fields empty');
         }
     }
 
     public function updateAction($id, Request $request)
     {
-        $data = $request->get('category');
+        try
+        {
+            
+            $data = $request->get('category');
 
-        $data['id'] = $id;
-
-        (new CategoryModel)->saveData($data);
-        return redirect(route('formEdit'))->with('Updated','Category updated!!!');
+            $data['id'] = $id;
+    
+            (new CategoryModel)->saveData($data);
+            Session::forget('error');
+            return redirect(route('formEdit'))->with('Updated','Category updated!!!');
+        }
+        catch (\Exception $e) {
+            $e->getMessage();
+            Session::put('error', 'category fields empty');
+        }
         // return redirect()->back()->with('Delete','Category Deleted!!!');
     }
 
@@ -125,7 +134,7 @@ class Category extends Controller
         }
 
         (new CategoryModel)->deleteData($id);
-
+        Session::forget('error');
         return redirect(route('formEdit'))->with('Delete','Category Deleted!!!');
     }
 

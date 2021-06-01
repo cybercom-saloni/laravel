@@ -21,7 +21,12 @@
                     </div>
                     <span id="username" class="text-danger font-weight-bold"> </span>
                 </div>
-
+                @if(Session::get('customerError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('customerError');
+                    print_r($output->getMessages()['customer.firstname'][0]);?>
+                </div>
+                @endif
                 <div class=" form-group row">
                     <div class="form-group col-lg-4">
                         <label for="name"> Last Name</label>
@@ -30,6 +35,12 @@
                         <input type="text" class="form-control"  id="lastname" placeholder="lastname" name="customer[lastname]" value="{{$customerData ? $customerData->lastname : ' '}}" required>
                     </div>
                 </div>
+                @if(Session::get('customerError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('customerError');
+                    print_r($output->getMessages()['customer.lastname'][0]);?>
+                </div>
+                @endif
 
                 <div class="form-group row">
                      <div class="col-lg-4">
@@ -39,6 +50,12 @@
                         <input type="email" class="form-control"  id="email"  placeholder="email" name="customer[email]" value="{{$customerData ? $customerData->email : ' '}}" required>
                     </div>
                 </div>
+                @if(Session::get('customerError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('customerError');
+                    print_r($output->getMessages()['customer.email'][0]);?>
+                </div>
+                @endif
 
                 <div class="form-group row">
                      <div class="col-lg-4">
@@ -48,6 +65,12 @@
                     <input type="password" class="form-control"  id="password"  placeholder="password" name="customer[password]" value="{{$passwordData}}"required>
                     </div>
                 </div>
+                @if(Session::get('customerError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('customerError');
+                    print_r($output->getMessages()['customer.password'][0]);?>
+                </div>
+                @endif
                 <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="contactno"> Contact Number</label>
@@ -56,7 +79,12 @@
                         <input type="text" id="contactno" class="form-control"placeholder="contactno" name="customer[contactno]"   value="{{$customerData ? $customerData->contactno : ' '}}" required>
                     </div>
                     </div>
-                   
+                    @if(Session::get('customerError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('customerError');
+                    print_r($output->getMessages()['customer.contactno'][0]);?>
+                </div>
+                @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="status"> Status</label>
@@ -73,6 +101,12 @@
                         </select>
                     </div>
                     </div>
+                    @if(Session::get('customerError'))
+                <div class ="alert alert-danger">
+                <?php $output=Session::get('customerError');
+                    print_r($output->getMessages()['customer.status'][0]);?>
+                </div>
+                @endif
                     <div class="form-group row">
                      <div class="col-lg-4">
                      </div>

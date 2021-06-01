@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-
+use Exception;
 class Product extends Controller
 {
     protected $products = [];
@@ -52,6 +52,7 @@ class Product extends Controller
 
     public function gridAction()
     {
+        Session::forget('producterror');
         $page = 2;
         if (Session::has('page')) {
             $page = Session::get('page');
@@ -86,8 +87,25 @@ class Product extends Controller
             return view('product.product',['products'=>$pagination,'controller'=>$this])->render();
         }
     }
-    public function formAction($id = null)
+    public function formAction($id = null,Request $request)
     {
+        try{
+            $validator = Validator::make($request->all(), [
+                        "product.sku" => "required|max:2",
+                        "product.name" => "required",
+                        "product.price" => "required",
+                        "product.discount" => "required",
+                        "product.quantity" => "required",
+                        "product.status" => "required",
+                        "product.description" => "required",
+                        "product.category_id" => "required",
+                    ]);
+        if ($validator->fails()) {
+            // return redirect('product/form')
+            //             ->withErrors($validator,'formValue')
+            //             ->withInput();
+            Session::put('productswe',$validator->errors());
+        }
         if (!$id) {
             $view = \view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this])->render();
             $response = 
@@ -105,6 +123,7 @@ class Product extends Controller
         } 
         else
         {
+           
             $product = new ProductModel;
             $product = $product->load($id);
 
@@ -125,45 +144,114 @@ class Product extends Controller
                 die();
         }
     }
+    catch (\Exception $e) {
+        echo  $e->getMessage();
+     //    die;
+         
+        
+     //     die;
+       
+     }
+    }
 
    
     
+    // public function saveAction($id = null,Request $request)
+    // {
+    //     print_r($request->get('product'));
+      
+    //     try{
+    //     // $validator = Validator::make($request->all(), [
+    //     //     "product.sku" => "required",
+    //     //     "product.name" => "required",
+    //     //     "product.price" => "required",
+    //     //     "product.discount" => "required",
+    //     //     "product.quantity" => "required",
+    //     //     "product.status" => "required",
+    //     //     "product.description" => "required",
+    //     //     "product.category_id" => "required",
+    //     // ]);
+    //     // if ($validator->fails()) {
+    //     //     Session::put('producterror',$validator);
+    //     // }
+    //     $validator = Validator::make($request->all(), [
+    //         "product.sku" => "required",
+    //         "product.name" => "required",
+    //         "product.price" => "required",
+    //         "product.discount" => "required",
+    //         "product.quantity" => "required",
+    //         "product.status" => "required",
+    //         "product.description" => "required",
+    //         "product.category_id" => "required",
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return redirect('product/form')->withErrors($validator,'formValue')->withInput();
+    //         // return redirect('product/form')
+    //         //             ->withErrors($validator,'formValue')
+    //         //             ->withInput();
+    //     }
+    //     //     $validator = $request->validate([
+    //     //     "product.sku" => "required",
+    //     //     "product.name" => "required",
+    //     //     "product.price" => "required",
+    //     //     "product.discount" => "required",
+    //     //     "product.quantity" => "required",
+    //     //     "product.status" => "required",
+    //     //     "product.description" => "required",
+    //     //     "product.category_id" => "required",
+    //     // ]);
+    
+    //     $product = $this->getProductModel();
+    //     $formData = $request->get('product');
+    //     date_default_timezone_set('Asia/Kolkata');
+    //     if( $product->saveData($formData))
+    //     {
+    //         Session::put('productSave', 'Product Saved successfully!!!');
+    //         return redirect('/product')->withErrors($validator, 'login');
+    //     }
+    //     // echo 111111;
+    //     // exit();
+         
+       
+    //     } catch (\Exception $e) {
+    //        echo  $e->getMessage();
+    //     //    die;
+    //         Session::put('producterror',$e->getMessage());
+    //         return redirect()->back()->withInput();
+    //     //     die;
+          
+    //     }
+        
+    //     $this->gridAction();
+    // }
+
     public function saveAction($id = null,Request $request)
     {
-
+        
+        try{
+            $validator = Validator::make($request->all(), [
+                        "product.sku" => "required",
+                        "product.name" => "required",
+                        "product.price" => "required",
+                        "product.discount" => "required",
+                        "product.quantity" => "required",
+                        "product.status" => "required",
+                        "product.description" => "required",
+                        "product.category_id" => "required",
+                    ]);
+        if ($validator->fails()) {
+            // return redirect('product/form')
+            //             ->withErrors($validator,'formValue')
+            //             ->withInput();
+            Session::put('productswe',$validator->errors());
+            throw new Exception($validator->errors());
+           
+           
+        }
+        
         $product = $this->getProductModel();
         $formData = $request->get('product');
-        // // $validator = Validator::make($request->all(), [
-        // //     'sku' => 'required',
-        // //     'name' => 'required',
-        // //     'price' =>'required',
-        // //     'discount' => 'required',
-        // //     'quantity' => 'required',
-        // //     'description' => 'required',
-        // //     'status' => 'required',
-        // //     'category_id' => 'required',
-        // // ]);
-        // // if ($validator->fails()) {
-        // //         return redirect('product/form')
-        // //                     ->withErrors($validator,'formValue')
-        // //                     ->withInput();
-        // //     }
-        // if(!$id)
-        // {
-        //     // if ($validator->fails()) {
-        //     //     return redirect('product/form')
-        //     //                 ->withErrors($validator,'formValue')
-        //     //                 ->withInput();
-        //     // }
-        // }
-        // else
-        // {
-        //     if ($validator->fails()) {
-        //         // return redirect('product/form/'.$id)
-        //         //             ->withErrors($validator,'formValue')
-        //         //             ->withInput();
-        //     }
-        // }
+        // print_r($formData);
         date_default_timezone_set('Asia/Kolkata');
         if ($id) {
             $formData['id'] = $id;
@@ -172,17 +260,26 @@ class Product extends Controller
             $formData['created_at'] = date('Y-m-d h:i:s');
         }
         
-        if (!$product->saveData($formData)) {
-            return redirect()->back()->withInput();
+        if ($product->saveData($formData)) {
+            Session::put('productSave', 'Product Saved successfully!!!');
+                    return redirect('/product');
         }
-         return redirect('/product')->with('productSave', 'Product Saved successfully!!!');
-        // if (array_key_exists('created_at', $formData)) {
-        //     //return redirect()->back();
-        //     return redirect('/product');
-        // } else {
-        //     return redirect('/product/form/' . $id);
-        // }
+        echo 1;
+        }
+        
+        catch (\Exception $e) {
+                   echo  $e->getMessage();
+                //    die;
+                    
+                    return redirect()->back()->withInput();
+                //     die;
+                  
+                }
+       
+
     }
+
+    
 
     public function deleteAction($id)
     {
@@ -202,15 +299,11 @@ class Product extends Controller
 
     public function getCategoryName($id)
     {
-        // $categoryModel = new CategoryModel();
-        // $categoryName =  $categoryModel->load($id);
-        // // print_r($categoryName);
-        // foreach($categoryName->getCategories() as $value)
-        // {
-        //     $categoryName = $value->name;
-        // }
-        // return $categoryName->getCategories()->id;
-        return 'category';
+       
+        $categoryModel = new CategoryModel();
+        $categoryName =  $categoryModel->load($id);
+        // print_r($categoryName->getCategories()->name);
+        return $categoryName->getCategories()->name;
     }
     
 

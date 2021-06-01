@@ -13,8 +13,8 @@
 @if(session('productStatus'))
 <div class ="alert alert-success">{{session('productStatus')}}</div>
 @endif
-@if(session('productSave'))
-<div class ="alert alert-success">{{session('productSave')}}</div>
+@if(Session::get('productSave'))
+<div class ="alert alert-success">{{Session::get('productSave')}}</div>
 @endif
 @if(session('productDelete'))
 <div class ="alert alert-success">{{session('productDelete')}}</div>

@@ -17,9 +17,9 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('customerId')->default(null);
             $table->decimal('total',10,2)->default(0);
-            $table->unsignedBigInteger('shippingId')->default(null);
+            $table->unsignedBigInteger('paymentId');
+            $table->unsignedBigInteger('shippingId');
             $table->decimal('shippingAmount',10,2)->default(0);
-            $table->unsignedBigInteger('paymentId')->default(null);
             $table->decimal('discount',10,2)->default(0);
             $table->enum('status',['Confirm','Pending','InProcess','Shipped','Cancelled'])->default('Pending');
             $table->timestamps();

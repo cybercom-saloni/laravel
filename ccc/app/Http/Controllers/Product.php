@@ -52,7 +52,7 @@ class Product extends Controller
 
     public function gridAction()
     {
-        Session::forget('producterror');
+        
         $page = 2;
         if (Session::has('page')) {
             $page = Session::get('page');
@@ -90,23 +90,9 @@ class Product extends Controller
     public function formAction($id = null,Request $request)
     {
         try{
-            $validator = Validator::make($request->all(), [
-                        "product.sku" => "required|max:2",
-                        "product.name" => "required",
-                        "product.price" => "required",
-                        "product.discount" => "required",
-                        "product.quantity" => "required",
-                        "product.status" => "required",
-                        "product.description" => "required",
-                        "product.category_id" => "required",
-                    ]);
-        if ($validator->fails()) {
-            // return redirect('product/form')
-            //             ->withErrors($validator,'formValue')
-            //             ->withInput();
-            Session::put('productswe',$validator->errors());
-        }
-        if (!$id) {
+           
+        if (!$id)
+        {
             $view = \view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this])->render();
             $response = 
             [
@@ -230,25 +216,29 @@ class Product extends Controller
         
         try{
             $validator = Validator::make($request->all(), [
-                        "product.sku" => "required",
-                        "product.name" => "required",
-                        "product.price" => "required",
-                        "product.discount" => "required",
-                        "product.quantity" => "required",
-                        "product.status" => "required",
-                        "product.description" => "required",
-                        "product.category_id" => "required",
-                    ]);
-        if ($validator->fails()) {
-            // return redirect('product/form')
-            //             ->withErrors($validator,'formValue')
-            //             ->withInput();
-            Session::put('productswe',$validator->errors());
-            throw new Exception($validator->errors());
+                "product.sku" => "required|unique:products,sku,$id",
+                "product.name" => "required",
+                "product.price" => "required",
+                "product.discount" => "required",
+                "product.quantity" => "required",
+                "product.status" => "required",
+                "product.description" => "required",
+                "product.category_id" => "required",
+            ]);
            
+
+            if ($validator->fails()) {
+                // return response()->json(['success'=>'Added new records.']);
+                return response()->json(['error'=>$validator->errors()->all()]);
+            }
+        //  else{
+        //     //  return redirect('/product/form')->with($validator->errors());
+             
+        //  }
            
-        }
-        
+        // if ($validator->fails()) {
+        //     return response()->json(['error'=>$validator->errors()->all()]);
+        // }
         $product = $this->getProductModel();
         $formData = $request->get('product');
         // print_r($formData);
@@ -261,17 +251,16 @@ class Product extends Controller
         }
         
         if ($product->saveData($formData)) {
-            Session::put('productSave', 'Product Saved successfully!!!');
-                    return redirect('/product');
+            // Session::put('productSave', 'Product Saved successfully!!!');
+                    return redirect('/product')->with('productSaves', 'Product Saved successfully!!!');
         }
-        echo 1;
         }
         
         catch (\Exception $e) {
                    echo  $e->getMessage();
                 //    die;
-                    
-                    return redirect()->back()->withInput();
+                // Session::put('proeer',$validator->errors());
+                    // return redirect()->back()->withInput();
                 //     die;
                   
                 }
@@ -299,11 +288,17 @@ class Product extends Controller
 
     public function getCategoryName($id)
     {
-       
         $categoryModel = new CategoryModel();
         $categoryName =  $categoryModel->load($id);
-        // print_r($categoryName->getCategories()->name);
-        return $categoryName->getCategories()->name;
+        $categoryNamefind = CategoryModel::find($id);
+        if(!$categoryNamefind)
+        {
+            echo 'category not found!!!';
+            // return $categoryName->getCategories()->name;
+        }
+        else{return $categoryName->getCategories()->name;}
+        // // print_r($categoryName->getCategories()->name);
+        // return 'category';
     }
     
 
@@ -402,7 +397,16 @@ class Product extends Controller
 
        if ($request->page == 'customerGrid') {
             return redirect('/customerGrid');
-        } else {
+        } 
+        elseif($request->page == 'manageOrder'){
+            return redirect('/manageOrder');
+        }
+        elseif($request->page == 'payment'){
+            return redirect('/payment');
+        }elseif($request->page == 'shipping'){
+            return redirect('/shipment');
+        }
+        else {
             return redirect('/product');
         }
     }

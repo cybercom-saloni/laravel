@@ -23,6 +23,7 @@ class Cart extends Controller
     public function addToCartAction($id=null,Request $request)
     {
     try{
+        
         Session::put('billingCartError', 'required field');
         $validator = Validator::make($request->all(), [
             "billing.address" => "required",
@@ -40,8 +41,10 @@ class Cart extends Controller
         // Session::put('customerId', $request->customer);
         
       $customerId = Session::get('customerId');
+        
         if(!$customerId)
         {
+            Session::forget('customerId');
             $customer = CustomerModel::first();
             $customerId = $customer->id;
             Session::put('customerId',$customerId);
@@ -50,16 +53,17 @@ class Cart extends Controller
         if($customerId)
         {
             $cart = CartModel::where('customerId',$customerId)->first();
-            
+            $payments=Payment::first();
+            $shippings=Shipping::first();
             if(!$cart)
             {
                 $cart = new CartModel;
                 $cart->customerId = $customerId;
                 $cart->total = 0;
                 $cart->discount = 0;
-                $cart->paymentId = 1;
-                $cart->shippingId = 1;
-                $cart->shippingAmount = 400;
+                $cart->paymentId = $payments->id;
+                $cart->shippingId = $shippings->id;
+                $cart->shippingAmount =$shippings->amount;
                 $cart->save();
             }
            $cartId = $cart->id;

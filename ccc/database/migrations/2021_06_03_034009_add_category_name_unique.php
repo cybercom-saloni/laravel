@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCartAddressesTable extends Migration
+class AddCategoryNameUnique extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateCartAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cart_addresses', function (Blueprint $table) {
-           
+        Schema::table('categories', function (Blueprint $table) {
+            $table->string('name',255)->unique()->change();
         });
     }
 
@@ -25,6 +25,8 @@ class CreateCartAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_addresses');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->string('name',255)->unique()->change();
+        });
     }
 }

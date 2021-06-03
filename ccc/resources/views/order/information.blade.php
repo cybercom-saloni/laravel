@@ -1,26 +1,7 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
 <hr>
-@if(session('changeCustomer'))
-<div class="alert alert-success">{{session('changeCustomer')}}</div>
-@endif
-@if(session('orderStatus'))
-<div class="alert alert-success">{{session('orderStatus')}}</div>
-@endif
-<form action="/order/customer" method="post" id="customerId">
-    @csrf
-    <div class="form-group">
-        <label for="customer">Select Customer</label>
-        <select name="customer" id="customer" class="form-control col-lg-5">
-                <option disabled selected>select</option>
-                @foreach ($customers as $customer)
-                    <option value="{{ $customer->id }}" 
-                        {{ Session::has('ordercustomerId') ? (Session::get('ordercustomerId') == $customer->id ? 'selected' : '') : '' }}>
-                        {{ $customer->firstname . ' ' . $customer->lastname }}
-                    </option>
-                @endforeach 
-        </select>
-    </div>
-</form>
+
+
 <div class="col-12">
     <div class ="row">
         <div class ="col-12">
@@ -129,7 +110,7 @@
             <td>Rs.{{$orderItem->basePrice}}</td>
             <td>{{$orderItem->quantity}}</td>
             <td>{{$orderItem->discount}}%</td>
-            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price @endphp {{$rowtotal - $rowtotal*($orderItem->discount/100)}}</td>
+            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price; $value = $rowtotal - $rowtotal*($orderItem->discount/100)@endphp {{number_format($value, 2)}}</td>
         </tr>
         @endforeach
         <tr>
@@ -142,7 +123,10 @@
         </tr>
     </tbody>
 </table>
- <h3>Order Status</h3>
+ <h3>Order Comment</h3>
+ @if(session('orderStatus'))
+<div class="alert alert-success ad" style="display:block">{{session('orderStatus')}}</div>
+@endif
 <table class="table table-bordered bg-light  table-hover">
     <thead>
         <tr>
@@ -152,6 +136,7 @@
          </tr>
     </thead>
     <tbody>
+    
         @if ($comments)
             @foreach ($comments as $comment)
             <tr>
@@ -163,6 +148,9 @@
         @endif
             <tr>
                 <td colspan="3">
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
                     <form action="saveComment/{{$orderDetails->id}}" method="post" id='comments'>
                     @csrf
                             <div class="form-group col-md-12">
@@ -175,9 +163,10 @@
                                 <select class="form-control" name="comments[status]" id="status">
                                     <option selected disabled> Select Status </option>
                                     <option value="Pending">Pending</option>
-                                    <option value="inprocess">In Process</option>
+                                    <option value="Confirm">Confirm</option>
+                                    <option value="InProcess">In Process</option>
                                     <option value="Shipped">Shipped</option>
-                                    <option value="Delivered">Delivered</option>
+                                    <option value="Cancelled">Cancelled</option>
                                 </select>
                             </div>
 
@@ -189,31 +178,7 @@
              </tr>
     </tbody>
 </table>
-<!-- <form action="" method="POST" id="form">
-        <tr>
-            <td>Status</td>
-            <td> 
-                 <select class="form-control" name="orderDetailsStatus" id="orderStatus">
-                    <option selected disabled>Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="InProcess">InProcess</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
-            </td>
-            <select name="customer" id="customer" class="form-control col-lg-5">
-                <option disabled selected>select</option>
-</table>
-                <option value="Pending">Pending</option>
-                </select>
-        <tr>
-        <tr>
-            <td></td>
-            <td><button type="button" id="addressUpdate" class="btn btn-md btn-primary">Order Status</button></td>
-        </tr>
-    </thead>
-</form> -->
+
 <script>
  $(function() {
         $('#customer').on('change', function(e) {
@@ -292,22 +257,28 @@
                         .attr('content')
                 },
                 data: $('#comments').serializeArray(),
-                success: function(response) {
-                    if (typeof response.element == 'undefined') {
-                        return false;
-                    }
-                    if (typeof response.element == 'object') {
-                        $(response.element).each(
-                            function(i, element) {
-                                $('#content').html(element.html);
-                            })
-                    } else {
-                        $(response.element.selector).html(response
-                            .element.html);
-                    }
-                }
+                success : function(data) {
+                        if($.isEmptyObject(data.error)){
+                            if(typeof data.element == 'object') {
+                                 $(data.element).each(function(i, element) {
+                                        $('#content').html(element.html);
+                                 });
+                                }
+                        }else{
+                            printErrorMsg(data.error);
+                        }
+                     }
+
+                });
             });
-        });
+            function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $(".ad").css('display','none');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
     });
 </script>
 

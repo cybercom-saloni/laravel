@@ -1,6 +1,7 @@
-    <div class="row">
+<div class="row">
         <?php $data = $product->getProducts();?>
-        
+     
+  
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">{{ $data ? 'Edit' : 'Add' }} Product Details</h3>
         <form action="" method="POST" id="form">
@@ -9,7 +10,9 @@
                 @endif
                 @csrf
     
-                
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
              <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="sku"> Sku</label>
@@ -20,12 +23,7 @@
                     </div>
                   
                 </div>
-                @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.sku'][0]);?>
-                </div>
-                @endif
+                
                 <div class=" form-group row">
                     <div class="form-group col-lg-4">
                         <label for="name"> Name</label>
@@ -36,12 +34,7 @@
                     </div>
                    
                 </div>
-                @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.name'][0]);?>
-                </div>
-                @endif
+                
                 <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="price"> Price( in Rs.)</label>
@@ -51,12 +44,7 @@
                         required  min="1" step="0.01" placeholder="PRODUCT PRICE" name="product[price]" required>
                     </div>
                 </div>
-                @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.price'][0]);?>
-                </div>
-                @endif
+                
 
                 <div class="form-group row">
                      <div class="col-lg-4">
@@ -67,12 +55,7 @@
                             placeholder="PRODUCT DISCOUNT" name="product[discount]" required max="100" min="0" step="0.01">
                     </div>
                 </div>
-                @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.discount'][0]);?>
-                </div>
-                @endif
+                
                 <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="price"> Quantity</label>
@@ -83,12 +66,7 @@
                             name="product[quantity]" required max="100" min="1" required>
                     </div>
                     </div>
-                    @if(Session::get('productswe'))
-                        <div class ="alert alert-success">
-                        <?php $output=Session::get('productswe');
-                            print_r($output->getMessages()['product.quantity'][0]);?>
-                        </div>
-                    @endif
+                    
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="status"> Status</label>
@@ -107,12 +85,9 @@
                    
                     </div>
 
-                    @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.status'][0]);?>
-                </div>
-                @endif                    <div class="form-group row">
+                    
+                
+                    <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="status"> Category</label>
                         </div>
@@ -128,12 +103,7 @@
                     </select>
                     </div>
                     </div>
-                    @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.category_id'][0]);?>
-                </div>
-                @endif
+                    
                     <div class="form-group row">
                      <div class="col-lg-4">
                         <label for="description"> Description</label>
@@ -144,12 +114,7 @@
                             placeholder="PRODUCT DESCRIPTION">{{ $data ? $data[0]->description : '' }}</textarea>
                     </div>
                     </div>
-                    @if(Session::get('productswe'))
-                <div class ="alert alert-success">
-                <?php $output=Session::get('productswe');
-                    print_r($output->getMessages()['product.description'][0]);?>
-                </div>
-                @endif
+                    
                     
                     <div class="form-group row">
                      <div class="col-lg-4">
@@ -164,26 +129,40 @@
     <script>
         $(function () {
              $('#update').on('click', function (e) {
+               
                 e.preventDefault();
+                var _token = $("input[name='_token']").val();
+                 var sku = $("input[name='product[sku]']").val();
+                 var name = $("input[name='product[name]']").val();
+                 var price = $("input[name='product[price]']").val();
+                 var discount = $("input[name='product[discount]']").val();
+                 var status = $("input[name='product[status]']").val();
+                 var category = $("input[name='product[category]']").val();
+                 console.log(sku);
                 $.ajax({
                     type: 'post',
                     url: '/productSave{{ $data ? '/' . $data[0]->id : '' }}',
                     data: $('#form').serializeArray(),
-                    success: function (response) {
-                                        if (typeof response.element == 'undefined') {
-                                            return false;
-                                        }
-                                        if(typeof response.element == 'object') {
-                                            $(response.element).each(function(i, element) {
-                                                $('#content').html(element.html);
-                                            })
-                                        }
-                                        else{
-                                            $(response.element.selector).html(response.element.html);
-                                        }
-                                    }
+                    success : function(data) {
+                        if($.isEmptyObject(data.error)){
+                            if(typeof data.element == 'object') {
+                                 $(data.element).each(function(i, element) {
+                                        $('#content').html(element.html);
+                                 });
+                                }
+                        }else{
+                            printErrorMsg(data.error);
+                        }
+                     }
+
                 });
             });
-        });
+            function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+    });
     </script>
-

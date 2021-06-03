@@ -18,7 +18,7 @@ class CreateOrderStatusesTable extends Migration
             $table->unsignedBigInteger('orderId');
             $table->foreign('orderId')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
             $table->string('comment', 255)->nullable();
-            $table->enum('status', ['pending', 'inprocess', 'shipped', 'delivered'])->nullable()->default('pending');
+            $table->enum('status',['Confirm','Pending','InProcess','Shipped','Cancelled'])->default('Pending');
             $table->timestamps();
         });
     }

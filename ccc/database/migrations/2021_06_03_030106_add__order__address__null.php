@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePotsTable extends Migration
+class AddOrderAddressNull extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreatePotsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pots', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('order_addresses', function (Blueprint $table) {
+            $table->unsignedBigInteger('addressId')->nullable()->change();
         });
     }
 
@@ -26,6 +25,8 @@ class CreatePotsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pots');
+        Schema::table('order_addresses', function (Blueprint $table) {
+            $table->unsignedBigInteger('addressId')->nullable(false)->change();
+        });
     }
 }

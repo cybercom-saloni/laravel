@@ -16,12 +16,6 @@
                         class="fa fa-pencil"></i></button> 
                 <button type="button" name="delete" id="deletebtn" value="delete" class="btn btn-md btn-secondary"> <i 
                         class="fa fa-trash"  value="delete"></i></button>    
-                 <!-- <button type="button" name="delete" onclick="object.setForm('formupdate').setUrl('/media/delete/{{ request()->id }}').setMethod('post').load();" value="delete" class="btn btn-md btn-secondary"> <i -->
-                        <!-- class="fa fa-trash"  value="delete"></i></button>  --> 
-                        <!-- <button type="submit" name="update"   value="update"  name="update" value="update" class="btn btn-md btn-success"> <i
-                        class="fa fa-pencil"></i></button>
-                <button type="submit" name="delete"  value="delete" class="btn btn-md btn-secondary"> <i
-                        class="fa fa-trash"  value="delete"></i></button>  -->
                 @csrf
                 <div class="row">
                     <table class="table table-bordered bg-light  table-hover">
@@ -104,6 +98,9 @@
                     </table>
                 </div>
             </form>
+            <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
             <form action="" id="upload_form" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('post')
@@ -175,6 +172,9 @@
                             $(document).ready(function(){
                             $('#upload_form').on('submit', function(event){
                             event.preventDefault();
+                            var _token = $("input[name='_token']").val();
+                            var image = $("input[name='image']").val();
+                            console.log(image);
                             $.ajax({
                             url:"/product/imageUpload/{{ $product->id }}",
                             method:"POST",
@@ -183,22 +183,26 @@
                             contentType: false,
                             cache: false,
                             processData: false,
-                                success: function (response) {
-                                        if (typeof response.element == 'undefined') {
-                                            return false;
-                                        }
-                                        if(typeof response.element == 'object') {
-                                            $(response.element).each(function(i, element) {
-                                                $('#content').html(element.html);
-                                            })
-                                        }
-                                        else{
-                                            $(response.element.selector).html(response.element.html);
+                                success: function(data) {
+                                        if($.isEmptyObject(data.error)){
+                                            if(typeof data.element == 'object') {
+                                                $(data.element).each(function(i, element) {
+                                                        $('#content').html(element.html);
+                                                });
+                                                }
+                                        }else{
+                                            printErrorMsg(data.error);
                                         }
                                     }
-                                
                             });
                             });
+                            function printErrorMsg (msg) {
+                                    $(".print-error-msg").find("ul").html('');
+                                    $(".print-error-msg").css('display','block');
+                                    $.each( msg, function( key, value ) {
+                                        $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                                    });
+                                }
                             });
 
                         </script>

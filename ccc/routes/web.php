@@ -15,7 +15,11 @@ use App\Http\Controllers\Cart\CartItem;
 use App\Http\Controllers\Cart\Address as CartAddress;
 use App\Http\Controllers\Order;
 use App\Http\Controllers\OrderStatus;
+use App\Http\Controllers\Payment;
+use App\Http\Controllers\Shipping;
+
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -117,9 +121,24 @@ Route::post('/cartItem/addItem',[CartItem::class,'addItemAction']);
 
 Route::get('/order/{id?}',[Order::class,'displayOrderAction']);
 Route::get('/InformationCustomer/{id?}',[Order::class,'displayAllOrderAction']);
+Route::get('/manageOrder',[Order::class,'manageOrderAction'])->name('manageOrder');
 Route::post('/order/customer',[Order::class,'saveCustomerAction']);
 
 Route::post('/setPages/{page?}', [Product::class, 'setPageAction'])->name('setProductPage');
 
 
 Route::post('saveComment/{id}', [OrderStatus::class, 'saveComment'])->name('saveComment');
+
+Route::get('/payment',[Payment::class,'gridAction'])->name('payment');
+Route::post('/paymentSave/{id?}', [Payment::class, 'saveAction'])->whereNumber('id')->name('PaymentSave');
+Route::get('/paymentDelete/{id?}', [Payment::class, 'deleteAction'])->whereNumber('id');
+Route::get('/payment/form/{id?}', [Payment::class, 'formAction'])->whereNumber('id')->name('paymentForm');
+Route::get('payment/status/{id}', [Payment::class, 'StatusAction']);
+
+Route::get('/shipment',[Shipping::class,'gridAction'])->name('shipment');
+Route::post('/shippingSave/{id?}', [Shipping::class, 'saveAction'])->whereNumber('id')->name('shippingSave');
+Route::get('/shippingDelete/{id?}', [Shipping::class, 'deleteAction'])->whereNumber('id');
+Route::get('/shipping/form/{id?}', [Shipping::class, 'formAction'])->whereNumber('id')->name('shippingForm');
+Route::get('shipping/status/{id}', [Shipping::class, 'StatusAction']);
+
+

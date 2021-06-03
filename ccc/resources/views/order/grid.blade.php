@@ -91,12 +91,26 @@
         </div>
     </div>
 </div>
+<div class="col-12">
+    <div class ="row">
+        <div class ="col-12">
+            <h6>Order Comment Details</h6>
+            <table>
+                <tr>
+                    <td>Order Status :-</td>
+                    <td>{{$orderDetails->status}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 <table class="table table-bordered bg-light  table-hover">
     <thead class="bg-dark text-white">
         <tr>
         <th>PRODUCT NAME</th>
         <th>BASE PRICE</th>
         <th>QUANTITY</th>
+        <th>PRICE</th>
         <th>DISCOUNT</th>
         <th>TOTAL PRICE</th>
         </tr>
@@ -107,16 +121,17 @@
            <td>{{$controller->getProductName($orderItem->productId)}}</td>
             <td>Rs.{{$orderItem->basePrice}}</td>
             <td>{{$orderItem->quantity}}</td>
+            <td>@php $qty = $orderItem->price * $orderItem->quantity @endphp Rs.{{number_format($qty,2)}}</td>
             <td>{{$orderItem->discount}}%</td>
-            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price @endphp {{$rowtotal - $rowtotal*($orderItem->discount/100)}}</td>
+            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price; $total = $rowtotal - $rowtotal*($orderItem->discount/100) @endphp {{number_format($total,2)}}</td>
         </tr>
         @endforeach
         <tr>
-            <td colspan="4">Shipping Charge</td>
+            <td colspan="5">Shipping Charge</td>
             <td>Rs.{{$orderDetails->shippingAmount}}</td>
         </tr>
         <tr>
-        <td colspan="4">Total</td>
+        <td colspan="5">Total</td>
             <td>Rs.{{$orderDetails->total}}</td>
         </tr>
     </tbody>

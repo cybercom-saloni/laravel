@@ -17,8 +17,8 @@ class Address extends Controller
 {
     public function AddressAction($id=null,Request $request)
     {  
+        
     try{
-        Session::put('billing.state ', 'required field');
         $validator = Validator::make($request->all(), [
             "billing.address" => "required",
             "billing.area" => "required",
@@ -26,9 +26,12 @@ class Address extends Controller
             "billing.state" => "required",
             "billing.zipcode" => "required",
             "billing.country" => "required",
+           
         ]);
+        
         if ($validator->fails()) {
-            Session::put('billingCartError',$validator->errors());
+            // return response()->json(['success'=>'Added new records.']);
+            return response()->json(['error'=>$validator->errors()->all()]);
         }
          $customerId = SESSION::get('customerId');
         $sessioncartId = SESSION::get('cartId');
@@ -59,13 +62,17 @@ class Address extends Controller
             //     $cartItem->save();
             // }
        }
+
         // print_r($cartShippingAddressData);
+        
         $cartBillingAddress = CartAddress::where([['cartId',$sessioncartId],['addressType','billing']])->first();
+        $addressCustomer = AddressModel::where([['customerId', $customerId], ['addressType', 'billing']])->first();
         if(!$cartBillingAddress)
         {
+            
             $cartBillingAddress = new CartAddress;
         }
-
+        $cartBillingAddress->addressId = $addressCustomer->id;
         $cartBillingAddress->cartId = $sessioncartId;
         $cartBillingAddress->address = $cartBillingAddressData['address'];
         $cartBillingAddress->area = $cartBillingAddressData['area'];
@@ -76,16 +83,22 @@ class Address extends Controller
         $cartBillingAddress->addressType = 'billing';
         $cartBillingAddress->sameAsBilling = 1;
         $cartBillingAddress->save();
-      
+     
 
         if(array_key_exists('sameAsBilling',$cartShippingAddressData))
         {
-            echo 122;
+            
             $cartShippingAddress = CartAddress::where([['cartId',$sessioncartId],['addressType','shipping']])->first();
-          
+            $addressCustomer = AddressModel::where([['customerId', $customerId], ['addressType', 'shipping']])->first();
+            
             if(!$cartShippingAddress)
             {
                 $cartShippingAddress = new CartAddress;
+            }
+            $cartShippingAddress->addressId = null;
+            if($addressCustomer)
+            {
+                $cartShippingAddress->addressId = $addressCustomer->id;
             }
             $cartShippingAddress->cartId = $sessioncartId;
             $cartShippingAddress->address = $cartBillingAddressData['address'];
@@ -101,10 +114,17 @@ class Address extends Controller
         }
         else
         {
+            
             $cartShippingAddress = CartAddress::where([['cartId',$sessioncartId],['addressType','shipping']])->first();
+            $addressCustomer = AddressModel::where([['customerId', $customerId], ['addressType', 'shipping']])->first();
             if(!$cartShippingAddress)
             {
                 $cartShippingAddress = new CartAddress;
+            }
+            $cartShippingAddress->addressId = null;
+            if($addressCustomer)
+            {
+                $cartShippingAddress->addressId = $addressCustomer->id;
             }
             $cartShippingAddress->cartId = $sessioncartId;
             $cartShippingAddress->address = $cartShippingAddressData['address'];

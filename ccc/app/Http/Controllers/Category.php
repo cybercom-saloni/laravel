@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category as CategoryModel;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 class Category extends Controller
 {
     protected $model = null;
@@ -27,10 +28,14 @@ class Category extends Controller
 
     public function gridAction($id = null)
     {
+       
         $categories = CategoryModel::whereNull('parent_id')->orderBy('name')->get();
         $allCategories = CategoryModel::pluck('name', 'id')->all();
 
         if ($id) {
+            Session::forget('Added');
+            Session::forget('Updated');
+            Session::forget('Delete');
             $singleCategory = (new CategoryModel)->load($id)->getCategories();
 
             $view = view('category.grid', \compact('categories', 'allCategories', 'singleCategory'))->render();
@@ -78,11 +83,19 @@ class Category extends Controller
         return $subCategories;
     }
 
-    public function addAction($id = null)
+    public function addAction($id = null,Request $request)
     {
         try {
-            $data = request()->category;
+            $validator = Validator::make($request->all(), [
+                "category.name" => "required|unique:categories,name,$id",
+                "category.status" => "required",
+            ]);
+           
 
+            if ($validator->fails()) {
+                return response()->json(['error'=>$validator->errors()->all()]);
+            }
+            $data = request()->category;
             if ($id) {
                 $data['parent_id'] = $id;
             }
@@ -93,7 +106,7 @@ class Category extends Controller
 
         } catch (\Exception $e) {
             $e->getMessage();
-            Session::put('error', 'category fields empty');
+            
         }
     }
 
@@ -101,18 +114,27 @@ class Category extends Controller
     {
         try
         {
-            
+            $validator = Validator::make($request->all(), [
+                "category.name" => "required|unique:categories,name,$id",
+                "category.status" => "required",
+            ]);
+           
+
+            if ($validator->fails()) {
+                return response()->json(['error'=>$validator->errors()->all()]);
+                die;
+            }
             $data = $request->get('category');
 
             $data['id'] = $id;
     
-            (new CategoryModel)->saveData($data);
-            Session::forget('error');
-            return redirect(route('formEdit'))->with('Updated','Category updated!!!');
+            $value= (new CategoryModel)->saveData($data);
+               return redirect(route('formEdit'))->with('Updated','Category updated!!!');
+        
         }
         catch (\Exception $e) {
             $e->getMessage();
-            Session::put('error', 'category fields empty');
+           
         }
         // return redirect()->back()->with('Delete','Category Deleted!!!');
     }
@@ -120,7 +142,6 @@ class Category extends Controller
     public function deleteAction($id)
     {
         $category = CategoryModel::find($id);
-
         $parent = CategoryModel::where('id', $category->parent_id)->get();
         $child = $category->childs;
 
@@ -134,7 +155,7 @@ class Category extends Controller
         }
 
         (new CategoryModel)->deleteData($id);
-        Session::forget('error');
+       
         return redirect(route('formEdit'))->with('Delete','Category Deleted!!!');
     }
 

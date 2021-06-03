@@ -62,17 +62,6 @@ class Customer extends Controller
         
                 if(!$id)
                 {
-                    $validator = Validator::make($request->all(), [
-                        "customer.firstname" => "required",
-                        "customer.lastname" => "required",
-                        "customer.email" => "required",
-                        "customer.password" => "required",
-                        "customer.contactno" => "required",
-                        "customer.status" => "required",
-                    ]);
-                    if ($validator->fails()) {
-                        Session::put('customerError',$validator->errors());
-                    }
                     $view =view('customer.tabs.personalform')->render();
                     $response = [
                                 'element' =>[
@@ -87,17 +76,6 @@ class Customer extends Controller
                     die();
                 }else
                 {
-                    $validator = Validator::make($request->all(), [
-                        "customer.firstname" => "required",
-                        "customer.lastname" => "required",
-                        "customer.email" => "required",
-                        "customer.password" => "required",
-                        "customer.contactno" => "required",
-                        "customer.status" => "required",
-                    ]);
-                    if ($validator->fails()) {
-                        Session::put('customerError',$validator->errors());
-                    }
             $customer = CustomerModel::find($id);
                 $password=  Crypt::decryptString($customer->password);
             $view = view('customer.tabs.personalform',['customer'=>$customer,'password'=>$password])->render();
@@ -135,28 +113,35 @@ class Customer extends Controller
 
     public  function deleteAction($id)
     {
+       
         $customerModel = CustomerModel::find($id);
+        // $customerBillingModel = AddressModel::where(['customerId',$id],['addressType','billing'])->first();
+        // $customershippingModel = AddressModel::where(['customerId',$id],['addressType','shipping'])->first();
+        // if($customerBillingModel){
+        //     echo $customerBillingModel;
+        // }
+    //    print_r($customerBillingModel);
         $customerModel->delete();
+        Session::forget('customerId');
         return redirect('customerGrid')->with('custDelete','customer Deleted!!!');
     }
 
     public  function saveAction($id=null,Request $request)
     {
     try{
+       
         $validator = Validator::make($request->all(), [
             "customer.firstname" => "required",
             "customer.lastname" => "required",
-            "customer.email" => "required",
+            "customer.email" => "required|email|unique:customers,email,$id",
             "customer.password" => "required",
             "customer.contactno" => "required",
             "customer.status" => "required",
         ]);
+        
         if ($validator->fails()) {
-            // return redirect('product/form')
-            //             ->withErrors($validator,'formValue')
-            //             ->withInput();
-            Session::put('customerError',$validator->errors());
-            throw new Exception($validator->errors());
+            // return response()->json(['success'=>'Added new records.']);
+            return response()->json(['error'=>$validator->errors()->all()]);
         }
         $customerData = $request->customer;
         // $request->validate([
@@ -187,9 +172,10 @@ class Customer extends Controller
         }
         catch (\Exception $e) {
             echo  $e->getMessage();
+            return response()->json(['error'=>$e->getMessage()]);
          //    die;
              
-             return redirect()->back()->withInput();
+            //  return redirect()->back()->withInput();
          //     die;
            
          }

@@ -18,8 +18,8 @@ class CreateCartsTable extends Migration
             $table->unsignedBigInteger('customerId');
             $table->decimal('total',10,2)->default(0);
             $table->decimal('discount',10,2)->default(0);
-            $table->unsignedBigInteger('paymentId')->default(null);
-            $table->unsignedBigInteger('shippingId')->default(null);
+            $table->unsignedBigInteger('paymentId');
+            $table->unsignedBigInteger('shippingId');
             $table->decimal('shippingAmount',10,2)->default(0);
             $table->timestamps();
             $table->foreign('shippingId')->references('id')->on('shippings')->onUpdate('cascade')->onDelete('cascade');

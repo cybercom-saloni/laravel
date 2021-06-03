@@ -20,32 +20,7 @@
         </div>
        
             <div class="col-6">
-            <form action="/setPages/customerGrid" method="post" id="records">
-                            @csrf
-                            <div class="navbar-btn navbar-btn-right">
-                                <div class="form-group">
-                                    <label for="recordPerPage">Record Per Page</label>
-                                    <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
-                                        <option value="2"
-                                            {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
-                                            2
-                                        </option>
-                                        <option value="4"
-                                            {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
-                                            4
-                                        </option>
-                                        <option value="20"
-                                            {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
-                                            20
-                                        </option>
-                                        <option value="50"
-                                            {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
-                                            50
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
+          
             </div>
         
     </div>
@@ -101,7 +76,6 @@
                     </td>
                     <td><a onclick="object.setUrl('/customer/form/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
                     <td> <a onclick="object.setUrl('/customerDelete/{{ $customer->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
-
                 </tr>
                 @endforeach
             @endif
@@ -110,6 +84,7 @@
     </table>
     <!-- {!! $customerAddress->links()!!} -->
     <div>
+   
     <nav>
         <ul class="pagination">
             
@@ -131,7 +106,38 @@
         </ul>
     </nav>
 </div>
-
+<div class="row">
+<div class="col-7">
+</div>
+<div class="col-5">
+    <form action="/setPages/customerGrid" method="post" id="records">
+                            @csrf
+                            <div class="navbar-btn navbar-btn-right">
+                                <div class="form-group">
+                                    <label for="recordPerPage">Record Per Page</label>
+                                    <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
+                                        <option value="2"
+                                            {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
+                                            2
+                                        </option>
+                                        <option value="4"
+                                            {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
+                                            4
+                                        </option>
+                                        <option value="20"
+                                            {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
+                                            20
+                                        </option>
+                                        <option value="50"
+                                            {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
+                                            50
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+    </div>
+    </div>
 <script>
 $(function() {
     $('#recordPerPage').on('change', function(e) {

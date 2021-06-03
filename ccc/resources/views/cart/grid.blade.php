@@ -27,6 +27,9 @@
         <div class="row">
             <div class="col-6">
             <h3>BILLING ADDRESS </h3>
+            <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
             <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Address</label>
@@ -35,13 +38,7 @@
                                 <textarea class="form-control" id="billingaddress" name="billing[address]"  placeholder="address"  required>{{$billing ? $billing->address : ' '}}</textarea>
                             </div>
                         </div>
-                        @if(Session::get('billingCartError'))
-                        <div class ="alert alert-danger">
-                        <?php $output=Session::get('billingCartError');
-                            Session::forget('AddressUpdated');
-                            print_r($output->getMessages()['billing.address'][0]);?>
-                        </div>
-                        @endif
+                        
 
 
                         <div class=" form-group row">
@@ -52,13 +49,7 @@
                                 <input type="text" class="form-control" id="billingarea"  value="{{$billing ? $billing->area : ' '}}" name="billing[area]" placeholder="area"   required>
                             </div>
                         </div>
-                         @if(Session::get('billingCartError'))
-                        <div class ="alert alert-danger">
-                        <?php $output=Session::get('billingCartError');
-                            Session::forget('AddressUpdated');
-                            print_r($output->getMessages()['billing.area'][0]);?>
-                        </div>
-                        @endif
+                         
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> City</label>
@@ -67,13 +58,7 @@
                                 <input type="text" class="form-control" id="billingcity" value="{{$billing ? $billing->city : ' '}}" name="billing[city]" placeholder="city"  required>
                             </div>
                         </div>
-                        @if(Session::get('billingCartError'))
-                        <div class ="alert alert-danger">
-                        <?php $output=Session::get('billingCartError');
-                            Session::forget('AddressUpdated');
-                            print_r($output->getMessages()['billing.city'][0]);?>
-                        </div>
-                        @endif
+                        
                       
 
                         <div class=" form-group row">
@@ -84,13 +69,7 @@
                                 <input type="text" class="form-control" id="billingstate" value="{{$billing ? $billing->state : ' '}}" name="billing[state]" placeholder="state"  required>
                             </div>
                         </div>
-                        @if(Session::get('billingCartError'))
-                        <div class ="alert alert-danger">
-                        <?php $output=Session::get('billingCartError');
-                            Session::forget('AddressUpdated');
-                            print_r($output->getMessages()['billing.state'][0]);?>
-                        </div>
-                        @endif
+                        
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Zipcode</label>
@@ -99,13 +78,7 @@
                                 <input type="text" class="form-control" id="billingzipcode" value="{{$billing ? $billing->zipcode : ' '}}" name="billing[zipcode]" placeholder="zipcode"  required>
                             </div>
                         </div>
-                        @if(Session::get('billingCartError'))
-                        <div class ="alert alert-danger">
-                        <?php $output=Session::get('billingCartError');
-                            Session::forget('AddressUpdated');
-                            print_r($output->getMessages()['billing.zipcode'][0]);?>
-                        </div>
-                        @endif
+                        
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Country</label>
@@ -114,13 +87,7 @@
                                 <input type="text" class="form-control" id="billingcountry" name="billing[country]" value="{{$billing ? $billing->country : ' '}}" placeholder="country"   required>
                             </div>
                         </div>
-                        @if(Session::get('billingCartError'))
-                        <div class ="alert alert-danger">
-                        <?php $output=Session::get('billingCartError');
-                            Session::forget('AddressUpdated');
-                            print_r($output->getMessages()['billing.country'][0]);?>
-                        </div>
-                        @endif
+                        
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 
@@ -227,7 +194,7 @@
              @foreach($controller->getShipping() as $key => $value)
                 <tr>
                    <td><h6><input type="radio" name="shippingMethod" value="{{$value->id}}" <?php if($cart[0]->shippingId == $value->id) echo 'checked';?>>{{$value->name}}</h6></td>
-                   <td><h6>{{$value->amount}}</h6></td>
+                   <td><h6>Rs.{{$value->amount}}</h6></td>
                 </tr>
              @endforeach 
              </table>
@@ -340,9 +307,9 @@
                         <td>{{$controller->getProductName($cartItem->productId)}}</td>
                         <td>Rs.{{$cartItem->price}}</td>
                         <td><input type="number" class="form-control"  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"    min="1" step="1"  required></td>
-                        <td>Rs.@php  echo $rowtotal = $cartItem->quantity*$cartItem->price @endphp .00</td>
+                        <td>Rs.@php $rowtotal = $cartItem->quantity*$cartItem->price @endphp {{number_format($rowtotal, 2)}}</td>
                         <td>{{$cartItem->discount}}%</td>
-                        <td>Rs.{{$rowtotal - $rowtotal*($cartItem->discount/100)}}</td>      
+                        <td>Rs.@php $total =$rowtotal - $rowtotal*($cartItem->discount/100)@endphp {{number_format($total, 2)}}</td>      
                         <td><a href="javascript:void(0)" onclick="object.setUrl('/cartItem/delete/{{$cartItem->id}}').setMethod('get').load();" class="btn btn-secondary">DELETE</a></td>               
                     </tr>
                     @endforeach
@@ -353,7 +320,7 @@
                     </tr>
                     <tr>
                     <td colspan="5">Total</td>
-                    <td>Rs.{{$controller->getTotal()}}</td>
+                    <td>Rs.{{number_format($controller->getTotal(),2)}}</td>
                     <td></td>
                     </tr>
         </tbody>
@@ -401,28 +368,27 @@
                     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
                 },
                 data : $('#form').serializeArray(),
-                success : function(response)
-                {
-                    if(typeof response.element == 'undefined')
-                    {
-                        return false;
-                    }
-                    if(typeof response.element == 'object')
-                    {
-                        $(response.element).each(
-                            function(i,element)
-                            {
-                                $('#content').html(element.html);
-                            }
-                        )
-                    }
-                    else
-                    {
-                        $(response.element.selector).html(response.element.html);
-                    }
-                }
+                success : function(data) {
+                        if($.isEmptyObject(data.error)){
+                            if(typeof data.element == 'object') {
+                                 $(data.element).each(function(i, element) {
+                                        $('#content').html(element.html);
+                                 });
+                                }
+                        }else{
+                            printErrorMsg(data.error);
+                        }
+                     }
+
+                });
             });
-        });
+            function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
     });  
 
     function sameAsBillingFunction()

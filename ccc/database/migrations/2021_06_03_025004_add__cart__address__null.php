@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostsTable extends Migration
+class AddCartAddressNull extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('cart_addresses', function (Blueprint $table) {
+            $table->unsignedBigInteger('addressId')->nullable()->change();
         });
     }
 
@@ -26,6 +25,8 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::table('cart_addresses', function (Blueprint $table) {
+            $table->unsignedBigInteger('addressId')->nullable(false)->change();
+        });
     }
 }

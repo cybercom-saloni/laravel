@@ -72,17 +72,22 @@
             </style>
           
             @if(session('Delete'))
-                <div class ="alert alert-success">{{session('Delete')}}</div>
+                <div class ="alert alert-success del" style="display:block">{{session('Delete')}}</div>
             @endif
             @if(session('error'))
-                <div class ="alert alert-success">{{session('error')}}</div>
+                <div class ="alert alert-success er" style="display:block">{{session('error')}}</div>
             @endif
             @if(session('Added'))
-                <div class ="alert alert-success">{{session('Added')}}</div>
+                <div class ="alert alert-success ad" style="display:block">{{session('Added')}}</div>
             @endif
+
             @if(session('Updated'))
-                <div class ="alert alert-success">{{session('Updated')}}</div>
+                <div class ="alert alert-success up" style="display:block">{{session('Updated')}}</div>
             @endif
+            <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                   
+                </div>
             <div class="container-fluid">
                 <button type="button" id="show" class="btn btn-success mt-2 mb-2">Add Root Category</button>
                 @if (request()->id)
@@ -91,10 +96,15 @@
                 <script>
                     $("#addRootForm").hide();
                     $(document).ready(function() {
+                        
                         $("#show").click(function() {
                             $("#addRootForm").show();
                             $("#editCategoryModal").hide();
                             $("#addSubForm").hide();
+                            $(".ad").css('display','none');
+                            $(".up").css('display','none');
+                            $(".del").css('display','none');
+                            $(".er").css('display','none');
                         });
                     });
                 </script>
@@ -102,9 +112,14 @@
                     $("#addSubForm").hide();
                     $(document).ready(function() {
                         $("#showSub").click(function() {
+
                             $("#addSubForm").show();
                             $("#editCategoryModal").hide();
                             $("#addRootForm").hide();
+                            $(".ad").css('display','none');
+                            $(".up").css('display','none');
+                            $(".del").css('display','none');
+                            $(".er").css('display','none');
                         });
                     });
                 </script>
@@ -112,8 +127,8 @@
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                                     <ul id="tree1">
                                         @foreach ($categories as $category)
-                                        <li><i class="fas fa-cloud"></i>
-                                            <a  style="color: {{ $category->status == 0 ? 'red' : '' }} href="javascript:void(0);" onclick="object.setUrl('<?php echo  route('formEdit', $category->id) ?>').setMethod('get').load();" style="color: {{ $category->status == 0 ? 'grey' : '' }}">{{ $category->name }}</a>
+                                        <li><span class="fa fa-sticky-note"></span>
+                                            <a  style="color: {{ $category->status == 0 ? 'red' : '' }} href="javascript:void(0);" onclick="object.setUrl('<?php echo  route('formEdit', $category->id) ?>').setMethod('get').load();" style="color: {{ $category->status == 0 ? 'red' : '' }}">{{ $category->name }}</a>
                                             <ul>
                                             @if (count($category->childs))
                                                 @include('category.child',['childs' => $category->childs])
@@ -128,6 +143,7 @@
                              
                                 <form action="" method="Post" id="myrootform">
                                     @csrf
+                                   
                                     <div class="form-group col-lg-12">
                                         <button type="button" id="addRootCategory"  class="btn btn-success">Add Root Category</button>
                                     </div>
@@ -138,12 +154,7 @@
                                             <input type="text" class="form-control" name="category[name]" id="name" aria-describedby="helpId" placeholder="Category Name">
                                         </div>
                                     </div>
-                                    @if(Session::get('categoryError'))
-                                    <div class ="alert alert-danger">
-                                    <?php $output=Session::get('categoryError');
-                                        print_r($output->getMessages()['category.name'][0]);?>
-                                    </div>
-                                    @endif
+                                   
                                 
                                         <div class="form-group col-lg-12">
                                             <label for="name">Select Status</label>
@@ -167,16 +178,36 @@
                     <script>
                         $(function () {
                             $('#addRootCategory').on('click', function (e) {
+                                
                                 e.preventDefault();
+                                
+                                var name = $("input[name='category[name]']").val();
+                                console.log(name);
                                 $.ajax({
                                     type: 'post',
                                     url: '<?php echo route('addRoot') ?>',
                                     data: $('#myrootform').serializeArray(),
-                                    success: function (response) {
-                                        object.setUrl('<?php echo route('formEdit',request()->id) ?>').setMethod('get').load();
-                                    }
+                                    success : function(data) {
+                                            if($.isEmptyObject(data.error)){
+                                                if(typeof data.element == 'object') {
+                                                    $(data.element).each(function(i, element) {
+                                                            $('#content').html(element.html);
+                                                    });
+                                                    }
+                                            }else{
+                                                printErrorMsg(data.error);
+                                            }
+                                        }
                                 });
                             });
+
+                            function printErrorMsg (msg) {
+                                $(".print-error-msg").find("ul").html('');
+                                $(".print-error-msg").css('display','block');
+                                $.each( msg, function( key, value ) {
+                                    $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                                });
+                            }
                         });
                     </script>
 
@@ -224,11 +255,27 @@
                                     type: 'post',
                                     url: '<?php echo route('addRoot',request()->id) ?>',
                                     data: $('#mySubCategoryform').serializeArray(),
-                                    success: function (response) {
-                                        object.setUrl('<?php echo route('formEdit',request()->id) ?>').setMethod('get').load();
-                                    }
+                                    success: function(data) {
+                                            if($.isEmptyObject(data.error)){
+                                                if(typeof data.element == 'object') {
+                                                    $(data.element).each(function(i, element) {
+                                                            $('#content').html(element.html);
+                                                    });
+                                                    }
+                                            }else{
+                                                printErrorMsg(data.error);
+                                            }
+                                        }
                                 });
                             });
+
+                            function printErrorMsg (msg) {
+                                $(".print-error-msg").find("ul").html('');
+                                $(".print-error-msg").css('display','block');
+                                $.each( msg, function( key, value ) {
+                                    $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                                });
+                            }
                         });
                     </script>
 
@@ -236,6 +283,9 @@
 
 
                     @if(isset(request()->id))
+                    <?php Session::forget('Added');?>
+                   
+                    
                     <div class="col-md-8 col-lg-8" id="editCategoryModal">
                      
                                 
@@ -274,15 +324,33 @@
                                         $(function () {
                                             $('#updateCategory').on('click', function (e) {
                                                 e.preventDefault();
+                                                var name = $("input[name='category[name]']").val();
                                                 $.ajax({
                                                     type: 'post',
                                                     url: '<?php echo route('updateCategory', $singleCategory->id) ?>',
                                                     data: $('#myform').serializeArray(),
-                                                    success: function (response) {
-                                                        object.setUrl('<?php echo route('formEdit',request()->id) ?>').setMethod('get').load();
+                                                    success: function(data) {
+                                            if($.isEmptyObject(data.error)){
+                                                if(typeof data.element == 'object') {
+                                                    $(data.element).each(function(i, element) {
+                                                            $('#content').html(element.html);
+                                                    });
+                                                    
                                                     }
-                                                });
-                                            });
+                                            }else{
+                                                printErrorMsg(data.error);
+                                            }
+                                        }
+                                });
+                            });
+
+                            function printErrorMsg (msg) {
+                                $(".print-error-msg").find("ul").html('');
+                                $(".print-error-msg").css('display','block');
+                                $.each( msg, function( key, value ) {
+                                    $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                                });
+                            }
                                         });
                                     </script>
 

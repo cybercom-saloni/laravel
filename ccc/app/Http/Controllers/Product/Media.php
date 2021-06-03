@@ -6,14 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Product\Media as ProductMedia;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 class Media extends Controller
 {
     public function saveAction($id, Request $request)
     {
-            $request->validate([
+           try{
+
+          
+            $validator = Validator::make($request->all(), [
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['error'=>$validator->errors()->all()]);
+            }
 
             $imageName = time() . '.' . $request->image->extension();
 
@@ -27,6 +35,12 @@ class Media extends Controller
                 $request->image->move(public_path("images/products/$id"), $imageName);
             }
         return \redirect('/product/media/' . $id)->with('productUpload', 'product Media Uploaded successfully!!!');
+           }
+           catch (\Exception $e) {
+                   echo  $e->getMessage();
+            //     //    die;
+            //         Session::put('producterror',$e->getMessage());
+           }
     }
     public function productUpdateAction($id, Request $request)
     {

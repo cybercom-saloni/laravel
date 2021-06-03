@@ -5,11 +5,12 @@
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer Details</h3>
         <hr>
-        <form action="/customerAdress/save/{{$customerId}}" method="POST" id="form">
+        <form action="" method="POST" id="form">
         @csrf
         <h2 style="font-weight:bold; font-size:16px;" class="mt-2">Customer Billing Address Details</h2>
-        <!-- <input type="hidden" class="form-control"  name="billing[customerId]" placeholder="customerId"   value="{{$customerId}}" required>
-        <input type="hidden" class="form-control"  name="billing[addressType]" placeholder="addressType"   value="billing" required> -->
+        <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> Address</label>
@@ -18,12 +19,7 @@
                         <textarea class="form-control" id="address" name="billing[address]" placeholder="address"  required>{{$billing ? $billing->address : ' '}}</textarea>
                     </div>
                 </div>
-                @if(Session::get('billingError'))
-                <div class ="alert alert-danger">
-                <?php $output=Session::get('billingError');
-                    print_r($output->getMessages()['billing.address'][0]);?>
-                </div>
-                @endif
+               
 
                 <div class=" form-group row">
                     <div class="col-lg-4">
@@ -34,12 +30,7 @@
                     </div>
                 </div>
 
-                @if(Session::get('billingError'))
-                <div class ="alert alert-danger">
-                <?php $output=Session::get('billingError');
-                    print_r($output->getMessages()['billing.area'][0]);?>
-                </div>
-                @endif
+               
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> City</label>
@@ -49,12 +40,7 @@
                     </div>
                 </div>
 
-                @if(Session::get('billingError'))
-                <div class ="alert alert-danger">
-                <?php $output=Session::get('billingError');
-                    print_r($output->getMessages()['billing.city'][0]);?>
-                </div>
-                @endif
+               
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> State</label>
@@ -63,12 +49,7 @@
                         <input type="text" class="form-control" id="state" name="billing[state]" placeholder="state"   value="{{$billing ? $billing->state : ' '}}" required>
                     </div>
                 </div>
-                @if(Session::get('billingError'))
-                <div class ="alert alert-danger">
-                <?php $output=Session::get('billingError');
-                    print_r($output->getMessages()['billing.state'][0]);?>
-                </div>
-                @endif
+               
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> Zipcode</label>
@@ -77,12 +58,7 @@
                         <input type="text" class="form-control" id="zipcode" name="billing[zipcode]" placeholder="zipcode"   value="{{$billing ? $billing->zipcode : ' '}}" required>
                     </div>
                 </div>
-                @if(Session::get('billingError'))
-                <div class ="alert alert-danger">
-                <?php $output=Session::get('billingError');
-                    print_r($output->getMessages()['billing.zipcode'][0]);?>
-                </div>
-                @endif
+               
                 <div class=" form-group row">
                     <div class="col-lg-4">
                         <label for="firstname"> Country</label>
@@ -92,12 +68,7 @@
                     </div>
                     
                 </div>
-                @if(Session::get('billingError'))
-                <div class ="alert alert-danger">
-                <?php $output=Session::get('billingError');
-                    print_r($output->getMessages()['billing.country'][0]);?>
-                </div>
-                @endif
+               
 
 
                 <h2 style="font-weight:bold; font-size:16px;" class="mt-2">Customer Shipping Address Details</h2>
@@ -157,10 +128,50 @@
                      <div class="col-lg-4">
                      </div>
                     <div class="col-lg-6">
-                    <button type="button" onclick="object.setUrl('/customerAdress/save/{{$customerId}}').setForm('form').load();" class="btn btn-success btn-md">Save Customer Address Details</button>
+                    <button type="button" id ="update"  class="btn btn-success btn-md">Save Customer Address Details</button>
                 </div>
                 <div>
             </form>
         </div>
     </div>
+
+    <script>
+        $(function () {
+             $('#update').on('click', function (e) {
+                e.preventDefault();
+
+                var _token = $("input[name='_token']").val();
+                 var address = $("input[name='billing[address]']").val();
+                 var area = $("input[name='billing[area]']").val();
+                 var city = $("input[name='billing[city]']").val();
+                 var state = $("input[name='billing[state]']").val();
+                 var zipcode = $("input[name='billing[zipcode]']").val();
+                 var country = $("input[name='billing[country]']").val();
+                $.ajax({
+                    type: 'post',
+                    url: '/customerAdress/save/{{$customerId}}',
+                    data: $('#form').serializeArray(),
+                    success : function(data) {
+                        if($.isEmptyObject(data.error)){
+                            if(typeof data.element == 'object') {
+                                 $(data.element).each(function(i, element) {
+                                        $('#content').html(element.html);
+                                 });
+                                }
+                        }else{
+                            printErrorMsg(data.error);
+                        }
+                     }
+
+                });
+            });
+            function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+    });
+    </script>
 

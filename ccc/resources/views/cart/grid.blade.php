@@ -1,15 +1,20 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">View Cart</h3>
 <hr>
 @if(session('changeCustomer'))
-<div class="alert alert-success">{{session('changeCustomer')}}</div>
+<div class="alert alert-success change" style="display:block">{{session('changeCustomer')}}</div>
 @endif
-
+@if(session('AddressUpdated'))
+<div class="alert alert-success address" style="display:block">{{session('AddressUpdated')}}</div>
+@endif
+<div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+</div>
 <form action="/cart/customer" method="post" id="customerId">
     @csrf
     <div class="form-group">
         <label for="customer">Select Customer</label>
         <select name="customer" id="customer" class="form-control col-lg-5">
-                <option disabled selected>select</option>
+                <option disabled selected >select</option>
                 @foreach ($customers as $customer)
                     <option value="{{ $customer->id }}" 
                         {{ Session::has('customerId') ? (Session::get('customerId') == $customer->id ? 'selected' : '') : '' }}>
@@ -27,9 +32,6 @@
         <div class="row">
             <div class="col-6">
             <h3>BILLING ADDRESS </h3>
-            <div class="alert alert-danger print-error-msg" style="display:none">
-                    <ul></ul>
-                </div>
             <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Address</label>
@@ -87,7 +89,7 @@
                                 <input type="text" class="form-control" id="billingcountry" name="billing[country]" value="{{$billing ? $billing->country : ' '}}" placeholder="country"   required>
                             </div>
                         </div>
-                        
+    
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 
@@ -202,9 +204,6 @@
     </div>
     
 </div>
-@if(session('AddressUpdated'))
-<div class="alert alert-success">{{session('AddressUpdated')}}</div>
-@endif
 <button type="button"  id="addressUpdate" class="btn btn-md btn-success">UPDATE</button><br>
 </form>
 <br>
@@ -385,6 +384,8 @@
             function printErrorMsg (msg) {
             $(".print-error-msg").find("ul").html('');
             $(".print-error-msg").css('display','block');
+            $(".address").css('display','none');
+            $(".change").css('display','none');
             $.each( msg, function( key, value ) {
                 $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
             });

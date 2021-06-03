@@ -7,6 +7,7 @@ use App\Models\Customer as CustomerModel;
 use App\Models\Customer\Address as AddressModel;
 use Crypt;
 use Facade\FlareClient\View;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -25,11 +26,15 @@ class Customer extends Controller
             Session::put('page', $page);
         }
         $pagination = CustomerModel::paginate($page);
-        $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
-        ->where('addresses.addressType','=','billing')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
-        // $customerAddress = CustomerModel::leftJoin('addresses',function($join){
-        //     $join->on('addresses','customers.id','=','addresses.customerId')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page)
-        // });
+        //  $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
+        // ->and('addresses.type','=','billing')->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
+        
+        $customerAddress=DB::select("SELECT 
+                            FROM customers
+                             LEFT JOIN addresses ON customers.id = addresses.customerId AND addresses.addressType = 'billing'
+                             ");
+        print_r($customerAddress);        
+      
         $view = view('customer.grid',['customers'=>$pagination,'customerAddress'=>$customerAddress])->render();
         $response = [
             'element' =>[
@@ -115,12 +120,6 @@ class Customer extends Controller
     {
        
         $customerModel = CustomerModel::find($id);
-        // $customerBillingModel = AddressModel::where(['customerId',$id],['addressType','billing'])->first();
-        // $customershippingModel = AddressModel::where(['customerId',$id],['addressType','shipping'])->first();
-        // if($customerBillingModel){
-        //     echo $customerBillingModel;
-        // }
-    //    print_r($customerBillingModel);
         $customerModel->delete();
         Session::forget('customerId');
         return redirect('customerGrid')->with('custDelete','customer Deleted!!!');
@@ -144,14 +143,9 @@ class Customer extends Controller
             return response()->json(['error'=>$validator->errors()->all()]);
         }
         $customerData = $request->customer;
-        // $request->validate([
-        //     'customerData[firstname]' => 'required',
-        // ]);
+       
         $password =  Crypt::encryptString($customerData['password']);
         $customerData['password'] = $password;
-        // date_default_timezone_set('Asia/Kolkata');
-        // $customerData['created_at']= date('d-m-Y H:i');
-        // print_r($customerData);
         
         
         CustomerModel::updateOrInsert(['id'=>$id],$customerData);
@@ -167,7 +161,7 @@ class Customer extends Controller
         $billingAddress->customerId = $id;
         $billingAddress->addressType = 'billing';
         $billingAddress->save();
-        // // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
+        // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
         return redirect('customerGrid')->with('custSave','customer Saved!!!');
         }
         catch (\Exception $e) {

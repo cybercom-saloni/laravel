@@ -26,6 +26,9 @@ class Address extends Controller
             "billing.state" => "required",
             "billing.zipcode" => "required",
             "billing.country" => "required",
+            
+            'payment'=>"required",
+            'shippingMethod'=>"required",
            
         ]);
         
@@ -67,12 +70,17 @@ class Address extends Controller
         
         $cartBillingAddress = CartAddress::where([['cartId',$sessioncartId],['addressType','billing']])->first();
         $addressCustomer = AddressModel::where([['customerId', $customerId], ['addressType', 'billing']])->first();
+        
         if(!$cartBillingAddress)
         {
             
             $cartBillingAddress = new CartAddress;
         }
         $cartBillingAddress->addressId = $addressCustomer->id;
+        if(!$addressCustomer)
+        {
+            $cartBillingAddress->addressId =null;
+        }
         $cartBillingAddress->cartId = $sessioncartId;
         $cartBillingAddress->address = $cartBillingAddressData['address'];
         $cartBillingAddress->area = $cartBillingAddressData['area'];

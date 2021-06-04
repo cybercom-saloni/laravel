@@ -46,13 +46,14 @@
             </tr>
         </thead>
         <tbody>
+       
      
             @if (!$customerAddress)
                 <tr>
                     <td colspan="17" class="text-center">No Records Found</td>
                 </tr>
             @else
-        
+          
             @foreach($customerAddress as $customer)
                 <tr>
                     <td>{{$customer->id}}</td>
@@ -82,9 +83,29 @@
            
         </tbody>
     </table>
+   
     <div>
    
-   
+    <nav>
+        <ul class="pagination">
+            
+            @if($pagination->currentPage() != 1)
+            <li class="page-item">
+                <a class="page-link{{$pagination->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$pagination->previousPageUrl()}}').setMethod('get').load()">Previous</a>
+            </li>
+            @endif
+            @for($i=1;$i<=$pagination->lastPage();$i++)
+                <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
+                    <a class="page-link" onclick="object.setUrl('{{$pagination->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
+                </li>
+            @endfor
+            @if($pagination->currentPage() != $pagination->lastPage())
+            <li class="page-item">
+                <a class="page-link{{$pagination->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$pagination->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
+            </li>
+            @endif
+        </ul>
+    </nav>
 </div>
 <div class="row">
 <div class="col-7">

@@ -288,17 +288,36 @@ class Product extends Controller
 
     public function getCategoryName($id)
     {
+      
         $categoryModel = new CategoryModel();
         $categoryName =  $categoryModel->load($id);
         $categoryNamefind = CategoryModel::find($id);
-        if(!$categoryNamefind)
-        {
-            echo 'category not found!!!';
-            // return $categoryName->getCategories()->name;
+
+        $parent = CategoryModel::where('id', $categoryName->getCategories()->parent_id)->get();
+        $parentCat =  $categoryModel->load($id);
+        $child = $categoryNamefind->childs;
+       if (count($child)) {
+           echo 123;
+            if (count($parentCat)) {
+                foreach ($child as $value) {
+                    echo $value->parent_id = $parentCat[0]->id;
+                    
+                }
+            }
         }
-        else{return $categoryName->getCategories()->name;}
-        // // print_r($categoryName->getCategories()->name);
-        // return 'category';
+       
+        // if (count($parent)) {
+            
+        //     echo $parentCat->getCategories()->name;
+        // }
+
+        // if(!$categoryNamefind)
+        // {
+        //     echo 'category not found!!!';
+        // }
+        // else{
+        //     return $categoryName->getCategories()->name;
+        // }
     }
     
 

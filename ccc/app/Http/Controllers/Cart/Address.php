@@ -19,6 +19,22 @@ class Address extends Controller
     {  
         
     try{
+        if($request->input('shipping.sameAsBilling'))
+        {
+            $validator = Validator::make($request->all(), [
+                "billing.address" => "required",
+                "billing.area" => "required",
+                "billing.city" => "required",
+                "billing.state" => "required",
+                "billing.zipcode" => "required",
+                "billing.country" => "required",
+                
+                'payment'=>"required",
+                'shippingMethod'=>"required",
+               
+            ]);
+        }else
+        
         $validator = Validator::make($request->all(), [
             "billing.address" => "required",
             "billing.area" => "required",
@@ -26,11 +42,17 @@ class Address extends Controller
             "billing.state" => "required",
             "billing.zipcode" => "required",
             "billing.country" => "required",
-            
+            "shipping.address" => "required",
+            "shipping.area" => "required",
+            "shipping.city" => "required",
+            "shipping.state" => "required",
+            "shipping.zipcode" => "required",
+            "shipping.country" => "required",
             'payment'=>"required",
             'shippingMethod'=>"required",
            
         ]);
+    
         
         if ($validator->fails()) {
             // return response()->json(['success'=>'Added new records.']);
@@ -76,10 +98,10 @@ class Address extends Controller
             
             $cartBillingAddress = new CartAddress;
         }
-        $cartBillingAddress->addressId = $addressCustomer->id;
-        if(!$addressCustomer)
+        $cartBillingAddress->addressId =null;
+        if($addressCustomer)
         {
-            $cartBillingAddress->addressId =null;
+            $cartBillingAddress->addressId = $addressCustomer->id;
         }
         $cartBillingAddress->cartId = $sessioncartId;
         $cartBillingAddress->address = $cartBillingAddressData['address'];

@@ -50,7 +50,7 @@
                         <td>{{$value->id}}</td>
                         <td>{{$value->sku}}</td>
                         <td>{{$value->name}}</td>
-                      
+                        <td>{{$controller->getCategoryName($value->category_id)}}</td>
                         <td>{{$value->price}}</td>
                         <td>{{$value->discount}}</td>
                         <td>{{$value->quantity}}</td>

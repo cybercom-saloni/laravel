@@ -4,7 +4,7 @@
             <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
         </div>
         <div class ="col-6">
-        <td><a onclick="object.setUrl('/manageOrder').setMethod('get').load();" href="javascript:void(0);" class="btn btn-primary">Back</a></td>
+        <td><a onclick="object.setUrl('/manageOrder').setMethod('get').load();" href="javascript:void(0);" class="btn btn-primary">Back To All Orders</a></td>
         </div>
     </div>
 </div>

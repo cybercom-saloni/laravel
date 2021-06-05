@@ -504,7 +504,7 @@
         });
     }
 });
-
+//Initialization of treeviews
  $('#tree1').treed();
 // $('#tree1').treed({
 //     openedClass: 'glyphicon-folder-open',

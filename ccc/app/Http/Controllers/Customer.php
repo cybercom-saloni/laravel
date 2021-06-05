@@ -27,13 +27,14 @@ class Customer extends Controller
             Session::put('page', $page);
         }
         $pagination = CustomerModel::paginate($page);
-        // $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
-        //  ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
+        $customerAddress  = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
+         ->select('customers.id','customers.firstname','customers.lastname','customers.email','customers.contactno','addresses.address','addresses.area','addresses.city','addresses.state','addresses.zipcode','addresses.country','addresses.addressType','customers.status')->paginate($page);
 
-         $customerAddress=DB::select("SELECT customers.id,customers.firstname,customers.lastname,customers.email,customers.contactno,addresses.address,addresses.area,addresses.city,addresses.state,addresses.zipcode,addresses.country,addresses.addressType,customers.status
-                            FROM customers
-                              LEFT JOIN addresses ON customers.id = addresses.customerId AND addresses.addressType = 'billing'
-                             ");
+        //  $customerAddress=DB::select("SELECT customers.id,customers.firstname,customers.lastname,customers.email,customers.contactno,addresses.address,addresses.area,addresses.city,addresses.state,addresses.zipcode,addresses.country,addresses.addressType,customers.status
+        //                     FROM customers
+        //                       LEFT JOIN addresses ON customers.id = addresses.customerId AND addresses.addressType = 'billing'
+        //                      ");
+       
         // $customerAddress = CustomerModel::paginate($page)->withQueryString(DB::select("SELECT customers.id,customers.firstname,customers.lastname,customers.email,customers.contactno,addresses.address,addresses.area,addresses.city,addresses.state,addresses.zipcode,addresses.country,addresses.addressType,customers.status
         //                     FROM customers
         //                       LEFT JOIN addresses ON customers.id = addresses.customerId AND addresses.addressType = 'billing'

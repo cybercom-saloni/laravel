@@ -121,7 +121,8 @@ class Order extends Controller
            }
            $cartModel = CartModel::find($cartId);
                $cartModel->delete();
-               $view = view('order.grid',['controller'=>$this,'customer'=>$customer,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
+               $comments = Comments::where('orderId', $orderId)->get();
+               $view = view('order.grid',['comments'=>$comments,'controller'=>$this,'customer'=>$customer,'orderDetails'=>$orderDetails,'orderItemsDetails'=>$orderItemsDetails,'orderBillingAddressDetails'=>$orderBillingAddressDetails,'orderShippingAddressDetails'=>$orderShippingAddressDetails])->render();
                $response =[
                 'element'=>[
                     [

@@ -56,27 +56,29 @@
           
             @foreach($customerAddress as $customer)
                 <tr>
-                    <td>{{$customer->id}}</td>
-                    <td>{{$customer->firstname}}</td>
-                    <td>{{$customer->lastname}}</td>
-                    <td>{{$customer->email}}</td>
-                    <td>{{$customer->contactno}}</td>
-                    <td>{{$customer->address ? $customer->address : ' ' }}</td>   
-                    <td>{{$customer->area}}</td>
-                    <td>{{$customer->city}}</td>
-                    <td>{{$customer->state}}</td>
-                    <td>{{$customer->zipcode}}</td>
-                    <td>{{$customer->country}}</td>
-                    <td>{{$customer->addressType}}</td>
-                    <td>
-                       @if($customer->status == 1)
-                       <a onclick="object.setUrl('/customer/status/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-warning">Enable</a>
-                        @else
-                        <a onclick="object.setUrl('/customer/status/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-danger"> Disable</a>
-                       @endif
-                    </td>
-                    <td><a onclick="object.setUrl('/customer/form/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
-                    <td> <a onclick="object.setUrl('/customerDelete/{{ $customer->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
+                    @if($customer->addressType != 'shipping')
+                        <td>{{$customer->id}}</td>
+                        <td>{{$customer->firstname}}</td>
+                        <td>{{$customer->lastname}}</td>
+                        <td>{{$customer->email}}</td>
+                        <td>{{$customer->contactno}}</td>
+                        <td>{{$customer->address ? $customer->address : ' ' }}</td>   
+                        <td>{{$customer->area}}</td>
+                        <td>{{$customer->city}}</td>
+                        <td>{{$customer->state}}</td>
+                        <td>{{$customer->zipcode}}</td>
+                        <td>{{$customer->country}}</td>
+                        <td>{{$customer->addressType}}</td>
+                        <td>
+                        @if($customer->status == 1)
+                        <a onclick="object.setUrl('/customer/status/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-warning">Enable</a>
+                            @else
+                            <a onclick="object.setUrl('/customer/status/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-danger"> Disable</a>
+                        @endif
+                        </td>
+                        <td><a onclick="object.setUrl('/customer/form/{{$customer->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
+                        <td> <a onclick="object.setUrl('/customerDelete/{{ $customer->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
+                    @endif
                 </tr>
                 @endforeach
             @endif
@@ -89,19 +91,19 @@
     <nav>
         <ul class="pagination">
             
-            @if($pagination->currentPage() != 1)
+            @if($customerAddress->currentPage() != 1)
             <li class="page-item">
-                <a class="page-link{{$pagination->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$pagination->previousPageUrl()}}').setMethod('get').load()">Previous</a>
+                <a class="page-link{{$customerAddress->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$customerAddress->previousPageUrl()}}').setMethod('get').load()">Previous</a>
             </li>
             @endif
-            @for($i=1;$i<=$pagination->lastPage();$i++)
+            @for($i=1;$i<=$customerAddress->lastPage();$i++)
                 <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
-                    <a class="page-link" onclick="object.setUrl('{{$pagination->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
+                    <a class="page-link" onclick="object.setUrl('{{$customerAddress->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
                 </li>
             @endfor
-            @if($pagination->currentPage() != $pagination->lastPage())
+            @if($customerAddress->currentPage() != $customerAddress->lastPage())
             <li class="page-item">
-                <a class="page-link{{$pagination->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$pagination->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
+                <a class="page-link{{$customerAddress->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$customerAddress->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
             </li>
             @endif
         </ul>

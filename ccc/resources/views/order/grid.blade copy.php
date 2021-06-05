@@ -4,30 +4,27 @@
             <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Order Details</h3>
         </div>
         <div class ="col-6">
-        <td><a onclick="object.setUrl('/manageOrder').setMethod('get').load();" href="javascript:void(0);" class="btn btn-primary">Back</a></td>
+        <td><a onclick="object.setUrl('/manageOrder').setMethod('get').load();" href="javascript:void(0);" class="btn btn-primary">Manage All Orders</a></td>
         </div>
     </div>
 </div>
-
 <hr>
 <div class="col-12">
     <div class ="row">
         <div class ="col-12">
-          
             <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white"><tr><th colspan="2">Customer Details</th></tr></thead>
             <tbody>
-                <tr>
                     <td>Customer Name </td>
-                    <td>{{$customerDetails->firstname}} {{$customerDetails->lastname}}</td>
+                    <td>{{$customer->firstname}} {{$customer->lastname}}</td>
                 </tr>
                 <tr>
                     <td>Email Address</td>
-                    <td>{{$customerDetails->email}}</td>
+                    <td>{{$customer->email}}</td>
                 </tr>
                 <tr>
                     <td>Contact Number</td>
-                    <td>{{$customerDetails->contactno}}</td>
+                    <td>{{$customer->contactno}}</td>
                 </tr>
                 <tr>
                     <td>Payment Details</td>
@@ -39,13 +36,14 @@
                 </tr>
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
 <div class="col-12">
     <div class ="row">
         <div class ="col-6">
-            <table class="table table-bordered bg-light  table-hover">
+        <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white"><tr><th colspan="2">Billing Address</th></tr></thead>
             <tbody>
                 <tr>
@@ -82,7 +80,7 @@
             <tr>
                     <td>Address </td>
                     <td>{{$orderShippingAddressDetails[0]->address}}</td>
-            </tr>
+                </tr>
             <tr>
                     <td>Area </td>
                     <td>{{$orderShippingAddressDetails[0]->area}}</td>
@@ -103,7 +101,7 @@
                     <td>Country </td>
                     <td>{{$orderShippingAddressDetails[0]->country}}</td>
                 </tr>
-            </tbody>
+                </tbody>
             </table>
         </div>
     </div>
@@ -114,6 +112,7 @@
         <th>PRODUCT NAME</th>
         <th>BASE PRICE</th>
         <th>QUANTITY</th>
+        <th>PRICE</th>
         <th>DISCOUNT</th>
         <th>TOTAL PRICE</th>
         </tr>
@@ -124,17 +123,20 @@
            <td>{{$controller->getProductName($orderItem->productId)}}</td>
             <td>Rs.{{$orderItem->basePrice}}</td>
             <td>{{$orderItem->quantity}}</td>
+            <td>@php $qty = $orderItem->price * $orderItem->quantity @endphp Rs.{{number_format($qty,2)}}</td>
             <td>{{$orderItem->discount}}%</td>
-            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price; $value = $rowtotal - $rowtotal*($orderItem->discount/100)@endphp {{number_format($value, 2)}}</td>
+            <td>Rs. @php $rowtotal = $orderItem->quantity*$orderItem->price; $total = $rowtotal - $rowtotal*($orderItem->discount/100) @endphp {{number_format($total,2)}}</td>
         </tr>
         @endforeach
-        </tbody>
+
+    </tbody>
 </table>
+
 <div class="col-12">
     <div class ="row">
 <div class ="col-6">
  @if(session('orderStatus'))
-<div class="alert alert-success ad" style="display:none">{{session('orderStatus')}}</div>
+<div class="alert alert-success ad" style="display:block">{{session('orderStatus')}}</div>
 @endif
 <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white"><tr><th colspan="3">Order Comment</th></tr></thead>
@@ -270,7 +272,6 @@
  </script>
 
 <script>
-
     $(function() {
         $('#saveComment').on('click', function(e) {
             e.preventDefault();
@@ -287,7 +288,6 @@
                             if(typeof data.element == 'object') {
                                  $(data.element).each(function(i, element) {
                                         $('#content').html(element.html);
-                                        $(".ad").css('display','block');
                                  });
                                 }
                         }else{
@@ -307,5 +307,3 @@
         }
     });
 </script>
-
-

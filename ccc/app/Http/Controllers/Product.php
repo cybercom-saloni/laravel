@@ -293,14 +293,14 @@ class Product extends Controller
         $categoryName =  $categoryModel->load($id);
         $categoryNamefind = CategoryModel::find($id);
 
-        $parent = CategoryModel::where('id', $categoryName->getCategories()->parent_id)->get();
+        $parent = CategoryModel::where('id', $categoryName->getCategories()->parentId)->get();
         $parentCat =  $categoryModel->load($id);
         $child = $categoryNamefind->childs;
        if (count($child)) {
            echo 123;
             if (count($parentCat)) {
                 foreach ($child as $value) {
-                    echo $value->parent_id = $parentCat[0]->id;
+                    echo $value->parentId = $parentCat[0]->id;
                     
                 }
             }

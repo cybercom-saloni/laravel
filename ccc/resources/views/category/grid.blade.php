@@ -1,7 +1,18 @@
+<html>
+<head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="{{asset('css/categorytree.css')}}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/3fd66b9b9a.js" crossorigin="anonymous"></script>
+</head>
 <div id="layoutSidenav_content">
     <div class="container">
         <main>
-            <style>
+            <!-- <style>
                 .tree,
                 .tree ul {
                     margin: 0;
@@ -69,25 +80,9 @@
                     padding: 0px 0px 0px 0px;
                     outline: 0;
                 }
-            </style>
+            </style> -->
           
-            @if(session('Delete'))
-                <div class ="alert alert-success del" style="display:block">{{session('Delete')}}</div>
-            @endif
-            @if(session('error'))
-                <div class ="alert alert-success er" style="display:block">{{session('error')}}</div>
-            @endif
-            @if(session('Added'))
-                <div class ="alert alert-success ad" style="display:block">{{session('Added')}}</div>
-            @endif
-
-            @if(session('Updated'))
-                <div class ="alert alert-success up" style="display:block">{{session('Updated')}}</div>
-            @endif
-            <div class="alert alert-danger print-error-msg" style="display:none">
-                    <ul></ul>
-                   
-                </div>
+            
             <div class="container-fluid">
                 <button type="button" id="show" class="btn btn-success mt-2 mb-2">Add Root Category</button>
                 @if (request()->id)
@@ -127,7 +122,7 @@
                     <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
                                     <ul id="tree1">
                                         @foreach ($categories as $category)
-                                        <li><span class="fa fa-sticky-note"></span>
+                                        <li>
                                             <a  style="color: {{ $category->status == 0 ? 'red' : '' }} href="javascript:void(0);" onclick="object.setUrl('<?php echo  route('formEdit', $category->id) ?>').setMethod('get').load();" style="color: {{ $category->status == 0 ? 'red' : '' }}">{{ $category->name }}</a>
                                             <ul>
                                             @if (count($category->childs))
@@ -138,6 +133,8 @@
                                         @endforeach
                                     </ul>
                         </div>
+
+                        
                     <div class="col-md-8 col-lg-8" id="addRootForm">
                         
                              
@@ -382,7 +379,7 @@
 
 
                 </div>
-
+                <script src="{{asset('js/categorytree.js')}}"></script>
                 <!-- <script>
                     $.fn.extend({
                         treed: function(o) {
@@ -443,7 +440,7 @@
                         closedClass: 'glyphicon-chevron-down'
                     });
                 </script> -->
-                 <script>
+                 <!-- <script>
       $.fn.extend({
     treed: function(o) {
         var openedClass = 'glyphicon-minus-sign';
@@ -504,7 +501,7 @@
 //     openedClass: 'glyphicon-chevron-right',
 //     closedClass: 'glyphicon-chevron-down'
 // });
-                </script> 
+                </script>  -->
 
                 
         </main>

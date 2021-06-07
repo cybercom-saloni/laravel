@@ -17,9 +17,7 @@
     @include('layoutTemplate.left')
     <div id="content" class="p-4 p-md-5 bg-light">
     <div id="content bg-light">
-      @yield('container')
-    </div>
-      </div>
+            @yield('container')
 		</div>
   </body>
   <script src="{{asset('js/jquery.min.js')}}"></script>

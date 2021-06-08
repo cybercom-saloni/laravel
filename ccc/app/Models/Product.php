@@ -31,8 +31,6 @@ class Product extends Core\Adapter
         $this->products = $products;
         return $this;
     }
-
-
     public function getCategoryOptions($id = null)
     {
         $category = new CategoryModel();

@@ -38,6 +38,7 @@ class ImportExportCsv extends Controller
             // print_r($this->header);
             // print_r($this->data);
             $this->saveCsvFile();
+            
         }
        }catch(Exception $e)
        {
@@ -56,7 +57,6 @@ class ImportExportCsv extends Controller
             // {
             //     echo $value2;
             // }
-            $product->setProducts($value);
             $product->saveData($value);
             
         }

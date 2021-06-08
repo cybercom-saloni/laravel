@@ -17,6 +17,7 @@ use App\Http\Controllers\Order;
 use App\Http\Controllers\OrderStatus;
 use App\Http\Controllers\Payment;
 use App\Http\Controllers\Shipping;
+use App\Http\Controllers\Product\ImportExportCsv;
 
 /*
 
@@ -29,6 +30,8 @@ use App\Http\Controllers\Shipping;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -142,3 +145,10 @@ Route::get('/shipping/form/{id?}', [Shipping::class, 'formAction'])->whereNumber
 Route::get('shipping/status/{id}', [Shipping::class, 'StatusAction']);
 
 
+Route::post('/importCsv',[ImportExportCsv::class,'importCsvAction']);
+// Route::match(['get','post','put','delete','patch'],'{controller}/{function?}',function($controller='index',$function='index'){
+//     $controller = 'App\Http\Controllers\\'.ucfirst($controller);
+//     $controller = new $controller;
+    
+//     return $controller->{$function."Action"}();
+// });

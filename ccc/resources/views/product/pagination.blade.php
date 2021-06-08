@@ -1,6 +1,6 @@
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Product</h3>
 <hr>
-    <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
+
 
 <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">

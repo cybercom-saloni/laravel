@@ -1,0 +1,4 @@
+sku,name,price,discount,quantity,description,status,category_id
+queen,bed,2000,10,1,queensize,1,1
+king,bed,2000,10,1,queensize,1,1
+couch,bed,2000,10,1,queensize,1,1

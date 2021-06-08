@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 class Shipping extends Controller
 {
+    public function tryAction()
+    {
+        echo 12345;
+    }
     public function gridAction()
     {
         $page = 2;

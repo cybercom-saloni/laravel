@@ -1,13 +1,23 @@
     <div id="table_data">
     <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Product</h3>
 <hr>
-
-<div class="col-12">
-    <div class = "row">
-        <div class="col-6">
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-4 ">
             <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
         </div>
-        <div class="col-6">
+        <div class="col-4 ">
+        <form action="/importCsv" id="form" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('post')
+            <input type="file" class="form-control-file" id="file" name="file">
+                <button type="button" onclick="object.setUrl('/importCsv').setMethod('post').uploadFile().resetParams();" class="btn btn-success btn-md">Import</button>
+        </form>
+        </div>
+        <div class="col-4"> 
+            <form method="post" enctype="multipart/data">
+                    <button type ="button" class="btn btn-md btn-primary">Export</div>
+            </form>
         </div>
     </div>
 </div>
@@ -159,6 +169,8 @@ $(function() {
         });
     });
 });
+
+                        
 </script>
 
      <!-- storing page no -->

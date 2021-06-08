@@ -293,31 +293,31 @@ class Product extends Controller
         $categoryName =  $categoryModel->load($id);
         $categoryNamefind = CategoryModel::find($id);
 
-        $parent = CategoryModel::where('id', $categoryName->getCategories()->parentId)->get();
-        $parentCat =  $categoryModel->load($id);
-        $child = $categoryNamefind->childs;
-       if (count($child)) {
-           echo 123;
-            if (count($parentCat)) {
-                foreach ($child as $value) {
-                    echo $value->parentId = $parentCat[0]->id;
+    //     $parent = CategoryModel::where('id', $categoryName->getCategories()->parentId)->get();
+    //     $parentCat =  $categoryModel->load($id);
+    //     $child = $categoryNamefind->childs;
+    //    if (count($child)) {
+    //        echo 123;
+    //         if (count($parentCat)) {
+    //             foreach ($child as $value) {
+    //                 echo $value->parentId = $parentCat[0]->id;
                     
-                }
-            }
-        }
+    //             }
+    //         }
+    //     }
        
         // if (count($parent)) {
             
         //     echo $parentCat->getCategories()->name;
         // }
 
-        // if(!$categoryNamefind)
-        // {
-        //     echo 'category not found!!!';
-        // }
-        // else{
-        //     return $categoryName->getCategories()->name;
-        // }
+        if(!$categoryNamefind)
+        {
+            echo 'category not found!!!';
+        }
+        else{
+            return $categoryName->getCategories()->name;
+        }
     }
     
 

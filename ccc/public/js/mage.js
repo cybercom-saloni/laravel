@@ -64,48 +64,19 @@ Base.prototype = {
         }
         return this;
     },
-    setForm: function (obj = null) {
-        if (obj) {
-            formId = '#'+jQuery(obj).closest('form').attr('id');
-        }else{
-            formId = '#'+jQuery('form').attr('id');
-        }
-        formData = jQuery(formId).serializeArray();
-        // console.log(formData);
-        result = this.validateForm(formId);
-        if (result==true) {
-            this.setParams(formData);
-            this.setUrl(jQuery(formId).attr('action'));
-            this.setMethod(jQuery(formId).attr('method'));
-            this.load();    
-        }else{
-            jQuery('#messageHtml').html("Please fill this value "+result);
-        }
-    },
-    validateForm: function(formId){
-        var count = 0;
-        var emptyField = '';
-        jQuery.each(jQuery(formId).serializeArray(),function(i,field){
-            var input = jQuery("input[name=\""+String(field.name)+"\"]");
-            field.value = jQuery.trim(field.value);
-            if (document.getElementsByName(field.name)[0].required) {
-                if (field.value == '') {
-                    count++;
-                    emptyField+=field.name+', ';
-                }
-            }
-        });
-        if (!count) {
-            return true;
-        }
-        return emptyField;
+    setForm: function(form) {
+
+        this.setMethod($(form).attr('method'));
+        this.setUrl($(form).attr('action'));
+        this.setParams($(form).serializeArray());
+        return this;
     },
     
     uploadFile: function() {
         var formData = new FormData();
         var csrftoken = document.getElementsByName('_token')[0].value;
-        var file = $("#image")[0].files;
-        formData.append('image', file[0]);
+        var file = $("#file")[0].files;
+        formData.append('file', file[0]);
         formData.append('_token', csrftoken);
 
         this.setParams(formData);

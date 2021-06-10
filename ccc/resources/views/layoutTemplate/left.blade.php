@@ -24,7 +24,7 @@
             <a onclick="object.setUrl('/manageOrder').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Order</a>
           </li>
           <li>
-            <a onclick="object.setUrl('/routes/grid').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Routes</a>
+            <a onclick="object.setUrl('/csv/grid').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Csv</a>
           </li>
         </ul>
     	</nav>

@@ -3,21 +3,22 @@
 <hr>
 <div class="col-lg-12">
     <div class="row">
-        <div class="col-4 ">
+        <div class="col-4">
             <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
         </div>
-        <div class="col-4 ">
-        <form action="/importCsv" id="form" method="post" enctype="multipart/form-data">
+        <div class="col-4">
+        <form action="" id="form" method="post" enctype="multipart/form-data">
             @csrf
             @method('post')
             <input type="file" class="form-control-file" id="file" name="file">
-                <button type="button" onclick="object.setUrl('/importCsv').setMethod('post').uploadFile().resetParams();" class="btn btn-success btn-md">Import</button>
+                <!-- <button type="button" onclick="object.setUrl('/importCsv').setMethod('post').uploadFile().resetParam();" class="btn btn-primary btn-md">Import</button> -->
+                <!-- <button type="button" onclick="object.setUrl('/importExcelCsv').setMethod('post').uploadFile().resetParam();" class="btn btn-primary btn-md">Import</button> -->
+                <button type="button" onclick="object.setUrl('/importExcelCsv').setMethod('post').uploadFile().resetParam();" class="btn btn-primary btn-md">Import</button>
         </form>
         </div>
         <div class="col-4"> 
-            <form method="post" enctype="multipart/data">
-                    <button type ="button" class="btn btn-md btn-primary">Export</div>
-            </form>
+            <!-- <a href="javascript:void(0)" onclick="object.setUrl('/exportCsv').setMethod('get').load();" class="btn btn-primary btn-md">Export</a> -->
+            <a href="javascript:void(0)" id= "export" class="btn btn-primary btn-md">Export</a>
         </div>
     </div>
 </div>
@@ -32,13 +33,16 @@
 <div class ="alert alert-success">{{session('productDelete')}}</div>
 @endif
 
+@if(session('productImport'))
+<div class ="alert alert-success">{{session('productImport')}}</div>
+@endif
 <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">
                 <tr>
                     <th>ID</th>
                     <th>Sku</th>
                     <th>Name</th>
-                    <th>CategoryName</th>
+                    <!-- <th>CategoryName</th> -->
                     <th>Price</th>
                     <th>Discount</th>
                     <th>Quantity</th>
@@ -60,7 +64,7 @@
                         <td>{{$value->id}}</td>
                         <td>{{$value->sku}}</td>
                         <td>{{$value->name}}</td>
-                        <td>{{$controller->getCategoryName($value->category_id)}}</td>
+                        <!-- <td>{{$controller->getCategoryName($value->category_id)}}</td> -->
                         <td>{{$value->price}}</td>
                         <td>{{$value->discount}}</td>
                         <td>{{$value->quantity}}</td>
@@ -81,7 +85,6 @@
 
             <!-- {!! $products->links()!!} -->
             <!-- pagination -->
-        
      </div>
      <div>
      <div class ="col-12">
@@ -170,8 +173,31 @@ $(function() {
     });
 });
 
-                        
+
+$(document).ready(function(){
+    $('#export').click(function()
+    {
+       $.ajax({
+        url:"/exportExcelCsv",
+        type:'get',
+        headers:{'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')},
+        data:{},
+        success:function(response)
+        {
+            var file = new Blob([response],{
+                type:'text/csv',
+            });
+            var a = document.createElement('a');
+            a.href=URL.createObjectURL(file);
+            a.download ="product.csv";
+            document.body.appendChild(a);
+            a.click();
+        }
+       });
+    });
+});
 </script>
+
 
      <!-- storing page no -->
     <!-- <input type="hidden" name="hidden_page" id="hidden_page" value="1" />

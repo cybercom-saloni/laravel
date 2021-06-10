@@ -21,12 +21,13 @@ class Adapter extends Model
 
     public function load($id)
     {
-        $this->categories = DB::table($this->getTable())->where('id', $id)->first();
+        $this->products = DB::select("select * from {$this->table} where {$this->primaryKey} = ?", [$id]);
         return $this;
     }
 
     public function saveData($category)
     {
+      
         try {
             if (array_key_exists('id', $category)) {
                 return $this->updateData($category);
@@ -55,4 +56,8 @@ class Adapter extends Model
         $delete = DB::table($this->table)->where($this->primaryKey, '=', $id)->delete();
         return ($delete) ? true : false;
     }
+
+
+   
+
 }

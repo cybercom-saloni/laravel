@@ -18,6 +18,7 @@ use App\Http\Controllers\OrderStatus;
 use App\Http\Controllers\Payment;
 use App\Http\Controllers\Shipping;
 use App\Http\Controllers\Product\ImportExportCsv;
+use App\Http\Controllers\ProductImport;
 
 /*
 
@@ -144,8 +145,16 @@ Route::get('/shippingDelete/{id?}', [Shipping::class, 'deleteAction'])->whereNum
 Route::get('/shipping/form/{id?}', [Shipping::class, 'formAction'])->whereNumber('id')->name('shippingForm');
 Route::get('shipping/status/{id}', [Shipping::class, 'StatusAction']);
 
-
+Route::get('/exportCsv',[ImportExportCsv::class,'exportCsvAction']);
 Route::post('/importCsv',[ImportExportCsv::class,'importCsvAction']);
+Route::get('/csv/grid',[ImportExportCsv::class,'gridAction']);
+
+
+//importExport excel laravel maatwebsite
+Route::get('file', [Product::class, 'fileImportExport']);
+Route::post('/importExcelCsv', [Product::class, 'fileImport'])->name('importExcelCsv');
+Route::get('/exportExcelCsv', [Product::class, 'fileExport'])->name('exportExcelCsv');
+
 // Route::match(['get','post','put','delete','patch'],'{controller}/{function?}',function($controller='index',$function='index'){
 //     $controller = 'App\Http\Controllers\\'.ucfirst($controller);
 //     $controller = new $controller;

@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
+use App\Exports\ProductsExport;
 class Product extends Controller
 {
     protected $products = [];
@@ -249,6 +252,7 @@ class Product extends Controller
         } else {
             $formData['created_at'] = date('Y-m-d h:i:s');
         }
+       
         
         if ($product->saveData($formData)) {
             // Session::put('productSave', 'Product Saved successfully!!!');
@@ -316,7 +320,7 @@ class Product extends Controller
             echo 'category not found!!!';
         }
         else{
-            return $categoryName->getCategories()->name;
+            // return $categoryName->getCategories()->name;
         }
     }
     
@@ -429,4 +433,21 @@ class Product extends Controller
             return redirect('/product');
         }
     }
+
+    public function fileImport(Request $request) 
+    {
+        Excel::import(new ProductsImport, $request->file('file')->store('import'));
+        // (new ProductsImport)->import($request->file('file'));
+        return redirect('/product')->with('productImport', 'File imported successfully!!!');
+    }
+
+    public function fileExport()
+    {
+        return Excel::download(new ProductsExport,'product.csv');
+    }
+
+    // public function fileImportExport()
+    // {
+    //     return view('file.import');
+    // }
 }

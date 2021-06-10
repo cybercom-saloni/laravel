@@ -1,0 +1,11 @@
+name,sku,price,discount,quantity,description,status,category_id
+diningTable,diningTable,5000,10,1,queensize,'enable',6
+rawTable,rawTable,20,10,1,queensize,'enable',6
+teaTable,teaTable,20,10,1,queensize,'enable',6
+Table,Table,20,10,1,queensize,'enable',2
+Bench,Bench,20,10,1,queensize,'enable',2
+BookCase,BookCase,900,10,1,queensize,'enable',2
+FileCase,FileCase,20,10,1,queensize,'enable',2
+Fase,Case,2000,10,1,queensize,'enable',2
+Case,Fase,2000,10,1,queensize,'enable',2
+Case,Fase1,2000,10,1,queensize,'enable',2

@@ -7,11 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>hello</h1>
     <div class="container">
         @foreach($posts as $post)
-        <table>
-        <h1>{{$post->id}}</h1>
+        <table border=1>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>CommentId</td>
+        </tr>
+        <tr>
+            <td>{{$post->id}}</td>
+            <td>{{$post->name}}</td>
+            <td>{{$post->commentId}}</td>
+        </tr>
         </table>
         @endforeach
     </div>

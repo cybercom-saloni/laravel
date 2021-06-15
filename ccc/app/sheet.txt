@@ -1,0 +1,48 @@
+Eloquent/Relations:-
+BelongsTo:-
+inverse of hasMany
+assigns foregin key
+if not established Relationship of foregin key we can pass custom key
+
+Compulsory to define Relationship
+
+HasMany :- one to many
+
+hasOne:- one to one
+
+
+hasManyThrough:
+post  comment comment_post
+
+
+BelongsToMany:- many to many
+        pivot:-connects two table
+        wherePivot:- checks 
+
+
+
+ 
+
+
+Eloquent/Concerns
+fillable
+    methods->
+        getfillable(): return fillable
+        fillable():assign the fillable array values
+        mergeFillable(): merges the all fillable array values
+
+guarded
+    methods:->
+    getGuarded():- return the value is guarded or not
+    guard():- return array of guard
+    mergeGuard():- merges the guard array
+
+
+unguarded:-
+    methods:-
+        unguard() - assign state
+        reguard() - assign unguarded to false
+        isUnguarded() -  assign guarded variable
+
+    
+

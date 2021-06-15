@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,15 @@ class PostController extends Controller
     }
     public function index()
     {
-         dd(Post::all());
-        $posts= Post::all();
+        // $posts= Post::all();
         // return view('posts.index',compact('posts'));
+            // $posts = Comment::with(relations: 'getPostId')->get();
+            echo "<pre>";
+            $posts=Post::find(1)->getCommentId;
+            print_r($posts);
+            die;
+            // Event::find(1)->course;
+         dd($posts);
         return view('posts.index',['posts'=>$posts]);
     }
 

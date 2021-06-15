@@ -19,6 +19,8 @@ use App\Http\Controllers\Payment;
 use App\Http\Controllers\Shipping;
 use App\Http\Controllers\Product\ImportExportCsv;
 use App\Http\Controllers\ProductImport;
+use App\Http\Controllers\Comment;
+use App\Http\Controllers\Salesman;
 
 /*
 
@@ -44,11 +46,12 @@ Route::get('test',function ()
 });
 
 
-
+Route::get('/comment',[Comment::class,'index']);
 Route::get('/posts',[PostController::class,'index']);
 Route::get('/posts/{post}/edit',[PostController::class,'edit']);
-Route::get('/posts',[PostController::class,'store']);
+// Route::get('/posts',[PostController::class,'store']);
 Route::get('/posts/create',[PostController::class,'create']);
+
 Route::put('/posts/{post}',[PostController::class,'update']);
 Route::get('/admin/product',[ProductController::class,'index']);
 Route::get('/admin/product/create',[ProductController::class,'create']);
@@ -155,6 +158,20 @@ Route::get('file', [Product::class, 'fileImportExport']);
 Route::post('/importExcelCsv', [Product::class, 'fileImport'])->name('importExcelCsv');
 Route::get('/exportExcelCsv', [Product::class, 'fileExport'])->name('exportExcelCsv');
 
+
+//salesman
+Route::get('/salesmanGrid/{id?}',[Salesman::class,'gridAction']);
+Route::post('/salesmanGrid/searchSalesman',[Salesman::class,'gridAction']);
+Route::post('/salesmanAddPrice/{id}',[Salesman::class,'addPriceAction'])->name('salesmanAddPrice');
+Route::post('/salesmanUpdatePrice/{id}',[Salesman::class,'updatePriceAction'])->name('salesmanUpdatePrice');
+Route::post('/salesmanAdd',[Salesman::class,'addAction']);
+Route::post('/searchSalesman',[Salesman::class,'searchSalesmanAction']);
+Route::post('/SalesmanPrice/{id?}',[Salesman::class,'showPriceAction'])->name('SalesmanPrice');
+Route::get('/SalesmanPrice/salesman/{id?}',[Salesman::class,'showPriceAction2']);
+Route::post('/SalesmanPrice/new/{id?}',[Salesman::class,'showPriceAction']);
+Route::get('/salesmanDelete/{id}',[Salesman::class,'deleteAction'])->name('salesmandelete');
+Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction'])->name('SalesmanAddNewProduct');
+// Route::get('/SalesmanAddProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction'])->name('SalesmanAddProduct');
 // Route::match(['get','post','put','delete','patch'],'{controller}/{function?}',function($controller='index',$function='index'){
 //     $controller = 'App\Http\Controllers\\'.ucfirst($controller);
 //     $controller = new $controller;

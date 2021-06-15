@@ -101,18 +101,19 @@ class Media extends Controller
                     $value['gallery'] = 1;
                 }
 
-
+                print_r($value);
+                
                 $values = array_values($value);
                 $fields = array_keys($value);
 
                 $final = array_combine($fields,$values);
-
-               $final['id']= $key ;
+              
+               $final['id']= $key;
                $mediaModel = new ProductMedia;
                $mediaModel->updateData($final);
             }
         }
-        return \redirect('/product/media/' . $id)->with('updateMedia', 'Product Media Updated!!!');
+        // return \redirect('/product/media/' . $id)->with('updateMedia', 'Product Media Updated!!!');
     }
     
     public function deleteAction($id,Request $request)

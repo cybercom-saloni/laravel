@@ -90,8 +90,7 @@ public function addAction($id = null,Request $request)
             "category.name" => "required|unique:categories,name,$id",
             "category.status" => "required",
         ]);
-       
-
+    
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()->all()]);
         }

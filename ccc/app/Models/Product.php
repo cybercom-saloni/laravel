@@ -13,7 +13,7 @@ class Product extends Core\Adapter
 
     protected $products = [];
     
-    protected $tables = 'products';
+    protected $table = 'products';
     public function __construct()
     {
         $this->setTable('products');

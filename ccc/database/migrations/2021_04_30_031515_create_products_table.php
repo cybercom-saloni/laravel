@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->Integer('quantity');
             $table->String('description');
             $table->Integer('status');
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('category_id');
             $table->timestamps();
         });
     }

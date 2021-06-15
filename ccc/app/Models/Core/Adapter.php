@@ -24,7 +24,6 @@ class Adapter extends Model
         $this->products = DB::select("select * from {$this->table} where {$this->primaryKey} = ?", [$id]);
         return $this;
     }
-
     public function saveData($category)
     {
       

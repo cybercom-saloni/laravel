@@ -26,5 +26,8 @@
           <li>
             <a onclick="object.setUrl('/csv/grid').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Csv</a>
           </li>
+          <li>
+            <a onclick="object.setUrl('/salesmanGrid').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span>Salesman</a>
+          </li>
         </ul>
     	</nav>

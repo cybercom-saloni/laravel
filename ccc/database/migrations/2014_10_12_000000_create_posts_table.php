@@ -1,10 +1,11 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropUniqueSku extends Migration
+class CreatePostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +14,11 @@ class DropUniqueSku extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->string('sku')->unique(false)->change();
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('commentId');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class DropUniqueSku extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('posts');
     }
 }

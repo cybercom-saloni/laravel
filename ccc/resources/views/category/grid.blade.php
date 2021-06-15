@@ -217,6 +217,7 @@
                             
                                 <form action="" method="Post" id="mySubCategoryform">
                                     @csrf
+                                    {{request()->id}}
                                     <div class="form-group col-lg-12">
                                         <button type="button" id="addSubCategory" class="btn btn-success">Add SubCategory</button>
                                     </div>

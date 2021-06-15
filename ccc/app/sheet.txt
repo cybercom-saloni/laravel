@@ -16,8 +16,16 @@ post  comment comment_post
 
 
 BelongsToMany:- many to many
+table should be singular combining table name alphabetically.
         pivot:-connects two table
-        wherePivot:- checks 
+        wherePivot:- checks like where condition
+        wherePivotIn:- checks between 2 values
+        wherePivotNotIn
+        wherePivotBetween
+        wherePivotNotBetween
+        wherePivotNull
+        wherePivotNotNull
+
 
 
 

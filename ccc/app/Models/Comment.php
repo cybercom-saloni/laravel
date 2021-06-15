@@ -8,9 +8,13 @@ class Comment extends Model
     use HasFactory;
     protected $table = 'comments';
 
-    public function getPostId()
+    // public function getPostId()
+    // {
+    //     // return $this->belongsTo(Post::class,'post_id','id');
+    //     // return $this->belongsTo(Post::class);
+    // }
+    public function comments()
     {
-        // return $this->belongsTo(Post::class,'post_id','id');
-        // return $this->belongsTo(Post::class);
+        return $this->morphOne(Comment_post::class,'commentable');
     }
 }

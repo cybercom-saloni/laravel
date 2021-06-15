@@ -145,8 +145,7 @@
 $(document).ready(function(){
     $('#update').on('click',function(e){
         e.preventDefault();
-        // var salesmanprice = $("#updateSalesmanPriceinput").val();
-        // console.log(salesmanprice);
+        
         $.ajax({
             type:'post',
             url:'/salesmanUpdatePrice/{{session('salesId')}}',

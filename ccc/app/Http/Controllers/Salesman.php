@@ -101,7 +101,7 @@ class Salesman extends Controller
  
     public function updatePriceAction($id=null,Request $request)
     {
-      
+      $salesmanData = [];
        echo $id;
        echo  "<pre>";
        $updateSalesmanPrice = $request->get('updateSalesmanPrice');
@@ -113,56 +113,59 @@ class Salesman extends Controller
         LEFT JOIN  salesman_products as s
         ON s.product_id = p.id
         AND s.salesman_id=$id");
-        // die;
+       
+       
         if($updateSalesmanPrice)
         {
-            foreach($salesman as $salesmanKey =>$salesmanValue)
-           {
-            //    print_r($salesmanValue);
-                $productPrice =$salesmanValue->price;
-               foreach($updateSalesmanPrice as $productId =>$price)
-               {
-                $salesmanProduct = DB::select("SELECT * FROM salesman_products WHERE product_id=$productId AND salesman_id=$id");
-                if($salesmanProduct)
+            foreach($updateSalesmanPrice as $productId =>$price)
+            {
+                $salesmanData = DB::select("SELECT s.id,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
+                FROM products  as p
+               INNER JOIN  salesman_products as s
+                ON s.product_id = p.id
+                AND s.salesman_id=$id 
+                AND s.product_id = $productId");
+                if($salesmanData)
                 {
-                    foreach($salesmanProduct as $key =>$value)
+                    $productPrice = $salesmanData[0]->price;
+                    $salesmanPriceCost = $price;
+                    if($productPrice <= $salesmanPriceCost)
                     {
-                            $salesmanPriceCost = $price;
-
-                            if($productPrice <= $salesmanPriceCost)
-                            {
-                                echo  $productId.'in';
-                                $affectedRows = SalesmanProduct::where("id", $value->id)->update(["salesmanPrice" => $price]);
-                            }
-                            else
-                            {
-                                echo  $productId.'out';
-                                session::put('errorPrice'.$productId,$productId);
-                            }
-                        
-                        }
+                        // echo  $productId;
+                    $affectedRows = SalesmanProduct::where("id", $salesmanData[0]->id)->update(["salesmanPrice" => $salesmanPriceCost]);
                     }
                     else
                     {
-                        
-                        $salesmanPriceCost = $price;
-
-                        if($productPrice <= $salesmanPriceCost)
-                        {
-                            SalesmanProduct::insert([
-                                'salesman_id' => $id, 
-                                'product_id' => $productId,
-                                'salesmanPrice' => $price
-                            ]);
-                        }
-                        else
-                        {
-                            echo 'out';
-                        }
-                       
+                        echo  $productId.'  '.$salesmanPriceCost.'out'.' ';
                     }
-               }
-           }
+                }
+                else
+                {
+                    
+                    $productData = DB::select("SELECT p.price,p.id
+                FROM products  as p
+                WHERE id = $productId");
+                $productPrice=$productData[0]->price;
+                // print_r($productPrice);
+                    $salesmanPriceCost = $price;
+
+                    if($productPrice <= $salesmanPriceCost)
+                    {
+                    SalesmanProduct::insert([
+                                            'salesman_id' => $id, 
+                                            'product_id' => $productId,
+                                            'salesmanPrice' => $price
+                                        ]);
+                                    }
+                                    else
+                                    {
+                                        echo 'out';
+                                    }
+                                   
+                }
+
+            }
+            
         }
         
         if($updateSalesmanDiscount)
@@ -201,7 +204,7 @@ class Salesman extends Controller
     //    echo $id;
     }
 
-    public function addAction(Request $request)
+    public function addAction($id=null,Request $request)
     {
        try{
             $validator = Validator::make($request->all(), [

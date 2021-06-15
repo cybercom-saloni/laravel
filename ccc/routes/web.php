@@ -164,7 +164,7 @@ Route::get('/salesmanGrid/{id?}',[Salesman::class,'gridAction']);
 Route::post('/salesmanGrid/searchSalesman',[Salesman::class,'gridAction']);
 Route::post('/salesmanAddPrice/{id}',[Salesman::class,'addPriceAction'])->name('salesmanAddPrice');
 Route::post('/salesmanUpdatePrice/{id}',[Salesman::class,'updatePriceAction'])->name('salesmanUpdatePrice');
-Route::post('/salesmanAdd',[Salesman::class,'addAction']);
+Route::post('/salesmanAdd/{id?}',[Salesman::class,'addAction']);
 Route::post('/searchSalesman',[Salesman::class,'searchSalesmanAction']);
 Route::post('/SalesmanPrice/{id?}',[Salesman::class,'showPriceAction'])->name('SalesmanPrice');
 Route::get('/SalesmanPrice/salesman/{id?}',[Salesman::class,'showPriceAction2']);

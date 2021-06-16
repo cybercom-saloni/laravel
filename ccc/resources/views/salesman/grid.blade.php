@@ -80,7 +80,7 @@
                                     
                                         <div class="row">
                                             <div class="col-8"><h3 class="card-title"> Manage Salesman Price</h3></div>
-                                            <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary">Update</button></td></div>
+                                            <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary" onclick="myFunction()">Update</button></td></div>
                                         </div>
                                         @if(session('successAdd'))
                                             <div class="alert alert-success">{{session('successAdd')}}</div>
@@ -89,7 +89,8 @@
                                         @if(session('salesmanAddedProduct'))
                                                 <div class="alert alert-success">{{session('salesmanAddedProduct')}}</div>
                                         @endif
-                                        <table class="table table-bordered bg-light  table-hover">
+                                       
+                                        <table class="table table-bordered bg-light  table-hover" id="comparisonTable-{{session('salesId')}}">
                                             <thead>
                                                 <tr>
                                                     <td>Id</td>
@@ -110,18 +111,18 @@
                                                    <td></td>
                                                     <td><input type="text" class="form-control" name="addsalesman[sku]"></td>
                                                     <td><input type="text" class="form-control" name="addsalesman[price]"></td>
-                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesmanBtn">Add</button></td>
-                                                   
+                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" >Add</button></td>
                                                 </tr>
                                             
 
                                                 @foreach(session('salesmanId') as $key => $value)
+                                                <tr id="message">
                                                 <?php //print_r($value);?>
                                                     <td>{{$value->id}}</td>
                                                     <td>{{$value->sku}}</td>
-                                                    <td>{{$value->price}}</td>
-                                                    <td><input type="text" class="form-control" id="updateSalesmanPriceinput" name="updateSalesmanPrice[<?php echo $value->id;?>]" value="{{$value->salesmanPrice}}"></td>
-                                                    <td><input type="text" class="form-control" name="updateSalesmanDiscount[<?php echo $value->id;?>]"value="{{$value->salesmanDiscount}}"></td>
+                                                    <td  id="productPrice-{{$value->id}}" class="productPrice">{{$value->price}}</td>
+                                                    <td><input type="text" id="price"  class="form-control salesmanPrice"  name="updateSalesmanPrice[<?php echo $value->id;?>]" value="{{$value->salesmanPrice}}"></td>
+                                                    <td><input type="text" class="form-control"  name="updateSalesmanDiscount[<?php echo $value->id;?>]"value="{{$value->salesmanDiscount}}"></td>
                                                 </tr>
                                                @endforeach
                                             </tbody>
@@ -142,10 +143,61 @@
 </div>
 <!-- END MAIN CONTENT -->
 <script>
+function myFunction() {
+    alert(1);
+    // var productPrice = document.getElementById('price').value;
+    var rows = $("#comparisonTable-{{session('salesId')}}").find("tbody tr");
+    // console.log(rows);
+    rows.each(function() { //iterate over each row.
+
+    var thisRow = $(this), //this is the current row
+        productPrice = parseFloat(thisRow.find(".productPrice").text()), //this is the first value
+        salesmanPrice = parseFloat(thisRow.find(".salesmanPrice").val()); //this is the second value
+        // console.log(productPrice);
+        // console.log(salesmanPrice);
+    if (productPrice > salesmanPrice) {
+        console.log(salesmanPrice);
+        //  document.getElementById('message').style.backgroundColor  = 'green';
+        thisRow.find(".salesmanPrice").css('backgroundColor', 'yellow');
+        
+    }
+    else
+    {
+        thisRow.find(".salesmanPrice").css('backgroundColor', 'white');
+    }
+
+   
+
+    });
+
+}
 $(document).ready(function(){
     $('#update').on('click',function(e){
         e.preventDefault();
+        $('.price').each(function() {
+           var sellingPrice =  $(this).val();
+        //    console.log(sellingPrice);
+        // $(".productPrice").each(function () {
+        // // 'this' is now the raw td DOM element
+        // var txt = $(this).html();
+        // // console.log(txt);
+        // if(txt <= sellingPrice)
+        // {
+        //     console.log(1);
+        // }
+        // else
+        // {
         
+        // }
+    // });
+    });
+    $(".productPrice").each(function () {
+        var price = $(this).html();
+        // console.log(price);
+    });
+
+    // var price =document.getElementById('price').value;
+    // console.log(price);
         $.ajax({
             type:'post',
             url:'/salesmanUpdatePrice/{{session('salesId')}}',
@@ -170,6 +222,7 @@ $(document).ready(function(){
         });
     });
 });
+
 
 $(document).ready(function(){
     $('#addSalesmanBtn').on('click',function(e){

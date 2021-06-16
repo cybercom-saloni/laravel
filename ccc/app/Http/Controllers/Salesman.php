@@ -194,7 +194,7 @@ class Salesman extends Controller
                 
             }
         }
-      return \redirect('SalesmanPrice/salesman/'.$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!')->with('selectedId',$id);
+    //   return \redirect('SalesmanPrice/salesman/'.$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!')->with('selectedId',$id);
     }
 
     public function addPriceAction($id=null,Request $request)

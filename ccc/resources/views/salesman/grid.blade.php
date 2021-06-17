@@ -111,7 +111,7 @@
                                                    <td></td>
                                                     <td><input type="text" class="form-control" name="addsalesman[sku]"></td>
                                                     <td><input type="text" class="form-control" name="addsalesman[price]"></td>
-                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" >Add</button></td>
+                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesmanBtn" >Add</button></td>
                                                 </tr>
                                             
 
@@ -144,7 +144,6 @@
 <!-- END MAIN CONTENT -->
 <script>
 function myFunction() {
-    alert(1);
     // var productPrice = document.getElementById('price').value;
     var rows = $("#comparisonTable-{{session('salesId')}}").find("tbody tr");
     // console.log(rows);
@@ -176,28 +175,13 @@ $(document).ready(function(){
         e.preventDefault();
         $('.price').each(function() {
            var sellingPrice =  $(this).val();
-        //    console.log(sellingPrice);
-        // $(".productPrice").each(function () {
-        // // 'this' is now the raw td DOM element
-        // var txt = $(this).html();
-        // // console.log(txt);
-        // if(txt <= sellingPrice)
-        // {
-        //     console.log(1);
-        // }
-        // else
-        // {
-        
-        // }
-    // });
     });
     $(".productPrice").each(function () {
         var price = $(this).html();
         // console.log(price);
     });
 
-    // var price =document.getElementById('price').value;
-    // console.log(price);
+   
         $.ajax({
             type:'post',
             url:'/salesmanUpdatePrice/{{session('salesId')}}',

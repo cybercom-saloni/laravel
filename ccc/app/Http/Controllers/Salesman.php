@@ -72,11 +72,11 @@ class Salesman extends Controller
       }
     //   print_r($product);
       $product->save();
-      $salesman = DB::select("SELECT s.id,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
-      FROM products  as p
-      LEFT JOIN salesman_products as s
-      ON s.product_id = p.id
-      AND s.salesman_id=$id");
+      $salesman = DB::select("SELECT p.id,s.id as sid,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
+                             FROM products  as p
+                             LEFT JOIN salesman_products as s
+                             ON s.product_id = p.id
+                             AND s.salesman_id=$id");
       return \redirect('salesmanGrid/'.$id)->with('successAdd','Product Added!!!')->with('salesmanId',$salesman)->with('salesId',$id)->with('selectedId',$id);
     }
 

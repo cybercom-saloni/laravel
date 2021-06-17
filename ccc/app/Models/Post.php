@@ -17,7 +17,7 @@ class Post extends Model
     public function getCommentId()
     {
         //one to many
-        // return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class);
 
         //one to one
         // return $this->hasOne(Comment::class);

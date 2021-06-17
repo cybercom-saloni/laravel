@@ -22,7 +22,7 @@
                                             <div class="alert alert-success">{{session('salesmanDelete')}}</div>
                                             @endif
                                             @if(session('NewSalesman'))
-                                            <div class="alert alert-success">{{session('NewSalesman')}}</div>
+                                            <div class="alert alert-success NewSalesman" style="display:none">{{session('NewSalesman')}}</div>
                                             @endif
                                             <div class="alert alert-danger print-error-msg" style="display:none">
                                                 <ul></ul>
@@ -80,15 +80,19 @@
                                     
                                         <div class="row">
                                             <div class="col-8"><h3 class="card-title"> Manage Salesman Price</h3></div>
+                                            @if(session('salesmanDelete'))
+                                            <div class="col-4"></div>
+                                            @else
                                             <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary" onclick="myFunction()">Update</button></td></div>
+                                            @endif
                                         </div>
                                         @if(session('successAdd'))
-                                            <div class="alert alert-success">{{session('successAdd')}}</div>
+                                            <div class="alert alert-success successAdd" style="display:none">{{session('successAdd')}}</div>
                                      @endif
                                                             
-                                        @if(session('salesmanAddedProduct'))
-                                                <div class="alert alert-success">{{session('salesmanAddedProduct')}}</div>
-                                        @endif
+                                       
+                                    <div class="alert alert-success salesmanAddedProduct" style="display:none">Salesman Product Price Updated!!!!</div>
+                                       
                                        
                                         <table class="table table-bordered bg-light  table-hover" id="comparisonTable-{{session('salesId')}}">
                                             <thead>
@@ -165,8 +169,8 @@ function myFunction() {
         thisRow.find(".salesmanPrice").css('backgroundColor', 'white');
     }
 
-   
-
+    $(".successAdd").css('display','none');
+    $(".salesmanAddedProduct").css('display','block');
     });
 
 }
@@ -196,6 +200,8 @@ $(document).ready(function(){
                 {
                     $(response.element).each(function(i,element){
                         $('#content').html(element.html);
+                        $(".successAdd").css('display','none');
+                        $(".salesmanAddedProduct").css('display','block');
                     });
                 }
                 else
@@ -215,25 +221,38 @@ $(document).ready(function(){
             type:'post',
             url:'<?php echo route('SalesmanAddNewProduct',session('salesId'))?>',
             data:$('#form').serializeArray(),
-            success:function(response)
+            success:function(data)
             {
-                if(typeof response.element=='undefined')
+                if($.isEmptyObject(data.error)){
+                        if(typeof data.element == 'object')
+                        {
+                           
+                            $(data.element).each(function(i, element)
+                            {
+                                $('#content').html(element.html);
+                                $(".successAdd").css('display','block');
+                                $(".salesmanAddedProduct").css('display','none');
+                            });
+                        }
+                 }
+                else
                 {
-                    return false;
-                }
-                if(typeof response.element == 'object')
-                {
-                    $(response.element).each(function(i,element){
-                        $('#content').html(element.html);
-                    });
-                }
-                else{
-                    $(response.element.selector).html(response.element.html);
+                    alert(121);
+                    printErrorMsg(data.error);
                 }
             }
-        });
+
+            });
+            });
+            function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
     });
-});
+
 $(document).ready(function(){
     $('#addSalesman').on('click',function(e){
         e.preventDefault();
@@ -249,6 +268,7 @@ $(document).ready(function(){
                             $(data.element).each(function(i, element)
                             {
                                 $('#content').html(element.html);
+                                $(".NewSalesman").css('display','block');
                             });
                         }
                  }

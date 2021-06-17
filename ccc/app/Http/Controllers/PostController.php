@@ -35,10 +35,14 @@ class PostController extends Controller
             // $posts=Post::find(1)->getCommentId;
             // print_r($posts);
 
-            $posts=Post::find(1);
-            dd($posts->comments);
-            $comment1=Comment::find(1);
-            dd($comment1->comments);
+            // $posts=Post::find(1);
+            // dd($posts->comments);
+            // $comment1=Comment::find(1);
+            // dd($comment1->comments);
+
+            //counts realtionship
+            $posts = Post::withCounts('comments')->get();
+            dd($posts);
             die;
             // Event::find(1)->course;
         return view('posts.index',['posts'=>$posts]);

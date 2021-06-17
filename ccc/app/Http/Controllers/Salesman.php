@@ -61,7 +61,13 @@ class Salesman extends Controller
     public function SalesmanAddNewProductAction($id=null,Request $request){
         // echo 123;
         echo $id;
-        
+        $validator = Validator::make($request->all(), [
+            "addsalesman.sku" => "required|unique:products,sku",
+            "addsalesman.price" => "required"
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
       $name =$request->get('addsalesman');
       $product = new ProductModel;
     //   print_r($name);

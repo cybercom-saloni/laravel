@@ -6,6 +6,8 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Comment_post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class PostController extends Controller
 {
@@ -23,7 +25,7 @@ class PostController extends Controller
        Post::create([
            'name' => request('name'),
        ]);
-   
+
        return redirect('/posts');
     }
     public function index()
@@ -40,12 +42,25 @@ class PostController extends Controller
             // $comment1=Comment::find(1);
             // dd($comment1->comments);
 
-            //counts realtionship
-            $posts = Post::withCounts('comments')->get();
-            dd($posts);
-            die;
+            // //counts realtionship
+            // $posts = Post::withCount('comments')->get();
+            // dd($posts);
+            // die;
             // Event::find(1)->course;
-        return view('posts.index',['posts'=>$posts]);
+            // return DB::table('posts')->sum('id');
+            // return DB::table('posts')->avg('id');
+            // return DB::table('posts')->min('id');
+            // return DB::table('posts')->max('id');
+            // return DB::table('posts')->max('name');
+            // return DB::table('posts')->min('name');
+            // return DB::table('posts')->count();
+            // $post = Post::first();
+            // $post=Post::withSum('comments', 'comment_id')->get();
+            // dd($post);
+            // $posts = new Post;
+        //    $posts = $posts->contains(Post::find(1));
+        //     print_r($posts);
+        // return view('posts.index',['posts'=>$posts]);
     }
 
     public function edit(Post $post)

@@ -15,9 +15,9 @@ class Salesman extends Controller
         try{
             if(!$request->get('namesearch'))
             {
-                
+
                 $salesmanName = SalesmanModel::orderBy('name')->get();
-               
+
             }
             else
             {
@@ -33,7 +33,7 @@ class Salesman extends Controller
                 LEFT JOIN salesman_products as s
                 ON s.product_id = p.id
                 AND s.salesman_id=$id");
-                
+
                 $salesId=$id;
                 $view = view('salesman.grid',\compact('salesmanName','salesman','salesId'))->render();
             }
@@ -52,7 +52,7 @@ class Salesman extends Controller
              echo json_encode($response);
              die();
             // print_r($find);
-            
+
         }catch(Exception $e)
         {
             echo $e->getMessage();
@@ -60,22 +60,25 @@ class Salesman extends Controller
     }
     public function SalesmanAddNewProductAction($id=null,Request $request){
         // echo 123;
-        echo $id;
+        // echo $id;
         $validator = Validator::make($request->all(), [
             "addsalesman.sku" => "required|unique:products,sku",
             "addsalesman.price" => "required"
         ]);
         if ($validator->fails()) {
+
             return response()->json(['error'=>$validator->errors()->all()]);
         }
       $name =$request->get('addsalesman');
+
       $product = new ProductModel;
     //   print_r($name);
-  
-        echo $request->id;
+
+        // echo $request->id;
       foreach ($name as $key => $value) {
           $product->setAttribute($key,$value);
       }
+
     //   print_r($product);
       $product->save();
       $salesman = DB::select("SELECT p.id,s.id as sid,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
@@ -104,14 +107,14 @@ class Salesman extends Controller
                              AND s.salesman_id=$id");
         return redirect('/salesmanGrid')->with('salesmanId',$salesman)->with('salesId',$id)->with('selectedId',$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!');
     }
- 
+
     public function updatePriceAction($id=null,Request $request)
     {
       $salesmanData = [];
        echo $id;
        echo  "<pre>";
        $updateSalesmanPrice = $request->get('updateSalesmanPrice');
-       
+
        $updateSalesmanDiscount=$request->get('updateSalesmanDiscount');
         //   print_r($updateSalesmanDiscount);
         $salesman = DB::select("SELECT s.id,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
@@ -119,8 +122,8 @@ class Salesman extends Controller
         LEFT JOIN  salesman_products as s
         ON s.product_id = p.id
         AND s.salesman_id=$id");
-       
-       
+
+
         if($updateSalesmanPrice)
         {
             foreach($updateSalesmanPrice as $productId =>$price)
@@ -129,7 +132,7 @@ class Salesman extends Controller
                 FROM products  as p
                INNER JOIN  salesman_products as s
                 ON s.product_id = p.id
-                AND s.salesman_id=$id 
+                AND s.salesman_id=$id
                 AND s.product_id = $productId");
                 if($salesmanData)
                 {
@@ -147,7 +150,7 @@ class Salesman extends Controller
                 }
                 else
                 {
-                    
+
                     $productData = DB::select("SELECT p.price,p.id
                 FROM products  as p
                 WHERE id = $productId");
@@ -158,7 +161,7 @@ class Salesman extends Controller
                     if($productPrice <= $salesmanPriceCost)
                     {
                     SalesmanProduct::insert([
-                                            'salesman_id' => $id, 
+                                            'salesman_id' => $id,
                                             'product_id' => $productId,
                                             'salesmanPrice' => $price
                                         ]);
@@ -167,22 +170,22 @@ class Salesman extends Controller
                                     {
                                         echo 'out';
                                     }
-                                   
+
                 }
 
             }
-            
+
         }
-        
+
         if($updateSalesmanDiscount)
         {
             foreach($updateSalesmanDiscount as $productId =>$price)
             {
-                
+
                 $salesmanProduct = DB::select("SELECT * FROM salesman_products WHERE product_id = $productId AND salesman_id =$id");
                 if($salesmanProduct)
                 {
-                    
+
                     foreach($salesmanProduct as $key =>$value)
                     {
                      $affectedRows = SalesmanProduct::where("id", $value->id)->update(["salesmanDiscount" => $price]);
@@ -190,14 +193,14 @@ class Salesman extends Controller
                 }
                 else
                 {
-                    
+
                     SalesmanProduct::insert([
-                        'salesman_id' => $id, 
+                        'salesman_id' => $id,
                         'product_id' => $productId,
                         'salesmanDiscount' => $price
                       ]);
                 }
-                
+
             }
         }
     //   return \redirect('SalesmanPrice/salesman/'.$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!')->with('selectedId',$id);
@@ -220,11 +223,14 @@ class Salesman extends Controller
                 return response()->json(['error'=>$validator->errors()->all()]);
             }
             $name=$request->get('salesman');
+
+
             if(!$name)
             {
-                throw new Exception("Name not inserted");   
+                throw new Exception("Name not inserted");
             }
             $salesman = new SalesmanModel;
+
             foreach ($name as $key => $value) {
                 $salesman->setAttribute($key, $value);
             }
@@ -245,14 +251,15 @@ class Salesman extends Controller
             if(!$id)
             {
                 throw new Exception("SalesmanId is not found");
-                
+
             }
             $salesman = SalesmanModel::find($id);
+
             if($salesman)
             {
                 $salesman->delete($id);
             }
-            return redirect('/salesmanGrid')->with('salesmanDelete','Salesman Deleted')->with('salesId',$id);
+            return redirect('/salesmanGrid')->with('salesmanDelete',$salesman->name.' Salesman Deleted')->with('salesId',$id);
         }catch(Exception $e)
         {
             echo $e->getMessage();
@@ -271,9 +278,9 @@ class Salesman extends Controller
             }
             $name =trim($request->get('namesearch'));
             $find = SalesmanModel::where('name','LIKE',"%{$name}%")->orderBy('name')->get();
-           
+
             // print_r($find);
-            
+
         }catch(Exception $e)
         {
             echo $e->getMessage();

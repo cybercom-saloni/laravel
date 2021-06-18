@@ -19,7 +19,7 @@
                                       @csrf
                                         <table class="table table-bordered bg-light  table-hover">
                                             @if(session('salesmanDelete'))
-                                            <div class="alert alert-success">{{session('salesmanDelete')}}</div>
+                                            <div class="alert alert-danger">{{session('salesmanDelete')}}</div>
                                             @endif
                                             @if(session('NewSalesman'))
                                             <div class="alert alert-success NewSalesman" style="display:none">{{session('NewSalesman')}}</div>
@@ -30,15 +30,15 @@
                                         <thead>
                                                 <tr>
                                                     <td><input type="text" class="form-control" id="sku" placeholder="SALESMAN NAME" name="namesearch"></td>
-                                                    <td><button type="button" class="btn btn-md btn-primary" id="searchSalesman">Search</button></td>
-                                                    <td><a href="javascript:void(0);" id="salesmanAddGrid" class="btn btn-md btn-primary">Add</a></td>
-                                                    <td><a onclick="object.setUrl('/salesmanGrid').setMethod('get').load();" href="javascript:void(0);0" class="btn btn-md btn-primary">Clear</a></td>
+                                                    <td><button type="button" class="btn btn-md btn-primary" id="searchSalesman">   <i class="fa fa-search"></i></button></td>
+                                                    <td><a href="javascript:void(0);" id="salesmanAddGrid" class="btn btn-md btn-primary"><i class="fa fa-plus"></i></a></td>
+                                                    <td><a onclick="object.setUrl('/salesmanGrid').setMethod('get').load();" href="javascript:void(0);0" class="btn btn-md btn-primary"><i class="fa fa-remove"></i> </a></td>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr id="newSalesmanAdd">
                                                     <td colspan="2"> <input type="text" class="form-control" id="sku" placeholder="SALESMAN NAME" name="salesman[name]" required></td>
-                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesman">Add</button></td>
+                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesman"><i class="fa fa-plus"></i></button></td>
                                                 </tr>
                                                 
                                                 @if($salesmanName->count()> 0)
@@ -46,14 +46,14 @@
                                                         @if(session('selectedId') == $value->id)
                                                         <tr style="background-color:gray">
                                                             <td class="row1" colspan='2'>{{$value->name}}</td>
-                                                            <td class="row1"><a href="javascript:void(0);" onclick="object.setUrl('/salesmanDelete/{{$value->id}}').setMethod('get').load();" class="btn btn-md btn-primary">Delete</a></td>
+                                                            <td class="row1"><a href="javascript:void(0);" onclick="object.setUrl('/salesmanDelete/{{$value->id}}').setMethod('get').load();" class="btn btn-md btn-primary"><i class="fa fa-trash-o fa-lg"></i></a></td>
                                                             <td class="row1"><a href="javascript:void(0);"  onclick="object.setUrl('/SalesmanPrice/{{$value->id}}').setMethod('post').load();" class="btn btn-md btn-primary">Price</a></td>     
                                                         </tr>
                                                         @else
                                                     <tr>
 
                                                         <td class="row1" colspan='2'>{{$value->name}}</td>
-                                                        <td class="row1"><a href="javascript:void(0);" onclick="object.setUrl('/salesmanDelete/{{$value->id}}').setMethod('get').load();" class="btn btn-md btn-primary">Delete</a></td>
+                                                        <td class="row1"><a href="javascript:void(0);" onclick="object.setUrl('/salesmanDelete/{{$value->id}}').setMethod('get').load();" class="btn btn-md btn-primary"><i class="fa fa-trash-o fa-lg"></i></a></td>
                                                         <td class="row1"><a href="javascript:void(0);"  onclick="object.setUrl('/SalesmanPrice/{{$value->id}}').setMethod('post').load();" class="btn btn-md btn-primary">Price</a></td>     
                                                     </tr>
                                                     @endif
@@ -83,7 +83,7 @@
                                             @if(session('salesmanDelete'))
                                             <div class="col-4"></div>
                                             @else
-                                            <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary" onclick="myFunction()">Update</button></td></div>
+                                            <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary" onclick="myFunction()"><i class="fa fa-pencil"></i></button></td></div>
                                             @endif
                                         </div>
                                         @if(session('successAdd'))
@@ -111,16 +111,19 @@
                                                 <tr><td colspan="5"><b>No Salemen Selected!!!<b></td></tr>
                                                 @else
                                                 <tr>
-                                                   
+                                                   <div class="alert alert-danger print-error-msg1" style="display:none">
+                                                <ul></ul>
+                                            </div>
                                                    <td></td>
                                                     <td><input type="text" class="form-control" name="addsalesman[sku]"></td>
                                                     <td><input type="text" class="form-control" name="addsalesman[price]"></td>
-                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesmanBtn" >Add</button></td>
+                                                    <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesmanBtn" ><i class="fa fa-plus"></i></button></td>
                                                 </tr>
                                             
 
                                                 @foreach(session('salesmanId') as $key => $value)
                                                 <tr id="message">
+                                                     
                                                 <?php //print_r($value);?>
                                                     <td>{{$value->id}}</td>
                                                     <td>{{$value->sku}}</td>
@@ -237,7 +240,7 @@ $(document).ready(function(){
                  }
                 else
                 {
-                    alert(121);
+                   
                     printErrorMsg(data.error);
                 }
             }
@@ -245,10 +248,10 @@ $(document).ready(function(){
             });
             });
             function printErrorMsg (msg) {
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display','block');
+            $(".print-error-msg1").find("ul").html('');
+            $(".print-error-msg1").css('display','block');
             $.each( msg, function( key, value ) {
-                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                $(".print-error-msg1").find("ul").append('<li>'+value+'</li>');
             });
         }
     });

@@ -175,6 +175,6 @@ Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProdu
 // Route::match(['get','post','put','delete','patch'],'{controller}/{function?}',function($controller='index',$function='index'){
 //     $controller = 'App\Http\Controllers\\'.ucfirst($controller);
 //     $controller = new $controller;
-    
+
 //     return $controller->{$function."Action"}();
 // });

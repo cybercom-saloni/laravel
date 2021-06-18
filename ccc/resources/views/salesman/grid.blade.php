@@ -40,27 +40,27 @@
                                                     <td colspan="2"> <input type="text" class="form-control" id="sku" placeholder="SALESMAN NAME" name="salesman[name]" required></td>
                                                     <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesman"><i class="fa fa-plus"></i></button></td>
                                                 </tr>
-                                                
+
                                                 @if($salesmanName->count()> 0)
                                                     @foreach($salesmanName as $key => $value)
                                                         @if(session('selectedId') == $value->id)
                                                         <tr style="background-color:gray">
                                                             <td class="row1" colspan='2'>{{$value->name}}</td>
                                                             <td class="row1"><a href="javascript:void(0);" onclick="object.setUrl('/salesmanDelete/{{$value->id}}').setMethod('get').load();" class="btn btn-md btn-primary"><i class="fa fa-trash-o fa-lg"></i></a></td>
-                                                            <td class="row1"><a href="javascript:void(0);"  onclick="object.setUrl('/SalesmanPrice/{{$value->id}}').setMethod('post').load();" class="btn btn-md btn-primary">Price</a></td>     
+                                                            <td class="row1"><a href="javascript:void(0);"  onclick="object.setUrl('/SalesmanPrice/{{$value->id}}').setMethod('post').load();" class="btn btn-md btn-primary">Price</a></td>
                                                         </tr>
                                                         @else
                                                     <tr>
 
                                                         <td class="row1" colspan='2'>{{$value->name}}</td>
                                                         <td class="row1"><a href="javascript:void(0);" onclick="object.setUrl('/salesmanDelete/{{$value->id}}').setMethod('get').load();" class="btn btn-md btn-primary"><i class="fa fa-trash-o fa-lg"></i></a></td>
-                                                        <td class="row1"><a href="javascript:void(0);"  onclick="object.setUrl('/SalesmanPrice/{{$value->id}}').setMethod('post').load();" class="btn btn-md btn-primary">Price</a></td>     
+                                                        <td class="row1"><a href="javascript:void(0);"  onclick="object.setUrl('/SalesmanPrice/{{$value->id}}').setMethod('post').load();" class="btn btn-md btn-primary">Price</a></td>
                                                     </tr>
                                                     @endif
-                                                  
-                                                   
+
+
                                                     @endforeach
-                                                    
+
                                                 @else
                                                     <tr><td colspan="4"><b>No Record Found For Salemen!!!<b></td></tr>
                                                 @endif
@@ -74,10 +74,10 @@
                         <div class="col-md-6">
                             <div class="card">
                                       <div class="card-body">
-                                    
+
                                     <form action="" method="POST" id="form">
                                       @csrf
-                                    
+
                                         <div class="row">
                                             <div class="col-8"><h3 class="card-title"> Manage Salesman Price</h3></div>
                                             @if(session('salesmanDelete'))
@@ -89,11 +89,11 @@
                                         @if(session('successAdd'))
                                             <div class="alert alert-success successAdd" style="display:none">{{session('successAdd')}}</div>
                                      @endif
-                                                            
-                                       
+
+
                                     <div class="alert alert-success salesmanAddedProduct" style="display:none">Salesman Product Price Updated!!!!</div>
-                                       
-                                       
+
+
                                         <table class="table table-bordered bg-light  table-hover" id="comparisonTable-{{session('salesId')}}">
                                             <thead>
                                                 <tr>
@@ -104,7 +104,7 @@
                                                     <td>Salesman Discount</td>
                                                 </tr>
                                             </thead>
-                                           
+
                                             <tbody>
 
                                                 @if(session('salesmanDelete'))
@@ -119,11 +119,11 @@
                                                     <td><input type="text" class="form-control" name="addsalesman[price]"></td>
                                                     <td colspan='2'><button type="button" class="btn btn-md btn-primary" id="addSalesmanBtn" ><i class="fa fa-plus"></i></button></td>
                                                 </tr>
-                                            
+
 
                                                 @foreach(session('salesmanId') as $key => $value)
                                                 <tr id="message">
-                                                     
+
                                                 <?php //print_r($value);?>
                                                     <td>{{$value->id}}</td>
                                                     <td>{{$value->sku}}</td>
@@ -135,7 +135,7 @@
                                             </tbody>
                                             @endif
                                         </table>
-                              
+
                                     </div>
                             </form>
                             </div>
@@ -165,7 +165,7 @@ function myFunction() {
         console.log(salesmanPrice);
         //  document.getElementById('message').style.backgroundColor  = 'green';
         thisRow.find(".salesmanPrice").css('backgroundColor', 'yellow');
-        
+
     }
     else
     {
@@ -188,10 +188,10 @@ $(document).ready(function(){
         // console.log(price);
     });
 
-   
+
         $.ajax({
             type:'post',
-            url:'/salesmanUpdatePrice/{{session('salesId')}}',
+            url:'/salesmanUpdatePrice/{{session("salesId")}}',
             data:$('#form').serializeArray(),
             success:function(response)
             {
@@ -229,7 +229,7 @@ $(document).ready(function(){
                 if($.isEmptyObject(data.error)){
                         if(typeof data.element == 'object')
                         {
-                           
+
                             $(data.element).each(function(i, element)
                             {
                                 $('#content').html(element.html);
@@ -240,7 +240,7 @@ $(document).ready(function(){
                  }
                 else
                 {
-                   
+
                     printErrorMsg(data.error);
                 }
             }
@@ -386,7 +386,7 @@ $(document).ready(function()
                 }
             }
         });
-        
+
     });
 });
 </script>

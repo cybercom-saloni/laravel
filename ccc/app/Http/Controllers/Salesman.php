@@ -13,6 +13,7 @@ class Salesman extends Controller
     public function gridAction($id=null,Request $request)
     {
         try{
+
             if(!$request->get('namesearch'))
             {
 
@@ -24,6 +25,7 @@ class Salesman extends Controller
                 $name =trim($request->get('namesearch'));
                 $salesmanName = SalesmanModel::where('name','LIKE',"%{$name}%")->orderBy('name')->get();
             }
+
 
             if($id)
             {
@@ -64,6 +66,10 @@ class Salesman extends Controller
         $validator = Validator::make($request->all(), [
             "addsalesman.sku" => "required|unique:products,sku",
             "addsalesman.price" => "required"
+        ],[
+            "addsalesman.sku.required" =>"The product Sku Field is required.",
+            "addsalesman.sku.unique" =>"The product Sku Field should be unique.",
+            "addsalesman.price.required" => "The product price Field is required."
         ]);
         if ($validator->fails()) {
 
@@ -97,6 +103,18 @@ class Salesman extends Controller
                              LEFT JOIN salesman_products as s
                              ON s.product_id = p.id
                              AND s.salesman_id=$id");
+
+        // $salesman = DB::table('salesman_products as s')->join('products as p', 's.product_id', '=', 'p.id')
+        // ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+        // ->where('s.salesman_id', $id)
+        //  ->get();
+        // $salesman =DB::table('products as p')->join('salesman_products as s', 's.product_id', '=', 'p.id')
+        //         ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+        //          ->orWhere('s.salesman_id',$id)
+        //          ->get();
+        // $salesman = ProductModel::leftJoin('salesman_products', function($join) {
+        //     $join->on('salesman_products.product_id', '=', 'products.id');
+        //   });
         return redirect('/salesmanGrid')->with('salesmanId',$salesman)->with('salesId',$id)->with('selectedId',$id);
     }
     public function showPriceAction2($id=null,Request $request){
@@ -218,6 +236,9 @@ class Salesman extends Controller
        try{
             $validator = Validator::make($request->all(), [
                 "salesman.name" => "required|unique:salesmen,name",
+            ],[
+                "salesman.name.required" =>"The salesman name Field is required.",
+                "salesman.name.unique" =>"The salesman name Field should be unique"
             ]);
             if ($validator->fails()) {
                 return response()->json(['error'=>$validator->errors()->all()]);

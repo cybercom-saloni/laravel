@@ -19,7 +19,8 @@
                                       @csrf
                                         <table class="table table-bordered bg-light  table-hover">
                                             @if(session('salesmanDelete'))
-                                            <div class="alert alert-danger">{{session('salesmanDelete')}}</div>
+                                            <div class="alert alert-danger salesmanDelete" style="display:block">{{session('salesmanDelete')}}</div>
+
                                             @endif
                                             @if(session('NewSalesman'))
                                             <div class="alert alert-success NewSalesman" style="display:none">{{session('NewSalesman')}}</div>
@@ -31,8 +32,8 @@
                                                 <tr>
                                                     <td><input type="text" class="form-control" id="sku" placeholder="SALESMAN NAME" name="namesearch"></td>
                                                     <td><button type="button" class="btn btn-md btn-primary" id="searchSalesman">   <i class="fa fa-search"></i></button></td>
-                                                    <td><a href="javascript:void(0);" id="salesmanAddGrid" class="btn btn-md btn-primary"><i class="fa fa-plus"></i></a></td>
                                                     <td><a onclick="object.setUrl('/salesmanGrid').setMethod('get').load();" href="javascript:void(0);0" class="btn btn-md btn-primary"><i class="fa fa-remove"></i> </a></td>
+                                                    <td><a href="javascript:void(0);" id="salesmanAddGrid" class="btn btn-md btn-primary"><i class="fa fa-plus"></i></a></td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -83,7 +84,7 @@
                                             @if(session('salesmanDelete'))
                                             <div class="col-4"></div>
                                             @else
-                                            <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary" onclick="myFunction()"><i class="fa fa-pencil"></i></button></td></div>
+                                            <div class="col-4"><button type="button" id="update" class="btn btn-md btn-primary" onclick="myFunction()"><i class="fa fa-pencil"></i>UPDATE</button></td></div>
                                             @endif
                                         </div>
                                         @if(session('successAdd'))
@@ -272,12 +273,15 @@ $(document).ready(function(){
                             {
                                 $('#content').html(element.html);
                                 $(".NewSalesman").css('display','block');
+                                $(".salesmanDelete").css('display','none');
+
                             });
                         }
                  }
                 else
                 {
                     printErrorMsg(data.error);
+                    $(".salesmanDelete").css('display','none');
                 }
             }
 

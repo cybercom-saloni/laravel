@@ -85,7 +85,7 @@ class Shipping extends Controller
        
         $validator = Validator::make($request->all(), [
             "shipping.name" => "required",
-            "shipping.code" => "required",
+            "shipping.code" => "required|unique:shippings,code,$id",
             "shipping.amount" => "required",
             "shipping.description" => "required",
             "shipping.status" => "required",

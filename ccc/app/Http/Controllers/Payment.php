@@ -81,7 +81,7 @@ class Payment extends Controller
        
         $validator = Validator::make($request->all(), [
             "payment.name" => "required",
-            "payment.code" => "required",
+            "payment.code" => "required|unique:payments,code,$id",
             "payment.description" => "required",
             "payment.status" => "required",
         ]);

@@ -13,31 +13,42 @@ class Salesman extends Controller
     public function gridAction($id=null,Request $request)
     {
         try{
-
-            if(!$request->get('namesearch'))
+            $salesman_id = session('idSales');
+            if($request->get('namesearch'))
             {
-
-                $salesmanName = SalesmanModel::orderBy('name')->get();
-
+                $name =trim($request->get('namesearch'));
+                session::forget('idSales');
+                session(['searchName' =>$name]);
+                session::save();
+                $salesmanName = SalesmanModel::where('name','LIKE',"%{$name}%")->orderBy('name')->get();
+                $idSales = $id;
             }
             else
             {
-                $name =trim($request->get('namesearch'));
-                $salesmanName = SalesmanModel::where('name','LIKE',"%{$name}%")->orderBy('name')->get();
+                if(session('searchName'))
+                {
+
+                   $name = session('searchName');
+                   $salesmanName = SalesmanModel::where('name','LIKE',"%{$name}%")->orderBy('name')->get();
+                }
+                else{
+                    $salesmanName = SalesmanModel::orderBy('name')->get();
+                }
+
             }
-
-
             if($id)
             {
-                // echo $id;
-                $salesman = DB::select("SELECT p.id,s.id as sid,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
-                FROM products  as p
-                LEFT JOIN salesman_products as s
-                ON s.product_id = p.id
-                AND s.salesman_id=$id");
+                $salesman = DB::table('products as p')
+                                ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+                                ->leftJoin('salesman_products as s',function($join) use($id)
+                                {
+                                    $join->on('s.product_id','=','p.id');
+                                    $join->where('s.salesman_id','=',"$id");
+                                })->get();
 
-                $salesId=$id;
-                $view = view('salesman.grid',\compact('salesmanName','salesman','salesId'))->render();
+                $idSales=$id;
+                $view = view('salesman.grid',\compact('salesmanName','salesman','idSales'))->render();
+
             }
            else
            {
@@ -53,16 +64,14 @@ class Salesman extends Controller
              header('content-type:application/json');
              echo json_encode($response);
              die();
-            // print_r($find);
 
         }catch(Exception $e)
         {
             echo $e->getMessage();
         }
     }
-    public function SalesmanAddNewProductAction($id=null,Request $request){
-        // echo 123;
-        // echo $id;
+ public function SalesmanAddNewProductAction($id=null,Request $request){
+
         $validator = Validator::make($request->all(), [
             "addsalesman.sku" => "required|unique:products,sku",
             "addsalesman.price" => "required"
@@ -78,55 +87,38 @@ class Salesman extends Controller
       $name =$request->get('addsalesman');
 
       $product = new ProductModel;
-    //   print_r($name);
-
-        // echo $request->id;
       foreach ($name as $key => $value) {
           $product->setAttribute($key,$value);
       }
 
-    //   print_r($product);
       $product->save();
-      $salesman = DB::select("SELECT p.id,s.id as sid,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
-                             FROM products  as p
-                             LEFT JOIN salesman_products as s
-                             ON s.product_id = p.id
-                             AND s.salesman_id=$id");
-      return \redirect('salesmanGrid/'.$id)->with('successAdd','Product Added!!!')->with('salesmanId',$salesman)->with('salesId',$id)->with('selectedId',$id);
+      $salesman = DB::table('products as p')
+        ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+        ->leftJoin('salesman_products as s',function($join) use($id)
+        {
+            $join->on('s.product_id', '=', 'p.id');
+            $join->where('s.salesman_id', '=',"$id");
+        })->get();
+      return \redirect('salesmanGrid/'.$id)->with('successAdd','Product Added!!!')->with('salesmanId',$salesman)->with('idSales',$id)->with('selectedId',$id);
     }
 
 
 
     public function showPriceAction($id=null,Request $request){
-        $salesman = DB::select("SELECT p.id,s.id as sid,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
-                             FROM products  as p
-                             LEFT JOIN salesman_products as s
-                             ON s.product_id = p.id
-                             AND s.salesman_id=$id");
+        $salesman_id= $id;
+        $salesman = DB::table('products as p')
+        ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+        ->leftJoin('salesman_products as s',function($join) use($id)
+        {
+            $join->on('s.product_id', '=', 'p.id');
+            $join->where('s.salesman_id', '=',"$id");
+        })->get();
 
-        // $salesman = DB::table('salesman_products as s')->join('products as p', 's.product_id', '=', 'p.id')
-        // ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
-        // ->where('s.salesman_id', $id)
-        //  ->get();
-        // $salesman =DB::table('products as p')->join('salesman_products as s', 's.product_id', '=', 'p.id')
-        //         ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
-        //          ->orWhere('s.salesman_id',$id)
-        //          ->get();
-        // $salesman = ProductModel::leftJoin('salesman_products', function($join) {
-        //     $join->on('salesman_products.product_id', '=', 'products.id');
-        //   });
-        return redirect('/salesmanGrid')->with('salesmanId',$salesman)->with('salesId',$id)->with('selectedId',$id);
-    }
-    public function showPriceAction2($id=null,Request $request){
-        $salesman = DB::select("SELECT p.id,s.id as sid,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
-                             FROM products  as p
-                             LEFT JOIN salesman_products as s
-                             ON s.product_id = p.id
-                             AND s.salesman_id=$id");
-        return redirect('/salesmanGrid')->with('salesmanId',$salesman)->with('salesId',$id)->with('selectedId',$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!');
+        return redirect('/salesmanGrid')->with('salesmanId',$salesman)->with('idSales',$id)->with('selectedId',$id);
     }
 
-    public function updatePriceAction($id=null,Request $request)
+
+   public function updatePriceAction($id=null,Request $request)
     {
       $salesmanData = [];
        echo $id;
@@ -135,11 +127,6 @@ class Salesman extends Controller
 
        $updateSalesmanDiscount=$request->get('updateSalesmanDiscount');
         //   print_r($updateSalesmanDiscount);
-        $salesman = DB::select("SELECT s.id,s.salesmanPrice,p.sku,p.price,s.salesmanDiscount
-        FROM products  as p
-        LEFT JOIN  salesman_products as s
-        ON s.product_id = p.id
-        AND s.salesman_id=$id");
 
 
         if($updateSalesmanPrice)
@@ -152,28 +139,28 @@ class Salesman extends Controller
                 ON s.product_id = p.id
                 AND s.salesman_id=$id
                 AND s.product_id = $productId");
+                // $salesmanData = DB::table('products as p')
+                //                 ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+                //                 ->leftJoin('salesman_products as s',function($join) use($id,$productId)
+                //                 {
+                //                     $join->on('s.product_id','=','p.id');
+                //                     $join->where('s.product_id','=',$productId);
+                //                     $join->where('s.salesman_id','=',$id);
+                //                 })->get();
+
                 if($salesmanData)
                 {
                     $productPrice = $salesmanData[0]->price;
                     $salesmanPriceCost = $price;
                     if($productPrice <= $salesmanPriceCost)
                     {
-                        // echo  $productId;
                     $affectedRows = SalesmanProduct::where("id", $salesmanData[0]->id)->update(["salesmanPrice" => $salesmanPriceCost]);
-                    }
-                    else
-                    {
-                        echo  $productId.'  '.$salesmanPriceCost.'out'.' ';
                     }
                 }
                 else
                 {
-
-                    $productData = DB::select("SELECT p.price,p.id
-                FROM products  as p
-                WHERE id = $productId");
-                $productPrice=$productData[0]->price;
-                // print_r($productPrice);
+                 $productData= ProductModel::where('id',$productId)->first();
+                 $productPrice = $productData->price;
                     $salesmanPriceCost = $price;
 
                     if($productPrice <= $salesmanPriceCost)
@@ -183,11 +170,7 @@ class Salesman extends Controller
                                             'product_id' => $productId,
                                             'salesmanPrice' => $price
                                         ]);
-                                    }
-                                    else
-                                    {
-                                        echo 'out';
-                                    }
+                    }
 
                 }
 
@@ -199,15 +182,12 @@ class Salesman extends Controller
         {
             foreach($updateSalesmanDiscount as $productId =>$price)
             {
+                  $salesmanProduct= SalesmanProduct::where('product_id',$productId)->where('salesman_id',$id)->first();
 
-                $salesmanProduct = DB::select("SELECT * FROM salesman_products WHERE product_id = $productId AND salesman_id =$id");
                 if($salesmanProduct)
                 {
 
-                    foreach($salesmanProduct as $key =>$value)
-                    {
-                     $affectedRows = SalesmanProduct::where("id", $value->id)->update(["salesmanDiscount" => $price]);
-                    }
+                     $affectedRows = SalesmanProduct::where("id", $salesmanProduct->id)->update(["salesmanDiscount" => $price]);
                 }
                 else
                 {
@@ -224,12 +204,8 @@ class Salesman extends Controller
     //   return \redirect('SalesmanPrice/salesman/'.$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!')->with('selectedId',$id);
     }
 
-    public function addPriceAction($id=null,Request $request)
-    {
-       $salesmanPrice =$request->get('addsalesman');
-    //    print_r($salesmanPrice);
-    //    echo $id;
-    }
+
+
 
     public function addAction($id=null,Request $request)
     {
@@ -244,7 +220,6 @@ class Salesman extends Controller
                 return response()->json(['error'=>$validator->errors()->all()]);
             }
             $name=$request->get('salesman');
-
 
             if(!$name)
             {
@@ -280,32 +255,31 @@ class Salesman extends Controller
             {
                 $salesman->delete($id);
             }
-            return redirect('/salesmanGrid')->with('salesmanDelete',$salesman->name.' Salesman Deleted')->with('salesId',$id);
+            return redirect('/salesmanGrid')->with('salesmanDelete',$salesman->name.' Salesman Deleted')->with('idSales',$id);
         }catch(Exception $e)
         {
             echo $e->getMessage();
         }
     }
 
+    public function showPriceAction2($id=null,Request $request){
+        $salesman = DB::table('products as p')
+                    ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
+                    ->leftJoin('salesman_products as s',function($join) use($id)
+                    {
+                        $join->on('s.product_id','=','p.id');
+                        $join->where('s.salesman_id','=',"$id");
+                    })->get();
+        return redirect('/salesmanGrid')->with('salesmanId',$salesman)->with('idSales',$id)->with('selectedId',$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!');
+    }
 
-    public function searchSalesmanAction(Request $request)
+
+
+    public function clearAction()
     {
-        try{
-            $validator = Validator::make($request->all(), [
-                "namesearch" => "required",
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['error'=>$validator->errors()->all()]);
-            }
-            $name =trim($request->get('namesearch'));
-            $find = SalesmanModel::where('name','LIKE',"%{$name}%")->orderBy('name')->get();
-
-            // print_r($find);
-
-        }catch(Exception $e)
-        {
-            echo $e->getMessage();
-        }
+        session::forget('searchName');
+        return redirect('/salesmanGrid');
     }
-}
 
+
+}

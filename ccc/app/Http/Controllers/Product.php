@@ -436,9 +436,33 @@ class Product extends Controller
 
     public function fileImport(Request $request) 
     {
+        try{
+            if($request->file('file') == null)
+            {
+            echo 1;
+                $validator  = Validator::make($request->all(),[
+                    'file' =>'required',
+                ]);
+                if($validator->fails())
+                {
+                    return response()->json(['error' => $validator->errors()->all()]);
+                }
+                die;
+            }
+         // if($request->file('file') == null)
+         //    {
+         //    return redirect('/product')->with('productImport', 'File is empty!!!');
+         //        die;
+         //    }
+        
         Excel::import(new ProductsImport, $request->file('file')->store('import'));
         // (new ProductsImport)->import($request->file('file'));
         return redirect('/product')->with('productImport', 'File imported successfully!!!');
+
+        }catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
     }
 
     public function fileExport()

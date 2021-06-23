@@ -35,7 +35,13 @@ use App\Http\Controllers\Salesman;
 */
 
 
-
+//middleware
+// Route::view('users','user');
+Route::view('error','error');
+Route::view('home','home');
+Route::group(['middleware' =>['page']],function(){
+    Route::view('user','user');
+});
 Route::get('/', function () {
     return view('welcome');
 });
@@ -162,6 +168,8 @@ Route::get('/exportExcelCsv', [Product::class, 'fileExport'])->name('exportExcel
 //salesman
 Route::get('/salesmanGrid/{id?}',[Salesman::class,'gridAction']);
 Route::post('/salesmanGrid/searchSalesman',[Salesman::class,'gridAction']);
+// Route::get('/salesmanGrid/gridActionClear',[Salesman::class,'gridActionClear']);
+Route::get('gridActionClear', 'App\Http\Controllers\Salesman@clearAction');
 Route::post('/salesmanAddPrice/{id}',[Salesman::class,'addPriceAction'])->name('salesmanAddPrice');
 Route::post('/salesmanUpdatePrice/{id}',[Salesman::class,'updatePriceAction'])->name('salesmanUpdatePrice');
 Route::post('/salesmanAdd/{id?}',[Salesman::class,'addAction']);
@@ -170,7 +178,9 @@ Route::post('/SalesmanPrice/{id?}',[Salesman::class,'showPriceAction'])->name('S
 Route::get('/SalesmanPrice/salesman/{id?}',[Salesman::class,'showPriceAction2']);
 Route::post('/SalesmanPrice/new/{id?}',[Salesman::class,'showPriceAction']);
 Route::get('/salesmanDelete/{id}',[Salesman::class,'deleteAction'])->name('salesmandelete');
-Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction'])->name('SalesmanAddNewProduct');
+Route::get('/salesmanClear',[Salesman::class,'clearAction']);
+Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction']);
+// Route::post('/SalesmanAddNewProduct/{id?}', 'App\Http\Controllers\Salesman@SalesmanAddNewProductAction');
 // Route::get('/SalesmanAddProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction'])->name('SalesmanAddProduct');
 // Route::match(['get','post','put','delete','patch'],'{controller}/{function?}',function($controller='index',$function='index'){
 //     $controller = 'App\Http\Controllers\\'.ucfirst($controller);

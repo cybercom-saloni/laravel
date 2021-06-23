@@ -7,7 +7,7 @@
           <li>
             <a  onclick="object.setUrl('<?php echo route('formEdit'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Category</a>
           </li>
-         
+
           <li>
             <a onclick="object.setUrl('<?php echo route('customerGrid'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-user"></span> Customer</a>
           </li>
@@ -27,7 +27,7 @@
             <a onclick="object.setUrl('/csv/grid').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Csv</a>
           </li>
           <li>
-            <a onclick="object.setUrl('/salesmanGrid').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span>Salesman</a>
+            <a onclick="object.setUrl('/salesmanClear').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span>Salesman</a>
           </li>
         </ul>
     	</nav>

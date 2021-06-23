@@ -69,7 +69,9 @@ Base.prototype = {
         this.setMethod($(form).attr('method'));
         this.setUrl($(form).attr('action'));
         this.setParams($(form).serializeArray());
+
         return this;
+
     },
     
     uploadFile: function() {
@@ -99,7 +101,7 @@ Base.prototype = {
     load: function() {
 
         var self = this;
-
+        // console.log(self);
         $.ajax({
             method: this.getMethod(),
             url: this.getUrl(),
@@ -109,26 +111,43 @@ Base.prototype = {
             },
             success: function(response) {
                 self.manageHtml(response);
+
             }
         });
     },
 
     manageHtml: function(response) {
 
+        // console.log(jQuery.type(response.error));
+        if(response.error  === undefined){
+            if (typeof response.element == 'object') {
+                 $(response.element).each(function(i, element) {
 
+                    $(element.selector).html(element.html);
+                });
+            }
+        } else {
+            this.printErrorMsg(response.error);
+            $(response.element.selector).html(response.element.html);
+        }
         if (typeof response.element == 'undefined') {
             return false;
         }
-        if (typeof response.element == 'object') {
-            $(response.element).each(function(i, element) {
-
-                $(element.selector).html(element.html);
-            })
-        } else {
-
-            $(response.element.selector).html(response.element.html);
-        }
-    }
+         
+    },
+    printErrorMsg:function(msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        },
+    changeAction:function (form,value) {
+        var str = '#';
+        var id = str+form;
+        $(id).attr('action',value);
+        this.setForm(form);
+    },
 }
 
 

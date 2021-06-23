@@ -117,7 +117,7 @@
                                                     <td>Sku</td>
                                                     <td>Product Price</td>
                                                     <td>Salesman Price</td>
-                                                    <td>Salesman Discount</td>
+                                                    <td>Salesman Discount(in %)</td>
                                                 </tr>
                                             </thead>
 
@@ -136,8 +136,6 @@
 
                                                 @foreach(session('salesmanId') as $key => $value)
                                                 <tr id="message">
-
-                                                <?php //print_r($value);?>
                                                     <td>{{$value->id}}</td>
                                                     <td>{{$value->sku}}</td>
                                                     <td  id="productPrice-{{$value->id}}" class="productPrice">{{$value->price}}</td>
@@ -172,29 +170,34 @@
 </div>
 <!-- END MAIN CONTENT -->
 <script>
-
-  $('.salesmanPrice').change(function(e) {
+function priceCheck()
+{
     var rows = $("#comparisonTable-{{session('idSales')}}").find("tbody tr");
     rows.each(function() {
-    var thisRow = $(this),
-        productPrice = parseFloat(thisRow.find(".productPrice").text());
-        salesmanPrice = parseFloat(thisRow.find(".salesmanPrice").val());
-    if (productPrice > salesmanPrice) {
-        console.log(salesmanPrice);
-        thisRow.find(".salesmanPrice").css('backgroundColor', 'gray');
+        var thisRow = $(this),
+            productPrice = parseFloat(thisRow.find(".productPrice").text());
+            salesmanPrice = parseFloat(thisRow.find(".salesmanPrice").val());
 
-    }
-    else
-    {
-        thisRow.find(".salesmanPrice").css('backgroundColor', 'white');
-    }
+        if (productPrice > salesmanPrice) {
+            console.log(salesmanPrice);
+            thisRow.find(".salesmanPrice").css('backgroundColor', 'gray');
 
-    $(".successAdd").css('display','none');
+        }
+        else
+        {
+            thisRow.find(".salesmanPrice").css('backgroundColor', 'white');
+        }
+
+        $(".successAdd").css('display','none');
+        salesmanPrice = parseFloat(salesmanPrice).toFixed(2);
+
+        if(!isNaN(salesmanPrice))
+        {
+            $(thisRow.find(".salesmanPrice")).val(salesmanPrice);
+        }
 
     });
-
-});
-
+}
 
 $(document).ready(function(){
     $("#newSalesmanAdd").hide();
@@ -203,26 +206,14 @@ $(document).ready(function(){
     });
 });
 
+$('.salesmanPrice').change(function(e) {
+    priceCheck();
+});
+
 function updateFunction()
 {
-    var rows = $("#comparisonTable-{{session('idSales')}}").find("tbody tr");
-    
-    rows.each(function() {
-    var thisRow = $(this),
-        productPrice = parseFloat(thisRow.find(".productPrice").text());
-        salesmanPrice = parseFloat(thisRow.find(".salesmanPrice").val());
-    if (productPrice > salesmanPrice) {
-        console.log(salesmanPrice);
-        thisRow.find(".salesmanPrice").css('backgroundColor', 'gray');
-
-    }
-    else
-    {
-        thisRow.find(".salesmanPrice").css('backgroundColor', 'white');
-    }
-
-    });
-     $(".salesmanAddedProduct").css('display','block');
+   priceCheck();
+    $(".salesmanAddedProduct").css('display','block');
      $('#form').attr('onclick',"object.setForm('form').setMethod('post').setUrl('salesmanUpdatePrice/{{$idSales}}').load()");
 }
 </script>

@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class check
+class try1
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,16 @@ class check
      */
     public function handle(Request $request, Closure $next)
     {
-        // echo 'in middleware';
-        // if($request->age && $request->age < 10)
+        // if ($request->name)
         // {
-        //     return redirect('error');
+        //     echo 'middleware applied';
         // }
+        $ip = 1234;
+        if($ip =='::1')
+        {
+            echo 'j';
+            return redirect('/error');
+        }
         return $next($request);
     }
 }

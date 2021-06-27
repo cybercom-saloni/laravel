@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    public function middlewareAction()
+    {
+        return view('posts.middlewareTry');
+    }
     public function create()
     {
         return view('posts.create');
@@ -30,6 +34,7 @@ class PostController extends Controller
     }
     public function index()
     {
+        echo 'active';
         // DB::table('posts')->orderBy('id')->chunk(1, function ($users) {
         //     foreach ($users as $user) {
         //       print_r($user->name);
@@ -44,7 +49,7 @@ class PostController extends Controller
         //         ->avg('id');
 
             //    echo  $users = DB::table('posts')->distinct()->get();
-               echo  $users = DB::table('posts')->skip(1)->take(5)->get();
+            //    echo  $users = DB::table('posts')->skip(1)->take(5)->get();
         // $posts= Post::all();
         // return view('posts.index',compact('posts'));
             // $posts = Comment::with(relations: 'getPostId')->get();

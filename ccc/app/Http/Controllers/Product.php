@@ -23,7 +23,7 @@ class Product extends Controller
     protected $categoryOptions = [];
     public $id = null;
 
-   
+
     public function getProductModel()
     {
         if (!$this->productModel) {
@@ -41,21 +41,9 @@ class Product extends Controller
         $this->productModel = $productModel;
     }
 
-    public function testAction()
-    {
-        $response = [
-            'success' =>'hello',
-            'name' => 'saloni'
-        ];
-
-        header('content-type:application/json');
-        echo json_encode($response);
-        die();
-    }
-
     public function gridAction()
     {
-        
+
         $page = 2;
         if (Session::has('page')) {
             $page = Session::get('page');
@@ -64,55 +52,23 @@ class Product extends Controller
         }
         $products = new ProductModel;
         $this->setProducts($products->fetchAll());
-        $pagination = ProductModel::paginate($page);
-        $view = \view('product.product',['products'=>$pagination,'controller'=>$this])->render();
-        $response = [
-            'element' => [
-                [
-                    'success' =>'hello',
-                    'name' => 'saloni',
-                    'selector' =>'#content',
-                    'html' =>$view
-                ]
-            ]
-        ];
+        $pagination = ProductModel::sortable()->paginate($page);
+       return  view('product.product',['products'=>$pagination,'controller'=>$this]);
+    }
 
-        header('content-type:application/json');
-        echo json_encode($response);
-        die();
-    }
-    
-    public function fetch_data(Request $request)
-    {
-        if($request->ajax())
-        {
-            $pagination =  ProductModel::paginate(2);
-            return view('product.product',['products'=>$pagination,'controller'=>$this])->render();
-        }
-    }
+
     public function formAction($id = null,Request $request)
     {
         try{
-           
+
         if (!$id)
         {
-            $view = \view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this])->render();
-            $response = 
-            [
-                'element' => [
-                    [
-                        'selector' => '#content',
-                        'html' => $view
-                    ]
-                ]
-             ];
-            header('content-type:application/json');
-            echo json_encode($response);
-            die();
-        } 
+           return view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this]);
+
+        }
         else
         {
-           
+
             $product = new ProductModel;
             $product = $product->load($id);
 
@@ -135,88 +91,12 @@ class Product extends Controller
     }
     catch (\Exception $e) {
         echo  $e->getMessage();
-     //    die;
-         
-        
-     //     die;
-       
      }
     }
 
-   
-    
-    // public function saveAction($id = null,Request $request)
-    // {
-    //     print_r($request->get('product'));
-      
-    //     try{
-    //     // $validator = Validator::make($request->all(), [
-    //     //     "product.sku" => "required",
-    //     //     "product.name" => "required",
-    //     //     "product.price" => "required",
-    //     //     "product.discount" => "required",
-    //     //     "product.quantity" => "required",
-    //     //     "product.status" => "required",
-    //     //     "product.description" => "required",
-    //     //     "product.category_id" => "required",
-    //     // ]);
-    //     // if ($validator->fails()) {
-    //     //     Session::put('producterror',$validator);
-    //     // }
-    //     $validator = Validator::make($request->all(), [
-    //         "product.sku" => "required",
-    //         "product.name" => "required",
-    //         "product.price" => "required",
-    //         "product.discount" => "required",
-    //         "product.quantity" => "required",
-    //         "product.status" => "required",
-    //         "product.description" => "required",
-    //         "product.category_id" => "required",
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return redirect('product/form')->withErrors($validator,'formValue')->withInput();
-    //         // return redirect('product/form')
-    //         //             ->withErrors($validator,'formValue')
-    //         //             ->withInput();
-    //     }
-    //     //     $validator = $request->validate([
-    //     //     "product.sku" => "required",
-    //     //     "product.name" => "required",
-    //     //     "product.price" => "required",
-    //     //     "product.discount" => "required",
-    //     //     "product.quantity" => "required",
-    //     //     "product.status" => "required",
-    //     //     "product.description" => "required",
-    //     //     "product.category_id" => "required",
-    //     // ]);
-    
-    //     $product = $this->getProductModel();
-    //     $formData = $request->get('product');
-    //     date_default_timezone_set('Asia/Kolkata');
-    //     if( $product->saveData($formData))
-    //     {
-    //         Session::put('productSave', 'Product Saved successfully!!!');
-    //         return redirect('/product')->withErrors($validator, 'login');
-    //     }
-    //     // echo 111111;
-    //     // exit();
-         
-       
-    //     } catch (\Exception $e) {
-    //        echo  $e->getMessage();
-    //     //    die;
-    //         Session::put('producterror',$e->getMessage());
-    //         return redirect()->back()->withInput();
-    //     //     die;
-          
-    //     }
-        
-    //     $this->gridAction();
-    // }
-
     public function saveAction($id = null,Request $request)
     {
-        
+
         try{
             $validator = Validator::make($request->all(), [
                 "product.sku" => "required|unique:products,sku,$id",
@@ -228,7 +108,7 @@ class Product extends Controller
                 "product.description" => "required",
                 "product.category_id" => "required",
             ]);
-           
+
 
             if ($validator->fails()) {
                 // return response()->json(['success'=>'Added new records.']);
@@ -236,9 +116,9 @@ class Product extends Controller
             }
         //  else{
         //     //  return redirect('/product/form')->with($validator->errors());
-             
+
         //  }
-           
+
         // if ($validator->fails()) {
         //     return response()->json(['error'=>$validator->errors()->all()]);
         // }
@@ -252,27 +132,27 @@ class Product extends Controller
         } else {
             $formData['created_at'] = date('Y-m-d h:i:s');
         }
-       
-        
+
+
         if ($product->saveData($formData)) {
             // Session::put('productSave', 'Product Saved successfully!!!');
                     return redirect('/product')->with('productSaves', 'Product Saved successfully!!!');
         }
         }
-        
+
         catch (\Exception $e) {
                    echo  $e->getMessage();
                 //    die;
                 // Session::put('proeer',$validator->errors());
                     // return redirect()->back()->withInput();
                 //     die;
-                  
+
                 }
-       
+
 
     }
 
-    
+
 
     public function deleteAction($id)
     {
@@ -292,7 +172,7 @@ class Product extends Controller
 
     public function getCategoryName($id)
     {
-      
+
         $categoryModel = new CategoryModel();
         $categoryName =  $categoryModel->load($id);
         $categoryNamefind = CategoryModel::find($id);
@@ -305,13 +185,13 @@ class Product extends Controller
     //         if (count($parentCat)) {
     //             foreach ($child as $value) {
     //                 echo $value->parentId = $parentCat[0]->id;
-                    
+
     //             }
     //         }
     //     }
-       
+
         // if (count($parent)) {
-            
+
         //     echo $parentCat->getCategories()->name;
         // }
 
@@ -323,7 +203,7 @@ class Product extends Controller
             // return $categoryName->getCategories()->name;
         }
     }
-    
+
 
     public function getCategories()
     {
@@ -373,7 +253,7 @@ class Product extends Controller
             header('content-type: application/json');
             echo json_encode($response);
             die();
-            
+
         } else {
 
             $media = new Media;
@@ -394,7 +274,7 @@ class Product extends Controller
                     ]
                 ]
             ];
-        
+
         header('content-type: application/json');
         echo json_encode($response);
         die();
@@ -420,7 +300,7 @@ class Product extends Controller
 
        if ($request->page == 'customerGrid') {
             return redirect('/customerGrid');
-        } 
+        }
         elseif($request->page == 'manageOrder'){
             return redirect('/manageOrder');
         }
@@ -434,7 +314,7 @@ class Product extends Controller
         }
     }
 
-    public function fileImport(Request $request) 
+    public function fileImport(Request $request)
     {
         try{
             if($request->file('file') == null)
@@ -454,7 +334,7 @@ class Product extends Controller
          //    return redirect('/product')->with('productImport', 'File is empty!!!');
          //        die;
          //    }
-        
+
         Excel::import(new ProductsImport, $request->file('file')->store('import'));
         // (new ProductsImport)->import($request->file('file'));
         return redirect('/product')->with('productImport', 'File imported successfully!!!');

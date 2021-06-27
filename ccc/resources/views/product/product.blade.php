@@ -1,23 +1,35 @@
+@extends('layoutTemplate.main')
+@section('container')
+
     <div id="table_data">
-    <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Product</h3>
-<hr>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+		    <i class="fa fa-bars"></i>
+		        <span class="sr-only">Toggle Menu</span>
+		</button>
+        <h3 style="font-weight:bold;font-size:32px;margin-inline-end: auto;padding-left: 30px;">Product</h3>
+
+    </div>
+
+
+</nav>
+
 <div class="col-lg-12">
     <div class="row">
         <div class="col-4">
-            <a onclick="object.setUrl('/product/form').setMethod('Get').load()" href="javascript:void(0);" id="formid" class="btn btn-md btn-success mb-4"><i class="fas fa-plus-square"></i> Create New Product</a>
+            <a href="{{'/product/form'}}" class="btn btn-md btn-secondary mb-4"><i class="fa fa-plus-square"></i> Create New Product</a>
         </div>
         <div class="col-4">
         <form action="" id="form" method="post" enctype="multipart/form-data">
             @csrf
             @method('post')
             <input type="file" class="form-control-file" id="file" name="file">
-                <!-- <button type="button" onclick="object.setUrl('/importCsv').setMethod('post').uploadFile().resetParam();" class="btn btn-primary btn-md">Import</button> -->
-                <!-- <button type="button" onclick="object.setUrl('/importExcelCsv').setMethod('post').uploadFile().resetParam();" class="btn btn-primary btn-md">Import</button> -->
                 <button type="button" onclick="object.setUrl('/importExcelCsv').setMethod('post').uploadFile().resetParam();" class="btn btn-primary btn-md">Import</button>
         </form>
         </div>
-        <div class="col-4"> 
-            <!-- <a href="javascript:void(0)" onclick="object.setUrl('/exportCsv').setMethod('get').load();" class="btn btn-primary btn-md">Export</a> -->
+        <div class="col-4">
             <a href="javascript:void(0)" id= "export" class="btn btn-primary btn-md">Export</a>
         </div>
     </div>
@@ -37,23 +49,23 @@
 <div class ="alert alert-success">{{session('productImport')}}</div>
 @endif
 <table class="table table-bordered bg-light  table-hover">
-            <thead class="bg-dark text-white">
+            <thead class="text-white" style="background-color: darkkhaki;">
                 <tr>
-                    <th>ID</th>
-                    <th>Sku</th>
-                    <th>Name</th>
+                <th>@sortablelink('id')</th>
+                    <th>@sortablelink('sku')</th>
+                    <th>@sortablelink('name')</th>
                     <!-- <th>CategoryName</th> -->
-                    <th>Price</th>
-                    <th>Discount</th>
-                    <th>Quantity</th>
-                    <th>status</th>
-                    <th colspan="2">Actions</th>
+                    <th>@sortablelink('price')</th>
+                    <th>@sortablelink('discount')</th>
+                    <th>@sortablelink('quantity')</th>
+                    <th style="color:blue">Status</th>
+                    <th style="color:blue" colspan="2">Actions</th>
                 </tr>
             </thead>
             <tbody>
-        
+
                 @if (!$products)
-                
+
                     <tr>
                         <td colspan="12" class="text-center">No Records Found</td>
                     </tr>
@@ -75,7 +87,7 @@
                             <a onclick="object.setUrl('/product/status/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-danger"> Disable</a>
                         @endif
                         </td>
-                        <td><a onclick="object.setUrl('/product/form/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-success">Edit</a></td>
+                        <td><a onclick="object.setUrl('/product/form/{{$value->id}}').setMethod('get').load();" href="javascript:void(0);" class="btn btn-secondary">Edit</a></td>
                         <td> <a onclick="object.setUrl('/productDelete/{{ $value->id }}').setMethod('get').load()" href="javascript:void(0)" class="btn btn-secondary">Delete</a></td>
                         </tr>
                     @endforeach
@@ -92,7 +104,7 @@
             <div class="col-6">
                 <nav>
                     <ul class="pagination">
-                        
+
                         @if($products->currentPage() != 1)
                         <li class="page-item">
                             <a class="page-link{{$products->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$products->previousPageUrl()}}').setMethod('get').load()">Previous</a>
@@ -164,7 +176,7 @@ $(function() {
                         function(i, element) {
                             $('#content').html(element.html);
                         })
-                        } 
+                        }
                         else {
                             $(response.element.selector).html(response.element.html);
                         }
@@ -197,55 +209,4 @@ $(document).ready(function(){
     });
 });
 </script>
-
-
-     <!-- storing page no -->
-    <!-- <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
-
-    vakues changes when user clicks
-    <input type="hid
-    
-    
-    den" name="hidden_column_name" id="hidden_column_name" value="id"/> -->
-    <!-- <form method="post" id="record">
-        <label>Record per Page</p>
-        <select name="selectpage">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-0    </form> -->
-    <!-- <script>
-        $(document).ready(function()
-        {  
-            $(document).on('click','.pagination a',function(event)
-            {
-                event.preventDefault();
-                var page = $(this).attr('href').split('page=')[1];
-                // fetch_data(page);
-                $.ajax({
-                    url:"/product/fetch_data?page="+page,
-                    success:function(data)
-                    {
-                        $('#table_data').html(data);
-                        console.log(data);
-                    }
-                });
-
-            });
-        
-            function fetch_data(page)
-            {
-                $.ajax({
-                    url:"/product/fetch_data?page="+page,
-                    success:function(data)
-                    {
-                        $('#table_data').html(data);
-                        console.log(data);
-                    }
-                });
-            }
-        });
-    </script> -->
-
+@stop

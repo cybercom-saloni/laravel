@@ -121,14 +121,8 @@ class Salesman extends Controller
    public function updatePriceAction($id=null,Request $request)
     {
       $salesmanData = [];
-       echo $id;
-       echo  "<pre>";
        $updateSalesmanPrice = $request->get('updateSalesmanPrice');
-
        $updateSalesmanDiscount=$request->get('updateSalesmanDiscount');
-        //   print_r($updateSalesmanDiscount);
-
-
         if($updateSalesmanPrice)
         {
             foreach($updateSalesmanPrice as $productId =>$price)
@@ -139,14 +133,6 @@ class Salesman extends Controller
                 ON s.product_id = p.id
                 AND s.salesman_id=$id
                 AND s.product_id = $productId");
-                // $salesmanData = DB::table('products as p')
-                //                 ->select('p.id', 's.id as sid', 's.salesmanPrice','p.sku','p.price','s.salesmanDiscount')
-                //                 ->leftJoin('salesman_products as s',function($join) use($id,$productId)
-                //                 {
-                //                     $join->on('s.product_id','=','p.id');
-                //                     $join->where('s.product_id','=',$productId);
-                //                     $join->where('s.salesman_id','=',$id);
-                //                 })->get();
 
                 if($salesmanData)
                 {
@@ -201,7 +187,6 @@ class Salesman extends Controller
 
             }
         }
-    //   return \redirect('SalesmanPrice/salesman/'.$id)->with('salesmanAddedProduct','Salesman Product Price Updated!!!')->with('selectedId',$id);
     }
 
 

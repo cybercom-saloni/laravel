@@ -2,7 +2,7 @@
 				<h1><a href="index.html" class="logo">CCC</a></h1>
         <ul class="list-unstyled components mb-5">
           <li>
-              <a onclick="object.setUrl('<?php echo route('productGrid'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-user"></span> Product</a>
+              <a href="<?php echo route('productGrid'); ?>"><i class="fa fa-sticky-note"></i> Product</a>
           </li>
           <li>
             <a  onclick="object.setUrl('<?php echo route('formEdit'); ?>').setMethod('get').load();" href="javascript:void(0);"><span class="fa fa-sticky-note"></span> Category</a>

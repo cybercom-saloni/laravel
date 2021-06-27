@@ -21,6 +21,7 @@ use App\Http\Controllers\Product\ImportExportCsv;
 use App\Http\Controllers\ProductImport;
 use App\Http\Controllers\Comment;
 use App\Http\Controllers\Salesman;
+use App\Http\Controllers\AppLogin;
 
 /*
 
@@ -36,6 +37,22 @@ use App\Http\Controllers\Salesman;
 
 
 //middleware
+// Route::get('/posts',[PostController::class,'index']);// global
+//group
+// Route::group(['middleware'=>['name']],function()
+// {
+//     Route::get('/posts',[PostController::class,'index']);
+// });
+// Route::middleware([name::class])->group(function () {
+//     });
+// Route::middleware(['name'])->group(function () {
+//     Route::get('/posts',[PostController::class,'index']);
+// });
+Route::middleware([check::class])->group(function(){
+    Route::get('/posts', [PostController::class,'index']);
+});
+Route::get('/posts', [PostController::class,'index']);
+// Route::get('/posts',[PostController::class,'index'])->middleware('name');
 // Route::view('users','user');
 Route::view('error','error');
 Route::view('home','home');
@@ -51,7 +68,7 @@ Route::get('test',function ()
     return App\Models\Category::with('child')->where('parent_id',0)->get();
 });
 
-
+Route::get('/posts/middleware',[PostController::class,'middlewareAction']);
 Route::get('/comment',[Comment::class,'index']);
 Route::get('/posts',[PostController::class,'index']);
 Route::get('/posts/{post}/edit',[PostController::class,'edit']);
@@ -76,7 +93,7 @@ Route::post('/admin/product/media/imageUpload/{id}', [MediaController::class, 's
 Route::post('/admin/product/media/mediaUpdate', [MediaController::class, 'updateAction']);
 
 
-//laravel start
+//laravel project start
 Route::get('/product', [Product::class, 'gridAction'])->name('productGrid');
 Route::post('/productSave/{id?}', [Product::class, 'saveAction'])->whereNumber('id')->name('productSave');
 Route::get('/productDelete/{id?}', [Product::class, 'deleteAction'])->whereNumber('id');
@@ -87,19 +104,8 @@ Route::post('/media/update/{id}', [Media::class,'productUpdateAction']);
 Route::post('/media/delete/{id?}', [Media::class, 'deleteAction'])->whereNumber('id');
 Route::get('product/status/{id}', [Product::class, 'productStatusAction']);
 Route::get('/product/fetch_data',[Product::class,'fetch_data']);
-// Route::get('product/',[Product::class,'fetch_data']);
 
-//category
-// Route::get('/category/{id}',[Category::class,'gridAction'])->name('categoryEdit');
-// Route::get('/categoryDelete/{id}', [Category::class, 'deleteAction'])->name('categoryDelete');
-// Route::get('/categorEditSave/{id}',[Category::class,'editSaveAction'])->name('categorEditSave');
-// Route::get('/categoryAddSubCategory/{id}',[Category::class,'addSubCategoryAction'])->name('addSubCategory');
-// Route::get('/addRootCategory',[Category::class,'addRootCategoryAction'])->name('addnewRootCategory');
-// Route::get('/rootCategoryEditSave',[Category::class,'rootCategoryEditSave'])->name('addRootCategory');
-// // Route::get('/categoryAddnewSubCategory/{$id}',function($id)
-// {
-//     return $id;f
-// });
+
 Route::get('/tree',[Category::class,'treeAction'])->name('tree');
 Route::get('/category/{id?}', [Category::class, 'gridAction'])->name('formEdit');
 
@@ -180,8 +186,53 @@ Route::post('/SalesmanPrice/new/{id?}',[Salesman::class,'showPriceAction']);
 Route::get('/salesmanDelete/{id}',[Salesman::class,'deleteAction'])->name('salesmandelete');
 Route::get('/salesmanClear',[Salesman::class,'clearAction']);
 Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction']);
-// Route::post('/SalesmanAddNewProduct/{id?}', 'App\Http\Controllers\Salesman@SalesmanAddNewProductAction');
-// Route::get('/SalesmanAddProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction'])->name('SalesmanAddProduct');
+
+//login
+Route::get('/login',[AppLogin::class,'loginAction']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Route::match(['get','post','put','delete','patch'],'{controller}/{function?}',function($controller='index',$function='index'){
 //     $controller = 'App\Http\Controllers\\'.ucfirst($controller);
 //     $controller = new $controller;

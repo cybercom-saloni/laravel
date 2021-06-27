@@ -16,7 +16,8 @@ class Kernel extends HttpKernel
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
-        // \App\Http\Middleware\check::class,
+        // \App\Http\Middleware\try1::class,
+        \App\Http\Middleware\check::class,
         \Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
@@ -44,9 +45,12 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-        'page' =>[
-            \App\Http\Middleware\check::class
-        ]
+        'name' =>[
+            \App\Http\Middleware\try1::class,
+        ],
+        // 'page' =>[
+        //     \App\Http\Middleware\check::class
+        // ]
     ];
 
     /**
@@ -58,6 +62,8 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        // 'name' => \App\Http\Middleware\try1::class,
+        'check' => \App\Http\Middleware\Check::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
@@ -66,5 +72,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        // 'try1' => \App\Http\Middleware\try1::class,
     ];
 }

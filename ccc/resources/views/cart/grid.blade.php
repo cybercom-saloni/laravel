@@ -16,14 +16,14 @@
         <select name="customer" id="customer" class="form-control col-lg-5">
                 <option disabled selected >select</option>
                 @foreach ($customers as $customer)
-                    <option value="{{ $customer->id }}" 
+                    <option value="{{ $customer->id }}"
                         {{ Session::has('customerId') ? (Session::get('customerId') == $customer->id ? 'selected' : '') : '' }}>
                         {{ $customer->firstname . ' ' . $customer->lastname }}
                     </option>
-                @endforeach 
+                @endforeach
         </select>
     </div>
-</form> 
+</form>
 
 <form method="POST" action="/cart/customer/addressSave" id="form">
 @csrf
@@ -40,7 +40,7 @@
                                 <textarea class="form-control" id="billingaddress" name="billing[address]"  placeholder="address"  required>{{$billing ? $billing->address : ' '}}</textarea>
                             </div>
                         </div>
-                        
+
 
 
                         <div class=" form-group row">
@@ -51,7 +51,7 @@
                                 <input type="text" class="form-control" id="billingarea"  value="{{$billing ? $billing->area : ' '}}" name="billing[area]" placeholder="area"   required>
                             </div>
                         </div>
-                         
+
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> City</label>
@@ -60,8 +60,8 @@
                                 <input type="text" class="form-control" id="billingcity" value="{{$billing ? $billing->city : ' '}}" name="billing[city]" placeholder="city"  required>
                             </div>
                         </div>
-                        
-                      
+
+
 
                         <div class=" form-group row">
                             <div class="col-lg-4">
@@ -71,7 +71,7 @@
                                 <input type="text" class="form-control" id="billingstate" value="{{$billing ? $billing->state : ' '}}" name="billing[state]" placeholder="state"  required>
                             </div>
                         </div>
-                        
+
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Zipcode</label>
@@ -80,7 +80,7 @@
                                 <input type="text" class="form-control" id="billingzipcode" value="{{$billing ? $billing->zipcode : ' '}}" name="billing[zipcode]" placeholder="zipcode"  required>
                             </div>
                         </div>
-                        
+
                         <div class=" form-group row">
                             <div class="col-lg-4">
                                 <label for="firstname"> Country</label>
@@ -89,10 +89,10 @@
                                 <input type="text" class="form-control" id="billingcountry" name="billing[country]" value="{{$billing ? $billing->country : ' '}}" placeholder="country"   required>
                             </div>
                         </div>
-    
+
                         <div class=" form-group row">
                             <div class="col-lg-4">
-                                
+
                             </div>
                             <div class="col-lg-6">
                                 <label for="firstname">Save in AddressBook</label>
@@ -104,7 +104,7 @@
                 <h3>SHIPPING  ADDRESS</h3>
                 <div class=" form-group row">
                             <div class="col-lg-4">
-                                
+
                             </div>
                             <div class="col-lg-6">
                                 <label for="firstname">Same as Billing</label>
@@ -164,7 +164,7 @@
                         </div>
                         <div class=" form-group row">
                             <div class="col-lg-4">
-                            
+
                             </div>
                             <div class="col-lg-6">
                                 <label for="firstname">Save in Address Book</label>
@@ -175,7 +175,7 @@
             </div>
         </div>
     </div>
-  
+
 
 <div class="col-12">
     <div class="row">
@@ -186,7 +186,7 @@
                 <tr>
                     <td><h6><input type="radio" name="payment" value="{{$value->id}}" <?php if($cart[0]->paymentId == $value->id) echo 'checked';?>>{{$value->name}}</h6></td>
                 </tr>
-               
+
                 @endforeach
             </table>
          </div>
@@ -198,11 +198,11 @@
                    <td><h6><input type="radio" name="shippingMethod" value="{{$value->id}}" <?php if($cart[0]->shippingId == $value->id) echo 'checked';?>>{{$value->name}}</h6></td>
                    <td><h6>Rs.{{$value->amount}}</h6></td>
                 </tr>
-             @endforeach 
+             @endforeach
              </table>
          </div>
     </div>
-    
+
 </div>
 <button type="button"  id="addressUpdate" class="btn btn-md btn-success">UPDATE</button><br>
 </form>
@@ -227,9 +227,9 @@
                     </tr>
                 </thead>
                 <tbody>
-            
+
                     @if (!$products)
-                    
+
                         <tr>
                             <td colspan="12" class="text-center">No Records Found</td>
                         </tr>
@@ -252,7 +252,7 @@
 <div>
     <nav>
         <ul class="pagination">
-            
+
             @if($products->currentPage() != 1)
             <li class="page-item">
                 <a class="page-link{{$products->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$products->previousPageUrl()}}').setMethod('get').load()">Previous</a>
@@ -287,8 +287,8 @@
     @if(session('deletecartItem'))
          <div class ="alert alert-success">{{session('deletecartItem')}}</div>
     @endif
-    
-   
+
+
 
         <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">
@@ -308,8 +308,8 @@
                         <td><input type="number" class="form-control"  name="quantityCart[{{$cartItem->id}}]" value="{{ $cartItem->quantity }}"    min="1" step="1"  required></td>
                         <td>Rs.@php $rowtotal = $cartItem->quantity*$cartItem->price @endphp {{number_format($rowtotal, 2)}}</td>
                         <td>{{$cartItem->discount}}%</td>
-                        <td>Rs.@php $total =$rowtotal - $rowtotal*($cartItem->discount/100)@endphp {{number_format($total, 2)}}</td>      
-                        <td><a href="javascript:void(0)" onclick="object.setUrl('/cartItem/delete/{{$cartItem->id}}').setMethod('get').load();" class="btn btn-secondary">DELETE</a></td>               
+                        <td>Rs.@php $total =$rowtotal - $rowtotal*($cartItem->discount/100)@endphp {{number_format($total, 2)}}</td>
+                        <td><a href="javascript:void(0)" onclick="object.setUrl('/cartItem/delete/{{$cartItem->id}}').setMethod('get').load();" class="btn btn-secondary">DELETE</a></td>
                     </tr>
                     @endforeach
                     <tr>
@@ -390,7 +390,7 @@
                 $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
             });
         }
-    });  
+    });
 
     function sameAsBillingFunction()
     {
@@ -404,7 +404,7 @@
             document.getElementById('zipcode').disabled=true;
             document.getElementById('country').disabled=true;
             document.getElementById('shippingsaveInAddressBook').disabled=true;
-          
+
         }
         else
         {
@@ -420,7 +420,7 @@
 
     $(function(){
         $('#cartItemUpdatebtn').on('click',function(e){
-           
+
             e.preventDefault();
             $.ajax({
                 type: 'post',
@@ -456,7 +456,7 @@
 
     $(function(){
         $('#addToCart').on('click',function(e){
-           
+
             e.preventDefault();
             $.ajax({
                 type: 'post',
@@ -511,8 +511,8 @@
     //                         .element.html);
     //                 }
     //             },
-               
+
     //         });
     //     });
-    // });   
+    // });
 </script>

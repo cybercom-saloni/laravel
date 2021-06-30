@@ -1,0 +1,9 @@
+name,sku,price,discount,quantity,description,status,category_id
+diningTable,diningTable,5000,10,1,queensize,1,2
+rawTable,rawTable,100,10,1,queensize,1,2
+teaTable,teaTable,100,10,1,queensize,1,2
+Table,Table,100,10,1,queensize,1,2
+Bench,Bench,100,10,1,queensize,1,2
+BookCase,BookCase,900,10,1,queensize,1,2
+FileCase,FileCase,100,10,1,queensize,1,2
+Fase,Case,100,10,1,queensize,1,2

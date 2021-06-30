@@ -9,6 +9,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/3fd66b9b9a.js" crossorigin="anonymous"></script>
 </head>
+
 <div id="layoutSidenav_content">
     <div class="container">
         <main>
@@ -81,8 +82,8 @@
                     outline: 0;
                 }
             </style> -->
-          
-            
+
+
             <div class="container-fluid">
                 <button type="button" id="show" class="btn btn-success mt-2 mb-2">Add Root Category</button>
                 @if (request()->id)
@@ -91,7 +92,7 @@
                 <script>
                     $("#addRootForm").hide();
                     $(document).ready(function() {
-                        
+
                         $("#show").click(function() {
                             $("#addRootForm").show();
                             $("#editCategoryModal").hide();
@@ -134,13 +135,13 @@
                                     </ul>
                         </div>
 
-                        
+
                     <div class="col-md-8 col-lg-8" id="addRootForm">
-                        
-                             
+
+
                                 <form action="" method="Post" id="myrootform">
                                     @csrf
-                                   
+
                                     <div class="form-group col-lg-12">
                                         <button type="button" id="addRootCategory"  class="btn btn-success">Add Root Category</button>
                                     </div>
@@ -151,8 +152,8 @@
                                             <input type="text" class="form-control" name="category[name]" id="name" aria-describedby="helpId" placeholder="Category Name">
                                         </div>
                                     </div>
-                                   
-                                
+
+
                                         <div class="form-group col-lg-12">
                                             <label for="name">Select Status</label>
                                             <select class="form-control" name="category[status]" id="">
@@ -165,19 +166,19 @@
                                         <label for="name">Category Description</label>
                                         <textarea name="category[description]" id="description" style="resize: vertical" rows="5" class="form-control" placeholder="Category Description"></textarea>
                                     </div>
-                                    
+
                                 </form>
                             </div>
-                  
+
 
                     <!-- add root category script -->
 
                     <script>
                         $(function () {
                             $('#addRootCategory').on('click', function (e) {
-                                
+
                                 e.preventDefault();
-                                
+
                                 var name = $("input[name='category[name]']").val();
                                 console.log(name);
                                 $.ajax({
@@ -212,12 +213,12 @@
 
 
                     <div class="col-md-8 col-lg-8" id="addSubForm">
-                     
-                              
-                            
+
+
+
                                 <form action="" method="Post" id="mySubCategoryform">
                                     @csrf
-                                   
+
                                     <div class="form-group col-lg-12">
                                         <button type="button" id="addSubCategory" class="btn btn-success">Add SubCategory</button>
                                     </div>
@@ -238,10 +239,10 @@
                                         <label for="name">Category Description</label>
                                         <textarea name="category[description]" id="description" style="resize: vertical" rows="5" class="form-control" placeholder="Category Description"></textarea>
                                     </div>
-                                   
+
                                 </form>
                             </div>
-                 
+
 
                         <!-- add root category script -->
 
@@ -282,15 +283,15 @@
 
                     @if(isset(request()->id))
                     <?php Session::forget('Added');?>
-                   
-                    
+
+
                     <div class="col-md-8 col-lg-8" id="editCategoryModal">
-                     
-                                
-                            
+
+
+
                                 <form action="" method="Post" id="myform">
                                     @csrf
-                                  
+
                                     <div class="form-group col-lg-12">
                                         <button type="button" id="updateCategory" class="btn btn-success">Update Category</button>
                                         <button type="button" id="deleteCategory" class="btn btn-secondary">Delete Category</button>
@@ -312,9 +313,9 @@
                                         <label for="name">Category Description</label>
                                         <textarea name="category[description]" id="description" style="resize: vertical" rows="5" class="form-control" placeholder="Category Description">{{ $singleCategory->description }}</textarea>
                                     </div>
-                                  
-                                
-                                </form> 
+
+
+                                </form>
                             </div>
                     </div>
 
@@ -333,7 +334,7 @@
                                                     $(data.element).each(function(i, element) {
                                                             $('#content').html(element.html);
                                                     });
-                                                    
+
                                                     }
                                             }else{
                                                 printErrorMsg(data.error);
@@ -504,6 +505,6 @@
 // });
                 </script>  -->
 
-                
+
         </main>
     </div>

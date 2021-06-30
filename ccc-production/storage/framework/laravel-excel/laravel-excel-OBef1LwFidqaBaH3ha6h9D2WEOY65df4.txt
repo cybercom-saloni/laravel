@@ -1,0 +1,4 @@
+name,sku,price,discount,quantity,description,status,category_id
+diningTable,diningTable,5000,10,1,queensize,1,2
+rawTable,rawTable,100,10,1,queensize,1,2
+teaTable,teaTable,100,10,1,queensize,1,2

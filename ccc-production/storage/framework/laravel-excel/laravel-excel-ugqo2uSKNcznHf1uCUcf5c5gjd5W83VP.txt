@@ -1,0 +1,7 @@
+sku,name,price,discount,quantity,description,status,category_id
+queen,bed,1000,1,1,queensize,enable,2
+king,bed,1000,10,1,queensize,enable,2
+couch,bed,1000,10,1,queensize,enable,2
+sofa,sofa,1000,10,1,queensize,enable,2
+diningTable,diningTable,1000,10,1,queensize,enable,2
+rawTable,rawTable,1000,10,1,queensize,enable,2

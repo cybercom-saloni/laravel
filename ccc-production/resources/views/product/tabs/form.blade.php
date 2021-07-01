@@ -19,6 +19,16 @@
                 @include('product.tabs')
                 @endif
                 @csrf
+                @include('layoutTemplate.message')
+                @if($errors->any())
+        @foreach($errors->all() as $error)
+        <div class="alert alert-danger alert-dismissible" role="alert"><i class="fa fa-warning-circle"></i> {{$error}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span arial-hidden="true">x</span>
+            </button>
+        </div>
+        @endforeach
+      @endif
 
                 <div class="alert alert-danger print-error-msg" style="display:none">
                     <ul></ul>
@@ -29,7 +39,7 @@
                     </div>
                     <div class="col-lg-6">
                         <input type="text" class="form-control" value="{{ $data ? $data[0]->sku : '' }}" id="sku"
-                            placeholder="PRODUCT SKU" name="product[sku]" required>
+                            placeholder="PRODUCT SKU" name="product[sku]" >
                     </div>
 
                 </div>
@@ -40,7 +50,17 @@
                     </div>
                     <div class="col-lg-6">
                         <input type="text" class="form-control" value="{{ $data ? $data[0]->name : '' }}" id="name"
-                            placeholder="PRODUCT NAME" name="product[name]" required>
+                            placeholder="PRODUCT NAME" name="product[name]" onload="createSlug(this.value)" onkeyup="createSlug(this.value)" >
+                    </div>
+
+                </div>
+                <div class=" form-group row">
+                    <div class="form-group col-lg-4">
+                        <label for="name"> Slug</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" value="{{ $data ? $data[0]->slug : '' }}" id="slug"
+                            placeholder="PRODUCT SLUG" name="product[slug]">
                     </div>
 
                 </div>
@@ -51,7 +71,7 @@
                     </div>
                     <div class="col-lg-6">
                         <input type="number" class="form-control" value="{{ $data ? $data[0]->price : '' }}" id="price"
-                        required  min="1" step="0.01" placeholder="PRODUCT PRICE" name="product[price]" required>
+                          min="1" step="0.01" placeholder="PRODUCT PRICE" name="product[price]" >
                     </div>
                 </div>
 
@@ -62,7 +82,7 @@
                         </div>
                     <div class="col-lg-6">
                         <input type="number" class="form-control" value="{{ $data ? $data[0]->discount : '' }}" id="price"
-                            placeholder="PRODUCT DISCOUNT" name="product[discount]" required max="100" min="0" step="0.01">
+                            placeholder="PRODUCT DISCOUNT" name="product[discount]"  max="100" min="0" step="0.01">
                     </div>
                 </div>
 
@@ -73,7 +93,7 @@
                     <div class="col-lg-6">
                         <input type="number" id="quantity" class="form-control"
                             value="{{ $data ? $data[0]->quantity : '' }}" placeholder="PRODUCT QUANTITY"
-                            name="product[quantity]" required max="100" min="1" required>
+                            name="product[quantity]"  max="100" min="1" >
                     </div>
                     </div>
 
@@ -82,7 +102,7 @@
                         <label for="status"> Status</label>
                         </div>
                     <div class="col-lg-6">
-                        <select name="product[status]" id="status" class="form-control" required>
+                        <select name="product[status]" id="status" class="form-control" >
                             <option disabled selected>Select Status</option>
                             <option value="1" {{ $data ? ($data[0]->status == 1 ? 'selected' : '') : '' }}>
                                 ENABLE
@@ -102,7 +122,7 @@
                         <label for="status"> Category</label>
                         </div>
                     <div class="col-lg-6">
-                    <select id="category" name="product[category_id]" class="form-control" required>
+                    <select id="category" name="product[category_id]" class="form-control" >
                         <option disabled selected>Choose Category</option>
                         @foreach ($product->getCategoryOptions() as $options)
                         <option value="{{ $options->id }}"
@@ -119,7 +139,7 @@
                         <label for="description"> Description</label>
                         </div>
                     <div class="col-lg-6">
-                        <textarea name="product[description]" id="description" style="resize: vertical" required
+                        <textarea name="product[description]" id="description" style="resize: vertical"
                             class="form-control"
                             placeholder="PRODUCT DESCRIPTION">{{ $data ? $data[0]->description : '' }}</textarea>
                     </div>
@@ -154,6 +174,23 @@
             $('#description').summernote({
                 height: 200,
             });
+        });
+        function createSlug(str)
+        {
+             //replace all special characters | symbols with a space
+            str = str.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,.<>?\s]/g,' ').toLowerCase();
+
+            // trim spaces at start and end of string
+            str = str.replace(/^\s+|\s+$/gm,'');
+
+             // replace space with dash/hyphen
+            str = str.replace(/\s+/g, '-');
+            console.log(str);
+            $('#slug').val(str);
+        }
+        $(document).ready(function(){
+            str = $('#name').val();
+            createSlug(str);
         });
 
     </script>

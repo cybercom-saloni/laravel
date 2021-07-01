@@ -125,6 +125,7 @@ tfoot input {
                                 <tr>
                                     <th>@sortablelink('id')</th>
                                     <th>@sortablelink('sku')</th>
+                                    <th>@sortablelink('slug')</th>
                                     <th>@sortablelink('name')</th>
                                     <th>@sortablelink('price')</th>
                                     <th>@sortablelink('discount')</th>
@@ -153,6 +154,7 @@ tfoot input {
                                     @csrf
                                     <th><input type="text" class="form-control filter-input"  name="id" id="searchid" placeholder="search Id.." value="{{Session::get('searchid') ? Session::get('searchid'): ' '}}"></th>
                                     <th><input type="text" class="form-control filter-input" placeholder="search Sku.." id="searchSku"  name="sku" value="{{Session::get('searchsSku') ? Session::get('searchsSku'): ' '}}"></th>
+                                    <th></th>
                                     <th><input type="text" class="form-control filter-input" placeholder="search Name.." id="searchName" name="name" value="{{Session::get('searchName') ? Session::get('searchName'): ' '}}"></th>
                                     <!-- <th>CategoryName</th> -->
                                     <th><input type="text" class="form-control filter-input" placeholder="search.." id="searchPrice" name="price" value="{{Session::get('searchPrice') ? Session::get('searchPrice'): ' '}}"></th>
@@ -174,6 +176,7 @@ tfoot input {
                                 <tr>
                                     <td>{{$value->id}}</td>
                                     <td>{{$value->sku}}</td>
+                                    <td>{{$value->slug}}</td>
                                     <td>{{$value->name}}</td>
                                     <!-- <td>{{$controller->getCategoryName($value->category_id)}}</td> -->
                                     <td>{{$value->price}}</td>

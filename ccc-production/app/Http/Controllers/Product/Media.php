@@ -14,54 +14,54 @@ class Media extends Controller
 {
 
 
-    // public function saveAction($id, Request $request)
-    // {
-    //        try{
+    public function saveAction($id, Request $request)
+    {
+           try{
 
-    //         $validator = Validator::make($request->all(), [
-    //             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    //         ]);
-    //         if ($validator->fails()) {
-    //             return redirect()->back()
-    //             ->withErrors($validator)
-    //             ->withInput();
-    //         }
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+            }
 
-    //         $targetFile=public_path("images/products/real/$id/").$request->image->getClientOriginalName();
-    //         $uploadok =1;
-    //         if(file_exists($targetFile))
-    //         {
-    //              return \redirect('/product/media/' . $id)->with('error', 'file already exists!!!');
-    //         }
+            $targetFile=public_path("images/products/real/$id/").$request->image->getClientOriginalName();
+            $uploadok =1;
+            if(file_exists($targetFile))
+            {
+                 return \redirect('/product/media/' . $id)->with('error', 'file already exists!!!');
+            }
 
-    //         else
-    //         {
+            else
+            {
 
-    //             $imageName = $request->image->getClientOriginalName();
-    //             $mediaData = [
-    //                 'media' => $imageName,
-    //                 'product_id' => $id
-    //             ];
-    //             $media = new ProductMedia;
-    //             if ($media->saveData($mediaData)) {
-    //                 $filename = $request->image;
-    //                 $image = getimagesize($request->image);
-    //                 $imageWidth = $image[0];
-    //                 $imageHeight = $image[1];
-    //                 $mime = $image['mime'];
-    //                 $this->resizeImage($filename,$imageWidth,$imageHeight,$mime,100,100,$imageName);
-    //                 $this->resizeImage($filename,$imageWidth,$imageHeight,$mime,200,200,$imageName);
-    //                 $filename->move(public_path("images/products/real/$id"), $imageName);
-    //                 return \redirect('/product/media/' . $id)->with('productUpload', 'product Media Uploaded successfully!!!');
-    //             }
-    //         }
-    //        }
-    //        catch (\Exception $e) {
-    //                echo  $e->getMessage();
-    //         //     //    die;
-    //         //         Session::put('producterror',$e->getMessage());
-    //        }
-    // }
+                $imageName = $request->image->getClientOriginalName();
+                $mediaData = [
+                    'media' => $imageName,
+                    'product_id' => $id
+                ];
+                $media = new ProductMedia;
+                if ($media->saveData($mediaData)) {
+                    $filename = $request->image;
+                    $image = getimagesize($request->image);
+                    $imageWidth = $image[0];
+                    $imageHeight = $image[1];
+                    $mime = $image['mime'];
+                    $this->resizeImage($filename,$imageWidth,$imageHeight,$mime,100,100,$imageName);
+                    $this->resizeImage($filename,$imageWidth,$imageHeight,$mime,200,200,$imageName);
+                    $filename->move(public_path("images/products/real/$id"), $imageName);
+                    return \redirect('/product/media/' . $id)->with('productUpload', 'product Media Uploaded successfully!!!');
+                }
+            }
+           }
+           catch (\Exception $e) {
+                   echo  $e->getMessage();
+            //     //    die;
+            //         Session::put('producterror',$e->getMessage());
+           }
+    }
     public function productUpdateAction(Request $request)
     {
         if (array_key_exists('update', $_POST)) {
@@ -399,41 +399,41 @@ class Media extends Controller
     //        }
     // }
 
-    public function saveAction($id, Request $request)
-    {
-           try{
+    // public function saveAction($id, Request $request)
+    // {
+    //        try{
 
 
-            $validator = Validator::make($request->all(), [
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-            }
+    //         $validator = Validator::make($request->all(), [
+    //             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //         ]);
+    //         if ($validator->fails()) {
+    //             return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //         }
 
-             $imageName = $request->image->getClientOriginalName();
-             $imageResize = Image::make($request->image->getRealPath());
-            $imageResize->resize(100,100);
-            $imageResize->save(public_path("images/products/cache/100x100/$imageName"));
-            die;
-            $mediaData = [
-                'media' => $imageName,
-                'product_id' => $id
-            ];
+    //          $imageName = $request->image->getClientOriginalName();
+    //          $imageResize = Image::make($request->image->getRealPath());
+    //         $imageResize->resize(100,100);
+    //         $imageResize->save(public_path("images/products/cache/100x100/$imageName"));
+    //         die;
+    //         $mediaData = [
+    //             'media' => $imageName,
+    //             'product_id' => $id
+    //         ];
 
 
-            $media = new ProductMedia;
-            if ($media->saveData($mediaData)) {
-                $request->image->move(public_path("images/products/$id"), $imageName);
-            }
-            // return \redirect('/product/media/' . $id)->with('productUpload', 'product Media Uploaded successfully!!!');
-           }
-           catch (\Exception $e) {
-                   echo  $e->getMessage();
-            //     //    die;
-            //         Session::put('producterror',$e->getMessage());
-           }
-    }
+    //         $media = new ProductMedia;
+    //         if ($media->saveData($mediaData)) {
+    //             $request->image->move(public_path("images/products/$id"), $imageName);
+    //         }
+    //         // return \redirect('/product/media/' . $id)->with('productUpload', 'product Media Uploaded successfully!!!');
+    //        }
+    //        catch (\Exception $e) {
+    //                echo  $e->getMessage();
+    //         //     //    die;
+    //         //         Session::put('producterror',$e->getMessage());
+    //        }
+    // }
 }

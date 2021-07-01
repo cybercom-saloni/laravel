@@ -216,10 +216,13 @@ class Product extends Controller
             }
         }
     }
+
+
     public function saveAction($id = null,Request $request)
     {
 
         try{
+
             $validator = Validator::make($request->all(), [
                 "product.sku" => "required|unique:products,sku,$id",
                 "product.name" => "required",
@@ -229,47 +232,99 @@ class Product extends Controller
                 "product.status" => "required",
                 "product.description" => "required",
                 "product.category_id" => "required",
+            ],[
+                "product.sku.required" =>"The product Sku Field is required.",
+                "product.sku.unique" =>"The product Sku Field should be unique.",
+                "product.name.required" => "The product name Field is required.",
+                "product.slug.required" =>"The product slug Field is required.",
+                "product.slug.unique" =>"The product slug Field should be unique.",
+                "product.price.required" => "The product price Field is required.",
+                "product.discount.required" =>"The product discount Field is required.",
+                "product.quantity.required" => "The product quantity Field is required.",
+                "product.status.required" =>"The product status Field is required.",
+                "product.description.required" => "The product description Field is required.",
+                "product.category_id.required" =>"The product category_id Field is required.",
             ]);
 
 
             if ($validator->fails()) {
-                // return response()->json(['success'=>'Added new records.']);
-                return response()->json(['error'=>$validator->errors()->all()]);
+                return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
             }
-        //  else{
-        //     //  return redirect('/product/form')->with($validator->errors());
 
-        //  }
+            $productValue = $request->get('product');
+            $productValue['name'] =str_replace(" ", "-", $productValue['slug']);
+             if(trim($productValue['name']) !== trim($productValue['slug']))
+             {
+                return redirect()->back()->with('error', 'Product Slug does not match with Product Name!!');
+             }
+             else
+             {
+                $slug = ProductModel::pluck('slug')->toArray();
+                $product = $this->getProductModel();
+                $productValue = $request->get('product');
+                if (in_array($productValue['slug'], $slug)) {
+                    // $productValue['slug'] .= "-" . uniqid();
+                    echo 'in';
 
-        // if ($validator->fails()) {
-        //     return response()->json(['error'=>$validator->errors()->all()]);
-        // }
-        $product = $this->getProductModel();
-        $formData = $request->get('product');
-        // print_r($formData);
-        date_default_timezone_set('Asia/Kolkata');
-        if ($id) {
-            $formData['id'] = $id;
-            $formData['updated_at'] = date('Y-m-d h:i:s');
-        } else {
-            $formData['created_at'] = date('Y-m-d h:i:s');
-        }
+                    if($productValue['slug'] == null)
+                    {
+                        $productValue['slug'] = $productValue['name'];
+                    }
+                    $productValue['slug'] =str_replace(" ", "-", $productValue['name']);
+                    $productValue['slug'] = preg_replace('/[^A-Za-z0-9]/', '-', $productValue['name']);
+                    $productValue['slug']=preg_replace('/-+/', '-', $productValue['slug']);
+                    $count = 0;
+                    while( in_array( ($productValue['slug'] . '-' . ++$count ), $slug) );
+
+                    $productValue['slug'] = $productValue['slug'] . '-' . $count;
+                    echo $productValue['slug'];
+                     $formData = $request->get('product');
+                date_default_timezone_set('Asia/Kolkata');
+                $formData['slug'] = strtolower($productValue['slug']);
+
+                if ($id) {
+                    $formData['id'] = $id;
+                    $formData['updated_at'] = date('Y-m-d h:i:s');
+                } else {
+                    $formData['created_at'] = date('Y-m-d h:i:s');
+                }
 
 
-        if ($product->saveData($formData)) {
-            // Session::put('productSave', 'Product Saved successfully!!!');
+                if ($product->saveData($formData)) {
+                    // Session::put('productSave', 'Product Saved successfully!!!');
                     return redirect('/productGrid')->with('productSaves', 'Product Saved successfully!!!');
-        }
+                }
+
+                }
+
+                $productValue['name'];
+                $productValue['slug'] =str_replace(" ", "-", $productValue['name']);
+                $productValue['slug'] = preg_replace('/[^A-Za-z0-9]/', '-', $productValue['name']);
+                $productValue['slug']=preg_replace('/-+/', '-', $productValue['slug']);
+               $formData = $request->get('product');
+                date_default_timezone_set('Asia/Kolkata');
+                $formData['slug'] = strtolower($productValue['slug']);
+
+                if ($id) {
+                    $formData['id'] = $id;
+                    $formData['updated_at'] = date('Y-m-d h:i:s');
+                } else {
+                    $formData['created_at'] = date('Y-m-d h:i:s');
+                }
+
+
+                if ($product->saveData($formData)) {
+                    // Session::put('productSave', 'Product Saved successfully!!!');
+                    return redirect('/productGrid')->with('productSaves', 'Product Saved successfully!!!');
+                }
+             }
         }
 
         catch (\Exception $e) {
                    echo  $e->getMessage();
-                //    die;
-                // Session::put('proeer',$validator->errors());
-                    // return redirect()->back()->withInput();
-                //     die;
-
-                }
+          }
 
 
     }
@@ -371,7 +426,7 @@ class Product extends Controller
             $media = new Media;
 
             $media = $media->fetchAll("select * from media where product_id=$id");
-            
+
 
             if ($media->getMedias()) {
                 $this->setMedias($media->getMedias());
@@ -558,4 +613,7 @@ class Product extends Controller
 
      ];
     }
+
+
+
 }

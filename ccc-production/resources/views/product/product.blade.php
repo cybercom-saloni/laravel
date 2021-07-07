@@ -1,4 +1,15 @@
 @extends('layoutTemplate.main')
+<style>
+  #loading{
+	position: fixed;
+	width: 100%;
+	height: 100vh;
+	background: #fff
+	url("{{ asset('spnner.gif') }}")
+	 no-repeat center center;
+	z-index: 99999;
+}
+</style>
 @section('content')
 <style>
 tfoot input {
@@ -19,6 +30,7 @@ tfoot input {
                         <div class="panel-heading">
                             <h3 class="panel-title">Manage Products</h3>
                         </div>
+                        @include('layoutTemplate.message')
                         @if (Session::has('productStatus'))
 
                             <div class="alert alert-success alert-dismissible" role="alert">
@@ -61,7 +73,7 @@ tfoot input {
                         <div class="col-lg-12">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                         <a href="{{'/product/form'}}" class="btn btn-md btn-secondary mb-4"><i class="fa fa-plus-square"></i> Create New Product</a>
+                                         <a href="{{'/product/create'}}" class="btn btn-md btn-secondary mb-4"><i class="fa fa-plus-square"></i> Create New Product</a>
                                     </div>
                                      <div class="col-lg-3">
                                         <form action="/importExcelCsv" id="form" method="post" enctype="multipart/form-data">
@@ -128,11 +140,11 @@ tfoot input {
                                     <th>@sortablelink('slug')</th>
                                     <th>@sortablelink('name')</th>
                                     <th>@sortablelink('price')</th>
-                                    <th>@sortablelink('discount')</th>
-                                    <th>@sortablelink('quantity')</th>
-                                    <th style="color:blue">Status</th>
-                                    <th style="color:blue">CreatedDate</th>
-                                    <th style="color:blue" colspan="2">Actions</th>
+                                    <th style="width:100px;">@sortablelink('discount')</th>
+                                    <th style="width:100px;">@sortablelink('quantity')</th>
+                                    <th style="color:#3b98c8">Status</th>
+                                    <th style="color:#3b98c8">CreatedDate</th>
+                                    <th style="color:#3b98c8" colspan="2">Actions</th>
                                 </tr>
                                 <!-- <tr>
                                     @foreach ($controller->getColumns() as $columns)
@@ -163,7 +175,7 @@ tfoot input {
                                     <th></th>
                                     <th><input type="date" class="form-control filter-input" placeholder="search.." id="createdDate" name="createdDate" value="{{Session::get('createdDate') ? Session::get('createdDate'): ' '}}"></th>
                                     <th><button type="submit" class="btn btn-md btn-secondary">Apply Filter</button></th>
-                                    <th><a href="/productGrid" class="btn btn-md btn-primary" name="clear" value="clear"><i class="fa fa-remove"></i>Remove Filter </a></th>
+                                    <th><a href="/products" class="btn btn-md btn-primary" name="clear" value="clear"><i class="fa fa-remove"></i>Remove Filter </a></th>
                                     </form>
                                 </tr>
                                 @if (!$products)
@@ -184,14 +196,14 @@ tfoot input {
                                     <td>{{$value->quantity}}</td>
                                     <td>
                                     @if($value->status == 1)
-                                    <a href='/product/status/{{$value->id}}' class="btn btn-warning">Enable</a>
+                                    <a href='/product/status/{{$value->id}}' class="btn btn-warning" id="status">Enable</a>
                                         @else
-                                        <a href='/product/status/{{$value->id}}' class="btn btn-danger"> Disable</a>
+                                        <a href='/product/status/{{$value->id}}' class="btn btn-danger" id="status"> Disable</a>
                                     @endif
                                     </td>
                                     <td>{{$value->created_at}}</td>
-                                    <td><a href='/product/form/{{$value->id}}' class="btn btn-secondary">Edit</a></td>
-                                    <td> <a href='/productDelete/{{ $value->id }}'class="btn btn-secondary">Delete</a></td>
+                                    <td><a href='/product/edit/{{$value->id}}' class="btn btn-secondary" id="edit">Edit</a></td>
+                                    <td> <a href='/productDelete/{{ $value->id }}'class="btn btn-secondary" id ="delete">Delete</a></td>
                                 </tr>
                                     @endforeach
                                 @endif
@@ -207,7 +219,23 @@ tfoot input {
         </div>
     </div>
 </div>
+<div id="loading">  </div>
 <script>
+ $(window).load(function() {
+        $("#loading").fadeOut(1000);
+        });
+        $("#delete").click(function() {
+            // $(this).html("<img src='{{ asset('spnner.gif') }}' />");
+            jQuery("#loading").show();
+        });
+        $("#edit").click(function() {
+            // $(this).html("<img src='{{ asset('spnner.gif') }}' />");
+            jQuery("#loading").show();
+        });
+        $("#status").click(function() {
+            // $(this).html("<img src='{{ asset('spnner.gif') }}' />");
+            jQuery("#loading").show();
+        });
  document.getElementById('recordPerPage').onchange = function() {
                 document.getElementById('records').submit();
             };

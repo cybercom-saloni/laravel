@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 use Exception;
 
 class Customer extends Controller
@@ -45,7 +47,7 @@ class Customer extends Controller
                                 ->leftJoin('addresses' ,function($join)
                                 {
                                     $join->on('customers.id','=','addresses.customerId');
-                                    // $join->where('addresses.addressType','<>','shipping');
+                                    $join->where('addresses.addressType','<>','shipping');
                                     // $join->orWhere( 'addresses.addressType','=','billing');
 
                                 })->paginate($page);
@@ -60,7 +62,6 @@ class Customer extends Controller
     }
     public function fetch_data(Request $request)
     {
-        echo 1111;
         if($request->ajax())
         {
             $customerAddress = CustomerModel::leftJoin('addresses','customers.id','=','addresses.customerId')
@@ -203,22 +204,7 @@ class Customer extends Controller
 
         $password =  Crypt::encryptString($customerData['password']);
         $customerData['password'] = $password;
-
-
         CustomerModel::updateOrInsert(['id'=>$id],$customerData);
-        // $lastRecord = CustomerModel::orderBy('id', 'DESC')->first();
-        // $lastRecordId = $lastRecord->id;
-        // $billingAddress = AddressModel::where([['customerId',$id],['addressType','billing']])->first();
-        // if(!$billingAddress)
-        // {
-        //     $id = $lastRecordId;
-        //     $billingAddress = new AddressModel;
-
-        // }
-        // $billingAddress->customerId = $id;
-        // $billingAddress->addressType = 'billing';
-        // $billingAddress->save();
-        // CustomerModel::upsert($customerData,['id'],['firstname','lastname','email','password','contactno','status']);
         return redirect('customerGrid')->with('custSave','customer Saved!!!');
         }
         catch (\Exception $e) {
@@ -233,4 +219,74 @@ class Customer extends Controller
 
 
     }
+
+    public  function saveUserAction($id=null,Request $request)
+    {
+    try{
+
+        $validator = Validator::make($request->all(), [
+            "customer.firstname" => "required",
+            "customer.lastname" => "required",
+            "customer.email" => "required|email|unique:customers,email,$id",
+            "customer.password"=>[
+                'required',
+                'confirmed',
+                'min: 8',
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+                'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                'regex:/[0-9]/',      // must contain at least one digit
+                'regex:/[@$!%*#?&]/', // must contain a special character
+
+            ],
+
+            "customer.password_confirmation"=>'min:8',
+            "customer.contactno" => "required",
+        ],[
+            "customer.firstname.required" =>"The Firstname Field is required.",
+            "customer.lastname.required" => "The Lastname Field is required.",
+            "customer.email.required" =>"The customer email Field is required.",
+            "customer.email.unique" =>"The customer email Field should be unique.",
+            "customer.password.required" => "The customer password Field is required.",
+            "customer.password.min"=>"The password length must be of 8 characters",
+            "customer.password.confirmed"=>"The password and confirm password must be same",
+            'customer.password.regex'=> 'The password must contains at least one number,one captial letter,one small letter,one special symbol',
+            "customer.password_confirmation.min"=>"The password length must be of 8 characters",
+            "customer.password.same"=>"The password and confirm password must be same",
+            "customer.contactno.required" =>"The customer contactno Field is required.",
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+        }
+        $customerData = $request->customer;
+
+        $password =  Crypt::encryptString($customerData['password']);
+        $customerData['password'] = $password;
+        CustomerModel::updateOrInsert(['id'=>$id],$customerData);
+        $lastInsertedId =CustomerModel::latest('id')->first();
+        $data=["name"=>$customerData['firstname'].' '.$customerData['lastname'],"id"=>$lastInsertedId['id'],'data'=>"Click the Link For Activation of Account"];
+        $user['to']=$customerData['email'];
+        Mail::send('emails.myTestMail',$data,function($messages) use($user)
+        {
+            $messages->to($user['to']);
+            $messages->subject('Activation link');
+        });
+        // date_default_timezone_set('Asia/Kolkata');
+        // $lastInsertedId['email_verified_at'] = date('Y-m-d h:i:s');
+        $lastInsertedId['status'] = 'pending';
+        $lastInsertedId->save();
+       return redirect('user/login')->with('success','Please check Your inbox to verify email address!!!');
+        }
+        catch (\Exception $e) {
+            echo  $e->getMessage();
+            return response()->json(['error'=>$e->getMessage()]);
+         //    die;
+
+            //  return redirect()->back()->withInput();
+         //     die;
+
+         }
+        }
 }

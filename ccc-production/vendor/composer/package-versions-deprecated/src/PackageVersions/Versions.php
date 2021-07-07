@@ -35,7 +35,9 @@ final class Versions
     const VERSIONS          = array (
   'asm89/stack-cors' => 'v2.0.3@9cb795bf30988e8c96dd3c40623c48a877bc6714',
   'brick/math' => '0.9.2@dff976c2f3487d42c1db75a3b180e2b9f0e72ce0',
+  'cocur/slugify' => 'v4.0.0@3f1ffc300f164f23abe8b64ffb3f92d35cec8307',
   'composer/package-versions-deprecated' => '1.11.99.2@c6522afe5540d5fc46675043d3ed5a45a740b27c',
+  'cviebrock/eloquent-sluggable' => '8.0.8@16e21db24d80180f870c3c7c4faf3d3af23f4117',
   'doctrine/cache' => '2.0.3@c9622c6820d3ede1e2315a6a377ea1076e421d88',
   'doctrine/dbal' => '3.1.1@8e0fde2b90e3f61361013d1e928621beeea07bc0',
   'doctrine/deprecations' => 'v0.5.3@9504165960a1f83cc1480e2be1dd0a0478561314',
@@ -55,7 +57,6 @@ final class Versions
   'kyslik/column-sortable' => '6.4.0@9aef633bfe160c5a43d97e92e55983daa2696eb1',
   'laravel/framework' => 'v8.48.2@4c50ebbb7d1a66c5f3511261413cd499d30ba4cd',
   'laravel/tinker' => 'v2.6.1@04ad32c1a3328081097a181875733fa51f402083',
-  'laravel/ui' => 'v3.3.0@07d725813350c695c779382cbd6dac0ab8665537',
   'league/commonmark' => '1.6.5@44ffd8d3c4a9133e4bd0548622b09c55af39db5f',
   'league/flysystem' => '1.1.4@f3ad69181b8afed2c9edf7be5a2918144ff4ea32',
   'league/mime-type-detection' => '1.7.0@3b9dff8aaf7323590c1d2e443db701eb1f9aa0d3',
@@ -122,6 +123,7 @@ final class Versions
   'filp/whoops' => '2.13.0@2edbc73a4687d9085c8f20f398eebade844e8424',
   'hamcrest/hamcrest-php' => 'v2.0.1@8c3d0a3f6af734494ad8f6fbbee0ba92422859f3',
   'laravel/sail' => 'v1.8.1@77fb31eb48de9971af1fe0c6b47be3da6b869dfd',
+  'laravel/ui' => 'v3.3.0@07d725813350c695c779382cbd6dac0ab8665537',
   'mockery/mockery' => '1.4.3@d1339f64479af1bee0e82a0413813fe5345a54ea',
   'myclabs/deep-copy' => '1.10.2@776f831124e9c62e1a2c601ecc52e776d8bb7220',
   'nunomaduro/collision' => 'v5.5.0@b5cb36122f1c142c3c3ee20a0ae778439ef0244b',
@@ -154,7 +156,7 @@ final class Versions
   'sebastian/type' => '2.3.4@b8cd8a1c753c90bc1a0f5372170e3e489136f914',
   'sebastian/version' => '3.0.2@c6c1022351a901512170118436c764e473f6de8c',
   'theseer/tokenizer' => '1.2.0@75a63c33a8577608444246075ea0af0d052e452a',
-  'laravel/laravel' => 'dev-main@f38fb1bd6953de43b637a1eaca2b5efb7ddc748e',
+  'laravel/laravel' => 'dev-main@ffbee523b58712cf09adc948effc6cd5043cbc43',
 );
 
     private function __construct()

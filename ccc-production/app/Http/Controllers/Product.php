@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductsImport;
@@ -63,10 +64,10 @@ class Product extends Controller
        }
        elseif (($orderBy && $orderDirection)) {
         $controller = $this;
-        $orderBy ="id";
-        $orderDirection="desc";
-        $products = ProductModel::orderBy($orderBy, $orderDirection)->paginate($page);
-        return view('product.product', \compact('controller', 'products'));
+        // $orderBy ="id";
+        // $orderDirection="desc";
+        echo $products = ProductModel::orderBy($orderBy, $orderDirection)->paginate($page);
+
        }
        else
        {
@@ -75,7 +76,7 @@ class Product extends Controller
         session::forget('searchName');
         session::forget('searchPrice');
         session::forget('createdDate');
-        $pagination = ProductModel::sortable()->paginate($page);
+         $pagination = ProductModel::sortable()->where('status',0)->orWhere('status',1)->paginate($page);
        return  view('product.product',['products'=>$pagination,'controller'=>$this]);
        }
 
@@ -104,7 +105,7 @@ class Product extends Controller
         session::save();
         $products = ProductModel::where('created_at','>=',$createdDate)->
         where('created_at','<=',$date)->orderBy('id')->sortable()->paginate($page);
-        return redirect('/productGrid')->with('products',$products);
+        return redirect('/products')->with('products',$products);
         }
 
         if($id || $sku || $name || $price)
@@ -112,66 +113,92 @@ class Product extends Controller
             session(['searchid' =>$id,'searchsSku'=>$sku,'searchName'=>$name,'searchPrice'=>$price]);
         session::save();
         $products = ProductModel::where([['id','LIKE',"%{$id}%"],['sku','LIKE',"%{$sku}%"],['name','LIKE',"%{$name}%"],['price','LIKE',"%{$price}%"]])->orderBy('id')->sortable()->paginate($page);
-        return redirect('/productGrid')->with('products',$products);
+        return redirect('/products')->with('products',$products);
         }
 
         if($id == null || $sku == null || $name == null || $price == null)
         {
-            return redirect('/productGrid');
+            return redirect('/products');
         }
        if($id)
        {
         session(['searchid' =>$id]);
         session::save();
         $products = ProductModel::where('id','LIKE',"%{$id}%")->orderBy('id')->sortable()->paginate($page);
-        return redirect('/productGrid')->with('products',$products);
+        return redirect('/products')->with('products',$products);
        }
        if($sku)
        {
         session(['searchsSku' =>$sku]);
         session::save();
         $products = ProductModel::where('sku','LIKE',"%{$sku}%")->orderBy('id')->sortable()->paginate($page);
-        return redirect('/productGrid')->with('products',$products);
+        return redirect('/products')->with('products',$products);
        }
        if($name)
        {
         session(['searchName' =>$name]);
         session::save();
         $products = ProductModel::where('name','LIKE',"%{$name}%")->orderBy('id')->sortable()->paginate($page);
-        return redirect('/productGrid')->with('products',$products);
+        return redirect('/products')->with('products',$products);
        }
        if($price)
        {
         session(['searchPrice' =>$price]);
         session::save();
         $products = ProductModel::where('price','LIKE',"%{$price}%")->orderBy('id')->sortable()->paginate($page);
-        return redirect('/productGrid')->with('products',$products);
+        return redirect('/products')->with('products',$products);
        }
     }
 
-
-    public function formAction($id = null,Request $request)
+    public function editFormAction($id=null,Request $request)
     {
         try{
 
+            // if (! $request->hasValidSignature()) {
+
+            //     echo 111;
+            // }
+            // if($this->isHttpException($e))
+            // {
+            //     // $code = $e->getStatusCode();
+
+            //     // return redirect()->route('welcome');
+            // }
+
         if (!$id)
         {
-           return view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this]);
+            return redirect('/products')->with('error','id not found!!');
 
         }
         else
         {
-
             $product = new ProductModel;
+            $product = ProductModel::find($id);
+            if(!$product)
+            {
+                return redirect('/products')->with('error','id not found!!');
+            }
             $product = $product->load($id);
-
-            return view('product.tabs.form',['product'=> $product,'controller'=>$this]);
-
+            return view('product.tabs.edit',['product'=> $product,'controller'=>$this]);
         }
     }
     catch (\Exception $e) {
         echo  $e->getMessage();
      }
+    }
+    public function formAction($id = null,Request $request)
+    {
+        try{
+            if (!$id)
+            {
+                return view('product.tabs.form',['product'=> new ProductModel(),'controller'=>$this]);
+            }
+
+
+        }
+        catch (\Exception $e) {
+            echo  $e->getMessage();
+        }
     }
 
     public function fetch_data(Request $request)
@@ -190,7 +217,7 @@ class Product extends Controller
                session(['searchsSku' =>$sku]);
                session::save();
                $products = ProductModel::where('sku','LIKE',"%{$sku}%")->orderBy('id')->sortable()->paginate($page);
-               return redirect('/productGrid')->with('products',$products);
+               return redirect('/products')->with('products',$products);
             }
             elseif(Session::get('searchName'))
             {
@@ -198,7 +225,7 @@ class Product extends Controller
              session(['searchName' =>$name]);
              session::save();
              $products = ProductModel::where('name','LIKE',"%{$name}%")->orderBy('id')->sortable()->paginate($page);
-             return redirect('/productGrid')->with('products',$products);
+             return redirect('/products')->with('products',$products);
             }
             elseif(Session::get('searchPrice'))
             {
@@ -206,7 +233,7 @@ class Product extends Controller
              session(['searchPrice' =>$price]);
              session::save();
              $products = ProductModel::where('price','LIKE',"%{$price}%")->orderBy('id')->sortable()->paginate($page);
-             return redirect('/productGrid')->with('products',$products);
+             return redirect('/products')->with('products',$products);
             }
             else
             {
@@ -227,6 +254,7 @@ class Product extends Controller
                 "product.sku" => "required|unique:products,sku,$id",
                 "product.name" => "required",
                 "product.price" => "required",
+                "product.slug" => "required",
                 "product.discount" => "required",
                 "product.quantity" => "required",
                 "product.status" => "required",
@@ -234,7 +262,6 @@ class Product extends Controller
                 "product.category_id" => "required",
             ],[
                 "product.sku.required" =>"The product Sku Field is required.",
-                "product.sku.unique" =>"The product Sku Field should be unique.",
                 "product.name.required" => "The product name Field is required.",
                 "product.slug.required" =>"The product slug Field is required.",
                 "product.slug.unique" =>"The product slug Field should be unique.",
@@ -246,80 +273,39 @@ class Product extends Controller
                 "product.category_id.required" =>"The product category_id Field is required.",
             ]);
 
-
             if ($validator->fails()) {
                 return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
             }
-
             $productValue = $request->get('product');
-            $productValue['name'] =str_replace(" ", "-", $productValue['slug']);
-             if(trim($productValue['name']) !== trim($productValue['slug']))
-             {
-                return redirect()->back()->with('error', 'Product Slug does not match with Product Name!!');
-             }
-             else
-             {
-                $slug = ProductModel::pluck('slug')->toArray();
-                $product = $this->getProductModel();
-                $productValue = $request->get('product');
+            print_r($productValue['slug']);
+            $slug = ProductModel::pluck('slug','id')->toArray();
+            $product = $this->getProductModel();
+            $formData = $request->get('product');
+            date_default_timezone_set('Asia/Kolkata');
+            $lastInsertedId =ProductModel::latest('id')->pluck('id')->first();
+            $lastInsertedId = $lastInsertedId+1;
+            if ($id) {
+                $formData['id'] = $id;
+                $slug = ProductModel::where('id','<>',$id)->pluck('slug','id')->toArray();
                 if (in_array($productValue['slug'], $slug)) {
-                    // $productValue['slug'] .= "-" . uniqid();
-                    echo 'in';
+                    $productValue['slug'] = $productValue['slug'].'-'.$id;
+                  }
+                  $formData['slug']=$productValue['slug'];
+                $formData['updated_at'] = date('Y-m-d h:i:s');
+             } else {
+                if (in_array($productValue['slug'], $slug)) {
+                    $productValue['slug'] = $productValue['slug'].'-'.$lastInsertedId;
+                  }
+                $formData['slug']=$productValue['slug'];
+                $formData['created_at'] = date('Y-m-d h:i:s');
 
-                    if($productValue['slug'] == null)
-                    {
-                        $productValue['slug'] = $productValue['name'];
-                    }
-                    $productValue['slug'] =str_replace(" ", "-", $productValue['name']);
-                    $productValue['slug'] = preg_replace('/[^A-Za-z0-9]/', '-', $productValue['name']);
-                    $productValue['slug']=preg_replace('/-+/', '-', $productValue['slug']);
-                    $count = 0;
-                    while( in_array( ($productValue['slug'] . '-' . ++$count ), $slug) );
+            }
+            if ($product->saveData($formData)) {
+                return redirect('/products')->with('productSaves', 'Product Saved successfully!!!');
+            }
 
-                    $productValue['slug'] = $productValue['slug'] . '-' . $count;
-                    echo $productValue['slug'];
-                     $formData = $request->get('product');
-                date_default_timezone_set('Asia/Kolkata');
-                $formData['slug'] = strtolower($productValue['slug']);
-
-                if ($id) {
-                    $formData['id'] = $id;
-                    $formData['updated_at'] = date('Y-m-d h:i:s');
-                } else {
-                    $formData['created_at'] = date('Y-m-d h:i:s');
-                }
-
-
-                if ($product->saveData($formData)) {
-                    // Session::put('productSave', 'Product Saved successfully!!!');
-                    return redirect('/productGrid')->with('productSaves', 'Product Saved successfully!!!');
-                }
-
-                }
-
-                $productValue['name'];
-                $productValue['slug'] =str_replace(" ", "-", $productValue['name']);
-                $productValue['slug'] = preg_replace('/[^A-Za-z0-9]/', '-', $productValue['name']);
-                $productValue['slug']=preg_replace('/-+/', '-', $productValue['slug']);
-               $formData = $request->get('product');
-                date_default_timezone_set('Asia/Kolkata');
-                $formData['slug'] = strtolower($productValue['slug']);
-
-                if ($id) {
-                    $formData['id'] = $id;
-                    $formData['updated_at'] = date('Y-m-d h:i:s');
-                } else {
-                    $formData['created_at'] = date('Y-m-d h:i:s');
-                }
-
-
-                if ($product->saveData($formData)) {
-                    // Session::put('productSave', 'Product Saved successfully!!!');
-                    return redirect('/productGrid')->with('productSaves', 'Product Saved successfully!!!');
-                }
-             }
         }
 
         catch (\Exception $e) {
@@ -329,15 +315,133 @@ class Product extends Controller
 
     }
 
+    // public function saveAction($id = null,Request $request)
+    // {
+
+    //     try{
+
+    //         $validator = Validator::make($request->all(), [
+    //             "product.sku" => "required|unique:products,sku,$id",
+    //             "product.name" => "required",
+    //             "product.price" => "required",
+    //             "product.discount" => "required",
+    //             "product.quantity" => "required",
+    //             "product.status" => "required",
+    //             "product.description" => "required",
+    //             "product.category_id" => "required",
+    //         ],[
+    //             "product.sku.required" =>"The product Sku Field is required.",
+    //             "product.sku.unique" =>"The product Sku Field should be unique.",
+    //             "product.name.required" => "The product name Field is required.",
+    //             "product.slug.required" =>"The product slug Field is required.",
+    //             "product.slug.unique" =>"The product slug Field should be unique.",
+    //             "product.price.required" => "The product price Field is required.",
+    //             "product.discount.required" =>"The product discount Field is required.",
+    //             "product.quantity.required" => "The product quantity Field is required.",
+    //             "product.status.required" =>"The product status Field is required.",
+    //             "product.description.required" => "The product description Field is required.",
+    //             "product.category_id.required" =>"The product category_id Field is required.",
+    //         ]);
+
+
+    //         if ($validator->fails()) {
+    //             return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //         }
+
+    //         $productValue = $request->get('product');
+    //         $productValue['name'] =str_replace(" ", "-", $productValue['slug']);
+    //          if(trim($productValue['name']) !== trim($productValue['slug']))
+    //          {
+    //             return redirect()->back()->with('error', 'Product Slug does not match with Product Name!!');
+    //          }
+    //          else
+    //          {
+    //             $slug = ProductModel::pluck('slug')->toArray();
+    //             $product = $this->getProductModel();
+    //             $productValue = $request->get('product');
+    //             if (in_array($productValue['slug'], $slug)) {
+    //                 // $productValue['slug'] .= "-" . uniqid();
+    //                 echo 'in';
+
+    //                 if($productValue['slug'] == null)
+    //                 {
+    //                     $productValue['slug'] = $productValue['name'];
+    //                 }
+    //                 $productValue['slug'] =str_replace(" ", "-", $productValue['name']);
+    //                 $productValue['slug'] = preg_replace('/[^A-Za-z0-9]/', '-', $productValue['name']);
+    //                 $productValue['slug']=preg_replace('/-+/', '-', $productValue['slug']);
+    //                 $count = 0;
+    //                 while( in_array( ($productValue['slug'] . '-' . ++$count ), $slug) );
+
+    //                 $productValue['slug'] = $productValue['slug'] . '-' . $count;
+    //                 echo $productValue['slug'];
+    //                  $formData = $request->get('product');
+    //             date_default_timezone_set('Asia/Kolkata');
+    //             $formData['slug'] = strtolower($productValue['slug']);
+
+    //             if ($id) {
+    //                 $formData['id'] = $id;
+    //                 $formData['updated_at'] = date('Y-m-d h:i:s');
+    //             } else {
+    //                 $formData['created_at'] = date('Y-m-d h:i:s');
+    //             }
+
+
+    //             if ($product->saveData($formData)) {
+    //                 // Session::put('productSave', 'Product Saved successfully!!!');
+    //                 return redirect('/products')->with('productSaves', 'Product Saved successfully!!!');
+    //             }
+
+    //             }
+
+    //             $productValue['name'];
+    //             $productValue['slug'] =str_replace(" ", "-", $productValue['name']);
+    //             $productValue['slug'] = preg_replace('/[^A-Za-z0-9]/', '-', $productValue['name']);
+    //             $productValue['slug']=preg_replace('/-+/', '-', $productValue['slug']);
+    //            $formData = $request->get('product');
+    //             date_default_timezone_set('Asia/Kolkata');
+    //             $formData['slug'] = strtolower($productValue['slug']);
+
+    //             if ($id) {
+    //                 $formData['id'] = $id;
+    //                 $formData['updated_at'] = date('Y-m-d h:i:s');
+    //             } else {
+    //                 $formData['created_at'] = date('Y-m-d h:i:s');
+    //             }
+
+
+    //             if ($product->saveData($formData)) {
+    //                 // Session::put('productSave', 'Product Saved successfully!!!');
+    //                 return redirect('/products')->with('productSaves', 'Product Saved successfully!!!');
+    //             }
+    //          }
+    //     }
+
+    //     catch (\Exception $e) {
+    //                echo  $e->getMessage();
+    //       }
+
+
+    // }
+
 
 
     public function deleteAction($id)
     {
          $product = $this->getProductModel();
-        if (!$product->deleteData([$id])) {
-            return redirect('/product')->with('error', 'ERROR WHILE DELETING');
-        }
-        return redirect('/productGrid')->with('productDelete', 'Product Deleted successfully!!!');;
+         $product = ProductModel::find($id);
+         $product->status = 3;
+         date_default_timezone_set('Asia/Kolkata');
+         $product->deletedOn = date('Y-m-d h:i:s');
+         $product->save();
+
+
+        // if (!$product->deleteData([$id])) {
+        //     return redirect('/products')->with('error', 'ERROR WHILE DELETING');
+        // }
+        return redirect('/products')->with('productDelete', 'Product Deleted successfully can be restore through cache!!!');;
     }
 
     public function getCategoryOptions($id = null)
@@ -441,11 +545,12 @@ class Product extends Controller
         $product = ProductModel::find($id);
         if ($product->status == 0) {
             $product->status = 1;
-        } else {
+        }
+        else {
             $product->status = 0;
         }
         $product->save();
-        return redirect('/productGrid')->with('productStatus', 'Product Status Changed successfully!!!');
+        return redirect('/products')->with('productStatus', 'Product Status Changed successfully!!!');
     }
 
 
@@ -460,7 +565,7 @@ class Product extends Controller
            session(['searchsSku' =>$sku]);
            session::save();
            $customerAddress = Customer::where('firstname','LIKE',"%{$sku}%")->orderBy('id')->sortable()->paginate($page);
-           return redirect('/productGrid')->with('customerAddress',$customerAddress);
+           return redirect('/products')->with('customerAddress',$customerAddress);
         }
         elseif(Session::get('searchName'))
         {
@@ -468,7 +573,7 @@ class Product extends Controller
          session(['searchName' =>$name]);
          session::save();
          $customerAddress = Customer::where('email','LIKE',"%{$name}%")->orderBy('id')->sortable()->paginate($page);
-         return redirect('/productGrid')->with('customerAddress',$customerAddress);
+         return redirect('/products')->with('customerAddress',$customerAddress);
         }
         elseif(Session::get('searchPrice'))
         {
@@ -476,11 +581,11 @@ class Product extends Controller
          session(['searchPrice' =>$price]);
          session::save();
          $customerAddress = Customer::where('area','LIKE',"%{$price}%")->orderBy('id')->sortable()->paginate($page);
-         return redirect('/productGrid')->with('customerAddress',$customerAddress);
+         return redirect('/products')->with('customerAddress',$customerAddress);
         }
         else
         {
-            return redirect('/productGrid');
+            return redirect('/products');
         }
         }
         elseif($request->page == 'manageOrder'){
@@ -499,7 +604,7 @@ class Product extends Controller
                session(['searchsSku' =>$sku]);
                session::save();
                $products = ProductModel::where('sku','LIKE',"%{$sku}%")->orderBy('id')->sortable()->paginate($page);
-               return redirect('/productGrid')->with('products',$products);
+               return redirect('/products')->with('products',$products);
             }
             elseif(Session::get('searchName'))
             {
@@ -507,7 +612,7 @@ class Product extends Controller
              session(['searchName' =>$name]);
              session::save();
              $products = ProductModel::where('name','LIKE',"%{$name}%")->orderBy('id')->sortable()->paginate($page);
-             return redirect('/productGrid')->with('products',$products);
+             return redirect('/products')->with('products',$products);
             }
             elseif(Session::get('searchPrice'))
             {
@@ -515,11 +620,11 @@ class Product extends Controller
              session(['searchPrice' =>$price]);
              session::save();
              $products = ProductModel::where('price','LIKE',"%{$price}%")->orderBy('id')->sortable()->paginate($page);
-             return redirect('/productGrid')->with('products',$products);
+             return redirect('/products')->with('products',$products);
             }
             else
             {
-                return redirect('/productGrid');
+                return redirect('/products');
             }
         }
     }
@@ -529,7 +634,6 @@ class Product extends Controller
         try{
             if($request->file('file') == null)
             {
-            echo 1;
                 $validator  = Validator::make($request->all(),[
                     'file' =>'required',
                 ]);
@@ -537,7 +641,6 @@ class Product extends Controller
                 {
                     return response()->json(['error' => $validator->errors()->all()]);
                 }
-                die;
             }
          // if($request->file('file') == null)
          //    {
@@ -547,7 +650,7 @@ class Product extends Controller
 
         Excel::import(new ProductsImport, $request->file('file')->store('import'));
         // (new ProductsImport)->import($request->file('file'));
-        return redirect('/productGrid')->with('productImport', 'File imported successfully!!!');
+        return redirect('/products')->with('productImport', 'File imported successfully!!!');
 
         }catch(Exception $e)
         {
@@ -614,6 +717,40 @@ class Product extends Controller
      ];
     }
 
+    public function deleteCacheGridAction()
+    {
+        $page = 2;
+        if (Session::has('page')) {
+            $page = Session::get('page');
+        } else {
+            Session::put('page', $page);
+        }
+        $products = new ProductModel;
+        $pagination = ProductModel::sortable()->where('status',3)->paginate($page);
+        return  view('product.deleteproduct',['products'=>$pagination,'controller'=>$this]);
+    }
+
+    public function deleteCacheAction($id)
+    {
+         $product = $this->getProductModel();
 
 
+        if (!$product->deleteData([$id])) {
+            return redirect('/productCacheDeleteGrid')->with('error', 'ERROR WHILE DELETING');
+        }
+        return redirect('/productCacheDeleteGrid')->with('success', 'Product Deleted successfully!!!');;
+    }
+
+    public function productDeleteStatusAction($id)
+    {
+        $product = ProductModel::find($id);
+        if ($product->status == 3) {
+            $product->status = 1;
+        }
+
+         date_default_timezone_set('Asia/Kolkata');
+         $product->created_at = date('Y-m-d h:i:s');
+        $product->save();
+        return redirect('/productCacheDeleteGrid')->with('success', 'Product Restored successfully!!!');
+    }
 }

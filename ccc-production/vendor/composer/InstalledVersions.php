@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '1b5d1f4da59b03f30cd03756e6a455fa9b7927f5',
+    'reference' => 'ffbee523b58712cf09adc948effc6cd5043cbc43',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -55,6 +55,15 @@ private static $installed = array (
       ),
       'reference' => 'dff976c2f3487d42c1db75a3b180e2b9f0e72ce0',
     ),
+    'cocur/slugify' => 
+    array (
+      'pretty_version' => 'v4.0.0',
+      'version' => '4.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3f1ffc300f164f23abe8b64ffb3f92d35cec8307',
+    ),
     'composer/package-versions-deprecated' => 
     array (
       'pretty_version' => '1.11.99.2',
@@ -70,6 +79,15 @@ private static $installed = array (
       array (
         0 => '*',
       ),
+    ),
+    'cviebrock/eloquent-sluggable' => 
+    array (
+      'pretty_version' => '8.0.8',
+      'version' => '8.0.8.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '16e21db24d80180f870c3c7c4faf3d3af23f4117',
     ),
     'davedevelopment/hamcrest-php' => 
     array (
@@ -534,7 +552,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '1b5d1f4da59b03f30cd03756e6a455fa9b7927f5',
+      'reference' => 'ffbee523b58712cf09adc948effc6cd5043cbc43',
     ),
     'laravel/sail' => 
     array (

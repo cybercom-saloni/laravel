@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Exception;
+// use Cviebrock\EloquentSluggable\Sluggable;
+
 use Illuminate\Support\Facades\File;
 class Category extends Controller
 {
+    // use sluggable;
     public $rootCategories = [];
 
     public function gridAction($id = null, $type = null, Request $request)
@@ -49,7 +52,22 @@ class Category extends Controller
         }
         return $category->name;
     }
+    // public function saveAction(Request $request)
+    // {
+    //    echo 1;
+    //    echo $request->get('category')['name'];
+    //     ModelsCategory::create([
+    //         "name" => $request->get('category')['name'],
+    //         "status"=>$request->get('category')['status'],
+    //     ]);
+    // }
+    //  public function saveAction(Request $request)
+    // {
+    //    echo 1;
+    //    echo $request->get('category')['name'];
 
+    //     $slug=SlugService::createSlug(ModelsCategory::class,'slug', $request->get('category')['name']);
+    // }
     public function saveAction($id = null, $type = null, Request $request)
     {
         try {

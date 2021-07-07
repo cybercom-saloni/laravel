@@ -13,6 +13,7 @@
 <div class="row">
 @include('customer.tabs')
 </div>
+
         <div class="col-sm-9">
         <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer Details</h3>
         <hr>

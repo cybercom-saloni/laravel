@@ -22,6 +22,8 @@ use App\Http\Controllers\ProductImport;
 use App\Http\Controllers\Comment;
 use App\Http\Controllers\Salesman;
 use App\Http\Controllers\UserLogin;
+use App\Http\Middleware\CheckUserLoginStatus;
+use App\Http\Controllers\Website;
 
 /*
 
@@ -97,15 +99,22 @@ Route::post('/admin/product/media/mediaUpdate', [MediaController::class, 'update
 Route::post('/custom-login', [UserLogin::class, 'customLogin'])->name('login.custom');
 Route::get('/custom-logout', [UserLogin::class, 'customLogout'])->name('logout.custom');
 Route::get('/dashboard', [UserLogin::class,'dashboard']);
-Route::get('/productGrid/{orderBy?}/{orderDirection?}', [Product::class, 'gridAction'])->name('productGrid');
+Route::get('/products/{orderBy?}/{orderDirection?}', [Product::class, 'gridAction'])->name('productGrid');
 Route::post('/productSave/{id?}', [Product::class, 'saveAction'])->whereNumber('id')->name('productSave');
 Route::get('/productDelete/{id?}', [Product::class, 'deleteAction'])->whereNumber('id');
-Route::get('/product/form/{id?}', [Product::class, 'formAction'])->whereNumber('id')->name('productForm');
+Route::get('/productCacheDelete/{id?}', [Product::class, 'deleteCacheAction'])->whereNumber('id');
+Route::get('/productCacheDeleteGrid', [Product::class, 'deleteCacheGridAction']);
+Route::get('/product/create/{id?}', [Product::class, 'formAction'])->whereNumber('id')->name('productForm');
+Route::get('/product/edit/{id?}', [Product::class, 'editFormAction'])->whereNumber('id')->name('productEdit')->missing(fn($request)=>response()->view('welcome'));
+// Route::get('/locations/{location:slug}', [LocationsController::class, 'show'])
+//     ->name('locations.view')
+//     ->missing(fn($request) => Redirect::route('locations.index', null, 301));
 Route::get('/product/media/{id?}', [Product::class, 'mediaAction'])->whereNumber('id');
 Route::post('/product/imageUpload/{id}', [Media::class, 'saveAction'])->whereNumber('id');
 Route::post('/media/update/{id}', [Media::class,'productUpdateAction']);
 Route::post('/media/delete/{id?}', [Media::class, 'deleteAction'])->whereNumber('id');
 Route::get('product/status/{id}', [Product::class, 'productStatusAction']);
+Route::get('productdelete/status/{id}', [Product::class, 'productDeleteStatusAction']);
 Route::get('/product/fetch_data',[Product::class,'fetch_data']);
 Route::get('students/list', [Product::class, 'getStudents'])->name('students.list');
 Route::post('/search/productId', [Product::class, 'searchIdAction']);
@@ -203,8 +212,25 @@ Route::get('/salesmanDelete/{id}',[Salesman::class,'deleteAction'])->name('sales
 Route::get('/salesmanClear',[Salesman::class,'clearAction']);
 Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction']);
 
-//login
-Route::get('/login',[AppLogin::class,'loginAction']);
+// Front-End
+Route::get('/user/login', [UserLogin::class,'userLoginAction']);
+Route::post('/user/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
+Route::get('/user/signup', [UserLogin::class,'signupAction'])->name('signup');
+Route::get('/user/newlogin/{id}', [UserLogin::class,'loginProcessAction']);
+Route::post('/user/save',[Customer::class,'saveUserAction']);
+
+
+Route::get('/mail',[Website::class,'index']);
+
+
+
+
+
+
+
+// Route::prefix('user')->middleware([CheckUserLoginStatus::class])->group(function(){
+//     Route::post('/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
+//  });
 
 
 

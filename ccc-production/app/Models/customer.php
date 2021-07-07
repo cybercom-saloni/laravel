@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
-class Customer extends Model
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class Customer extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
     use Sortable;
     protected $table = 'customers';
     public $sortable =['id',
@@ -22,4 +23,15 @@ class Customer extends Model
     'zipcode',
     'country'
 ];
+public $fillable =[
+    'firstname',
+    'lastname',
+    'email',
+   'password',
+];
+
+protected $hidden = [
+    'password'
+];
+
 }

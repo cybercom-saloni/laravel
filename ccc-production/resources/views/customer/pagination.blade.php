@@ -1,4 +1,4 @@
-<?php $customerAddress;?>
+
 <h3 style="font-weight:bold; font-size:32px;" class="mt-2">Customer</h3>
 <hr>
 <div id="table_data">
@@ -129,7 +129,6 @@
 
             @foreach($customerAddress as $customer)
                 <tr>
-                    @if($customer->addressType != 'shipping')
                         <td>{{$customer->id}}</td>
                         <td>{{$customer->firstname}}</td>
                         <td>{{$customer->lastname}}</td>
@@ -153,7 +152,7 @@
                         </td>
                         <td><a href="/customer/form/{{$customer->id}}" class="btn btn-success">Edit</a></td>
                         <td> <a href="/customerDelete/{{ $customer->id }}" class="btn btn-secondary">Delete</a></td>
-                    @endif
+
                 </tr>
                 @endforeach
             @endif

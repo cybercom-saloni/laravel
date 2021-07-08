@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 class UserLogin extends Controller
 {
     public function customLogin(Request $request)
@@ -34,6 +36,7 @@ class UserLogin extends Controller
        $user = Customer::where('email',$request->get('email'))->first();
         if($user)
         {
+
             $userpassword = Crypt::decryptString($user->password);
             if($userpassword ==  $request->get('password'))
             {
@@ -79,50 +82,106 @@ class UserLogin extends Controller
 
     public function userLoginAction()
     {
-       return view('frontend.login');
+        if(!Session::has('loginid'))
+        {
+            return view('frontend.login');
+        }
+        return redirect('user/dashboard');
     }
     public function checkLoginAction(Request $request)
     {
-        $user = Customer::where('email',$request->get('email'))->first();
-        if($user)
+        try
         {
-            $status = $user->status;
-            $email_verified_at = $user->email_verified_at;
-            if($status == 1 && $email_verified_at != null)
+            if($request->method()!='POST')
             {
-                 $userpassword = Crypt::decryptString($user->password);
-                if($userpassword ==  $request->get('password'))
+                return redirect('/user/login')->with('error','Please do login first!!!');
+            }
+
+
+           
+            $user = Customer::where('email',$request->get('email'))->first();
+
+            if($user)
+            {
+                // echo hash('sha256',$request->get('password') );
+                // echo "<br>";
+                // echo hash('sha256',$user->password);
+                // die;
+
+            if(strlen($user->password) == 60)
                 {
-                    session(['login' =>$user->firstname.' login successfully!!!','loginname'=>$user->firstname]);
-                    session::save();
-                    session::forget('invalidUser');
-                    session::forget('invalidPassword');
-                    return view('frontend.dashboard')->with('success',$user->name);
+                    $status = $user->status;
+                    $email_verified_at = $user->email_verified_at;
+                    if($status == 1 && $email_verified_at != null)
+                    {
+                        if(Hash::check($request->get('password'),$user->password ) )
+                        {
+                            session(['login' =>$user->firstname.' login successfully!!!','loginname'=>$user->firstname,'loginid'=>$user->id]);
+                            session::save();
+                            session::forget('invalidUser');
+                            session::forget('invalidPassword');
+                            $customer = Customer::find(session('loginid'));
+                            $customer['password'] =  hash('sha256',$request->get('password'));
+                            $customer->save();
+                            return redirect('/user/dashboard')->with('success',$user->name);
+                        }
+                        else
+                        {
+                            session(['invalidPassword' =>'invalid password!!!']);
+                            session::save();
+                            session::forget('invalidUser');
+                            session::forget('logout');
+                            return redirect('/user/login')->with('error','invalid password!!!');
+                        }
+                    }
+                    else
+                    {
+                        return redirect('/user/login')->with('error','invalid user!!!');
+                    }
                 }
                 else
                 {
-                    session(['invalidPassword' =>'invalid password!!!']);
-                    session::save();
-                    session::forget('invalidUser');
-                    session::forget('logout');
-                    return redirect('/user/login')->with('error','invalid password!!!');
+
+                    $status = $user->status;
+                    $email_verified_at = $user->email_verified_at;
+                    if($status == 1 && $email_verified_at != null)
+                    {
+                        if($user->password == hash('sha256',$request->get('password')))
+                        {
+                            session(['login' =>$user->firstname.' login successfully!!!','loginname'=>$user->firstname,'loginid'=>$user->id]);
+                            session::save();
+                            session::forget('invalidUser');
+                            session::forget('invalidPassword');
+                            return view('frontend.dashboard')->with('success',$user->name);
+                        }
+                        else
+                        {
+                            session(['invalidPassword' =>'invalid password!!!']);
+                            session::save();
+                            session::forget('invalidUser');
+                            session::forget('logout');
+                            return redirect('/user/login')->with('error','invalid password!!!');
+                        }
+                    }
+                    else
+                    {
+                        return redirect('/user/login')->with('error','invalid user!!!');
+                    }
                 }
+
             }
-            else
-            {
-                echo 45;
+            else{
+
+                session(['invalidUser' =>'invalid user!!!']);
+                session::save();
+                session::forget('invalidPassword');
+                session::forget('logout');
                 return redirect('/user/login')->with('error','invalid user!!!');
             }
-
-
         }
-        else{
-
-            session(['invalidUser' =>'invalid user!!!']);
-            session::save();
-            session::forget('invalidPassword');
-            session::forget('logout');
-            return redirect('/user/login')->with('error','invalid user!!!');
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
         }
     }
 
@@ -136,8 +195,8 @@ class UserLogin extends Controller
         $id = $request->id;
         $lastInsertedId = new Customer();
         $lastInsertedId =Customer::where('id',$id)->first();
-        echo $lastInsertedId->status;
-        echo $lastInsertedId->email_verified_at;
+        $lastInsertedId->status;
+     $lastInsertedId->email_verified_at;
         if($lastInsertedId->status == 1)
         {
             return redirect('/user/login')->with('success','Please Sign in Already you have done confirmation');
@@ -155,4 +214,17 @@ class UserLogin extends Controller
             return redirect('/user/login')->with('success','Please Wait for confirmation from Admin');
         }
     }
+
+    public function dashboardAction()
+    {
+        if(!Session::has('loginid'))
+        {
+            return redirect('/user/login')->with('error','Please Login first');
+
+        }
+        return view('frontend.dashboard');
+
+    }
+
+
 }

@@ -214,14 +214,16 @@ Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProdu
 
 // Front-End
 Route::get('/user/login', [UserLogin::class,'userLoginAction']);
-Route::post('/user/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
 Route::get('/user/signup', [UserLogin::class,'signupAction'])->name('signup');
 Route::get('/user/newlogin/{id}', [UserLogin::class,'loginProcessAction']);
 Route::post('/user/save',[Customer::class,'saveUserAction']);
-
-
 Route::get('/mail',[Website::class,'index']);
+Route::middleware(['AuthUser','PreventBackHistory'])->group(function(){
+    Route::post('/user/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
+    Route::get('/user/dashboard',[UserLogin::class,'dashboardAction']);
+    Route::get('/user/logout',[Customer::class,'userLogoutAction']);
 
+});
 
 
 

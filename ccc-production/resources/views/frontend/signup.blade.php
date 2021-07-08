@@ -1,4 +1,5 @@
 @include('layoutTemplate.frontend.main')
+
 <div id="table_data">
 <div id="Content">
 <div class="main">
@@ -84,10 +85,6 @@
                         <input type="text" id="contactno" class="form-control"placeholder="contactno" name="customer[contactno]"   value="{{old('customer.contactno')}}" required>
                     </div>
                 </div>
-
-
-
-
                     <div class="form-group row">
                      <div class="col-lg-4">
                      </div>
@@ -98,7 +95,18 @@
             </form>
         </div>
     </div>
-
+    <div id="loading"> </div>
+<script>
+ $(window).load(function() {
+        $("#loading").fadeOut(3000);
+        });
+    $("#update").click(function() {
+            // $(this).html("<img src='{{ asset('spnner.gif') }}' />");
+            // jQuery("#loading").show();
+            // $(this).html("<img src='{{ asset('spnner.gif') }}' />");
+            $("#loading").fadeOut(3000);
+        });
+</script>
 
 
 

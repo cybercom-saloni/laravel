@@ -43,11 +43,23 @@
             pointer-events: none;
         }
 
+
+  #loading{
+	position: fixed;
+	width: 100%;
+	height: 100vh;
+	background: #fff
+	url("{{ asset('spnner.gif') }}")
+	 no-repeat center center;
+	z-index: 99999;
+}
+
     </style>
 
 </head>
 
 <body>
+<div id="loading"></div>
 
     <!-- WRAPPER -->
     <div id="wrapper">
@@ -79,10 +91,19 @@
     <script src="{{ asset('assets/vendor/chartist/js/chartist.min.js') }}"></script>
     <script src="{{ asset('assets/scripts/klorofil-common.js') }}"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
+    <script>
+ $(window).load(function() {
+
+        $("#loading").fadeOut(3000);
+        });
+    $("#update").click(function() {
+      
+            // $(this).html("<img src='{{ asset('spnner.gif') }}' />");
+            $("#loading").fadeOut(3000);
+        });
+</script>
 
 
 
 
-</body>
 
-</html>

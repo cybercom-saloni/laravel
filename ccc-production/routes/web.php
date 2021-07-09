@@ -24,6 +24,7 @@ use App\Http\Controllers\Salesman;
 use App\Http\Controllers\UserLogin;
 use App\Http\Middleware\CheckUserLoginStatus;
 use App\Http\Controllers\Website;
+use App\Http\Controllers\Entity_Type;
 
 /*
 
@@ -223,9 +224,8 @@ Route::post('/user/save',[Customer::class,'saveUserAction']);
 Route::get('/mail',[Website::class,'index']);
 
 
-
-
-
+//dymanic form
+Route::get('/admin/manageForm',[Entity_Type::class,'indexAction']);
 
 
 // Route::prefix('user')->middleware([CheckUserLoginStatus::class])->group(function(){

@@ -76,11 +76,34 @@
             <div class="col-md-4">
                 <div class="card">
                 @include('layoutTemplate.message')
+                @if (session('invalidPassword'))
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <i class="fa fa-info-circle"></i> {{session('invalidPassword')}}
+
+                </div>
+                @endif
+                @if (session('logout'))
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <i class="fa fa-info-circle"></i> {{session('logout')}}
+
+                </div>
+                @endif
+                @if (session('invalidUser'))
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <i class="fa fa-info-circle"></i> {{session('invalidUser')}}
 
 
+                </div>
+                @endif
                     <h3 class="card-header text-center">Login</h3>
                     <div class="card-body">
-                        <form method="POST" action="/user/checkLogin">
+                        <form method="POST" action="{{route('login.check')}}">
                             @csrf
                             <div class="form-group mb-3">
                                 <input type="text" placeholder="Email" id="email" class="form-control" name="email" required

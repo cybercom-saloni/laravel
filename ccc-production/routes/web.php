@@ -25,6 +25,8 @@ use App\Http\Controllers\UserLogin;
 use App\Http\Middleware\CheckUserLoginStatus;
 use App\Http\Controllers\Website;
 use App\Http\Controllers\Entity_Type;
+use App\Http\Controllers\Attribute;
+use App\Http\Controllers\Pages;
 
 /*
 
@@ -215,17 +217,45 @@ Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProdu
 
 // Front-End
 Route::get('/user/login', [UserLogin::class,'userLoginAction']);
-Route::post('/user/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
+
 Route::get('/user/signup', [UserLogin::class,'signupAction'])->name('signup');
 Route::get('/user/newlogin/{id}', [UserLogin::class,'loginProcessAction']);
 Route::post('/user/save',[Customer::class,'saveUserAction']);
 
 
 Route::get('/mail',[Website::class,'index']);
+Route::middleware(['AuthUser','PreventBackHistory'])->group(function(){
+    Route::post('/user/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
+    Route::get('/user/dashboard',[UserLogin::class,'dashboardAction']);
+    Route::get('/user/contactus',[Pages::class,'contactusAction']);
+    // Route::get('/user/{$slug}',[Pages::class,'slugAction']);
+
+    Route::get('/user/logout', [UserLogin::class,'logoutAction']);
+
+});
 
 
 //dymanic form
-Route::get('/admin/manageForm',[Entity_Type::class,'indexAction']);
+Route::get('/admin/formName',[Entity_Type::class,'indexAction']);
+Route::get('/admin/createNewFormName',[Entity_Type::class,'createAction']);
+Route::post('/admin/createNewFormNameSave',[Entity_Type::class,'saveAction']);
+Route::get('/admin/createNewFormNameStatus/{id}',[Entity_Type::class,'statusAction']);
+Route::get('/admin/createFormNameEdit/{id}',[Entity_Type::class,'editAction']);
+Route::get('/admin/createFormDelete/{id}',[Entity_Type::class,'deleteAction']);
+Route::post('/admin/createFormNameEditSave/{id}',[Entity_Type::class,'editSaveAction']);
+
+
+//dynamic form Attribute
+Route::get('/admin/AttributeformName',[Attribute::class,'indexAction']);
+Route::get('/admin/formNameAttribute/create',[Attribute::class,'createAction']);
+Route::get('/admin/formNameStatus/{id}',[Attribute::class,'statusAction']);
+Route::get('/admin/formNameDelete/{id}',[Attribute::class,'deleteAction']);
+Route::get('/admin/formNameEdit/{id}',[Attribute::class,'editAction']);
+Route::post('/admin/formNameSave',[Attribute::class,'saveAction']);
+Route::post('/admin/formNameEditSave/{id}',[Attribute::class,'editSaveAction']);
+Route::get('/admin/Attribute/option/{id}',[Attribute::class,'optionAction']);
+Route::post('/admin/Attribute/option/save/{id}',[Attribute::class,'optionSaveAction']);
+Route::get('/admin/Attribute/option/delete/{id}',[Attribute::class,'optionDeleteAction']);
 
 
 // Route::prefix('user')->middleware([CheckUserLoginStatus::class])->group(function(){

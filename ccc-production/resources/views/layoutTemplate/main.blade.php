@@ -42,6 +42,15 @@
         .disabled-link {
             pointer-events: none;
         }
+        #loading{
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: #fff
+            url("{{ asset('spnner.gif') }}")
+            no-repeat center center;
+            z-index: 99999;
+        }
 
     </style>
 
@@ -84,6 +93,7 @@
     <script src="{{ asset('assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/chartist/js/chartist.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/jqueryValidator.js') }}"></script>
     <script src="{{ asset('assets/scripts/klorofil-common.js') }}"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
 

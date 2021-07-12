@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer as CustomerModel;
 use App\Models\Customer\Address as AddressModel;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Facade\FlareClient\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -262,8 +263,9 @@ class Customer extends Controller
         }
         $customerData = $request->customer;
 
-        $password =  Crypt::encryptString($customerData['password']);
-        $customerData['password'] = $password;
+        $userpassword = hash('sha256',$customerData['password']);
+        // $password =  Crypt::encryptString($customerData['password']);
+        $customerData['password'] = $userpassword;
         CustomerModel::updateOrInsert(['id'=>$id],$customerData);
         $lastInsertedId =CustomerModel::latest('id')->first();
         $data=["name"=>$customerData['firstname'].' '.$customerData['lastname'],"id"=>$lastInsertedId['id'],'data'=>"Click the Link For Activation of Account"];
@@ -274,7 +276,7 @@ class Customer extends Controller
             $messages->subject('Activation link');
         });
         // date_default_timezone_set('Asia/Kolkata');
-        // $lastInsertedId['email_verified_at'] = date('Y-m-d h:i:s');
+        $lastInsertedId['email_verified_at'] = date('Y-m-d h:i:s');
         $lastInsertedId['status'] = 'pending';
         $lastInsertedId->save();
        return redirect('user/login')->with('success','Please check Your inbox to verify email address!!!');
@@ -288,5 +290,10 @@ class Customer extends Controller
          //     die;
 
          }
+        }
+        public function userLogoutAction()
+        {
+            Session::forget('loginid');
+            return redirect('/user/login')->with('success','Logout Successfully!!!');
         }
 }

@@ -34,11 +34,13 @@
 
 <table class="table table-bordered bg-light  table-hover">
             <thead class="bg-dark text-white">
+              
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Description</th>
+                    <?php $order = "asc"?>
+                    <th><a class="column_sort" data-column_name="id" data-sorting_type="asc" style="cursor:pointer;">ID</a></th>
+                    <th><a class="column_sort" data-column_name="name" data-sorting_type="asc" style="cursor:pointer;">Name</a></th>
+                    <th><a class="column_sort" data-column_name="code" data-sorting_type="asc" style="cursor:pointer;">Code</a></th>
+                    <th><a class="column_sort" data-column_name="description" data-sorting_type="asc" style="cursor:pointer;">Description</th>
                     <th>Status</th>
                     <th colspan="2">Actions</th>
                 </tr>
@@ -66,77 +68,21 @@
                         @endif
                         </td>
                         <td><a href="/payment/form/{{$value->id}}" class="btn btn-success">Edit</a></td>
-                        <td> <a href="/paymentDelete/{{ $value->id }}"class="btn btn-secondary">Delete</a></td>
+                        <td> <a href="/paymentDelete/{{ $value->id}}"class="btn btn-secondary">Delete</a></td>
                         </tr>
                     @endforeach
                 @endif
             </tbody>
         </table>
+        <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id">
+        <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="asc">
+
 
             <!-- pagination -->
 
      </div>
-     <div>
-     <div class ="col-12">
-        <div class ="row">
-            <div class="col-6">
-                <nav>
-                    <ul class="pagination">
 
-                        @if($payments->currentPage() != 1)
-                        <li class="page-item">
-                            <a class="page-link{{$payments->previousPageUrl()? ' ':'disabled'}}" href="javascript:void(0)" onclick="object.setUrl('{{$payments->previousPageUrl()}}').setMethod('get').load()">Previous</a>
-                        </li>
-                        @endif
-                        @for($i=1;$i<=$payments->lastPage();$i++)
-                            <li class="page-item {{Request::get('page') == $i ? 'active' : ' '}}">
-                                <a class="page-link" onclick="object.setUrl('{{$payments->url($i)}}').setMethod('get').load()" href="javascript:void(0);">{{$i}}</a>
-                            </li>
-                        @endfor
-                        @if($payments->currentPage() != $payments->lastPage())
-                        <li class="page-item">
-                            <a class="page-link{{$payments->nextPageUrl() ? ' ':'disabled'}}" onclick="object.setUrl('{{$payments->nextPageUrl()}}').setMethod('get').load();" href="javascript:void(0)">Next</a>
-                        </li>
-                        @endif
-                    </ul>
-                </nav>
-            </div>
-            <div class ="col-6">
-                    <form action="/setPages/payment" method="post" id="records">
-                        @csrf
-                        <div class="navbar-btn navbar-btn-right">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="recordPerPage">Record Per Page</label>
-                                    </div>
-                                    <div class="col-6">
-                                        <select name="recordPerPage" id="recordPerPage" class="form-control col-lg-5">
-                                            <option value="2"
-                                                {{ Session::has('page') ? (Session::get('page') == 2 ? 'selected' : '') : '' }}>
-                                                2
-                                            </option>
-                                            <option value="4"
-                                                {{ Session::has('page') ? (Session::get('page') == 4 ? 'selected' : '') : '' }}>
-                                                4
-                                            </option>
-                                            <option value="20"
-                                                {{ Session::has('page') ? (Session::get('page') == 20 ? 'selected' : '') : '' }}>
-                                                20
-                                            </option>
-                                            <option value="50"
-                                                {{ Session::has('page') ? (Session::get('page') == 50 ? 'selected' : '') : '' }}>
-                                                50
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-            </div>
-        </div>
-    </div>
+
 <script>
 $(function() {
     $('#recordPerPage').on('change', function(e) {
@@ -159,6 +105,37 @@ $(function() {
                             $(response.element.selector).html(response.element.html);
                         }
                 }
+        });
+    });
+    $(document).ready(function(){
+        function fetch_data(sort_type="" ,column_name="")
+        {
+            $.ajax({
+                url:"/payment/sorting?sortby="+column_name+"&sort_type="+sort_type,
+                success:function(data)
+                {
+                    $("#table_data").html(data);
+                }
+            });
+            }
+        $(document).on('click','.column_sort',function(){
+
+           var column_name = $(this).data('column_name');
+           var order_type = $(this).data('sorting_type');
+           var reverse_order ="";
+           if(order_type == "asc")
+           {
+               $(this).data('sorting_type','desc');
+               reverse_order = 'desc';
+           }
+           else
+           {
+               $(this).data('sorting_type','asc');
+               reverse_order = 'asc';
+           }
+           $("#hidden_column_name").val(column_name);
+           $("#hidden_sort_type").val(reverse_order);
+           fetch_data(reverse_order,column_name);
         });
     });
 });

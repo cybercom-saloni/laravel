@@ -146,7 +146,7 @@
                                                     <td  id="productPrice-{{$value->id}}" class="productPrice">{{$value->price}}</td>
                                                     <td><input type="text"  class="salesmanPrice form-control"  name="updateSalesmanPrice[<?php echo $value->id;?>]" value="{{$value->salesmanPrice}}"></td>
                                                     <td><input type="text" class="form-control"  name="updateSalesmanDiscount[<?php echo $value->id;?>]"value="{{$value->salesmanDiscount}}"></td>
-                                                </tr>
+                                                </tr>1
                                                @endforeach
                                             </tbody>
                                             @endif

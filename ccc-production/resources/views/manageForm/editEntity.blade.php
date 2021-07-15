@@ -28,14 +28,14 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h3 class="card-title"> Add Custom Page</h3>
+                                    <h3 class="card-title"> Edit Custom Form</h3>
                                 </div>
                             </div>
                             <form action="/admin/createFormNameEditSave/{{$products->id}}" method="post" id="form">
                                 @csrf
                                 <div class="form-group col-lg-12">
                                     <label for="name">Entity_Name</label>
-                                        <input type="text" class="form-control"  name="entity[entity_name]" id="name" aria-describedby="helpId" placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)" value="{{$products->entity_name}}">
+                                        <input type="text" class="form-control"  name="entity[entity_name]" id="name" aria-describedby="helpId" placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)" value="{{$products->entity_name}}" required>
                                 </div>
                                 <div class="form-group col-lg-12">
                                     <label for="name">Slug</label>
@@ -59,7 +59,7 @@
                                         </select>
                                 </div>
                                 <div class="form-group col-lg-12">
-                                    <center><button type="submit" name="saveCategory" id="update" class="btn  btn-lg btn-secondary">Add Entity</button></center>
+                                    <center><button type="submit" name="saveCategory" id="update" class="btn  btn-lg btn-secondary">UPDATE</button></center>
                                 </div>
                             </form>
                         </div>

@@ -76,8 +76,8 @@
             <tbody>
                 <tr>
                         <td></td>
-                        <td><input type="text" name="New[name]" placeholder="Name" class="form-control"></td>
-                        <td><input type="text" name="New[sort_order]" placeholder="Sort Order" class="form-control"></td>
+                        <td><input type="text" name="New[name][]" placeholder="Name" class="form-control"></td>
+                        <td><input type="text" name="New[sort_order][]" placeholder="Sort Order" class="form-control"></td>
                         <td><a type="button" name="remove" value="remove Option"  onclick="removeOption(this)" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-trash"></span></a></td>
                 </tr>
             </tbody>

@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Option extends Model
 {
     use HasFactory;
-    protected $table = 'options';
+    protected $table = 'dynamic_form_field_option';
 }

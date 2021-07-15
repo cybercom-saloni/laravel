@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use App\Models\entityType;
 use Exception;
 class UserLogin extends Controller
 {
@@ -90,6 +91,7 @@ class UserLogin extends Controller
     }
     public function checkLoginAction(Request $request)
     {
+       
         try
         {
 
@@ -122,7 +124,9 @@ class UserLogin extends Controller
                             $customer = Customer::find(session('loginid'));
                             $customer['password'] =  hash('sha256',$request->get('password'));
                             $customer->save();
-                            return redirect('/user/dashboard')->with('success',$user->name);
+                            $controller = $this;
+                            return view('frontend.dashboard',compact('controller'));
+                            // return redirect('/user/dashboard')->with('success',$user->name);
                         }
                         else
                         {
@@ -151,7 +155,8 @@ class UserLogin extends Controller
                             session::save();
                             session::forget('invalidUser');
                             session::forget('invalidPassword');
-                            return view('frontend.dashboard')->with('success',$user->name);
+                            $controller =$this;
+                            return view('frontend.dashboard',compact('controller'))->with('success',$user->name);
                         }
                         else
                         {
@@ -175,7 +180,7 @@ class UserLogin extends Controller
                 session::save();
                 // session::forget('invalidPassword');
                 // session::forget('logout');
-                // return redirect('/user/login')->with('error','invalid user!!!');
+                return redirect('/user/login')->with('error','invalid user!!!');
             }
         }
         catch(Exception $e)
@@ -221,7 +226,8 @@ class UserLogin extends Controller
             return redirect('/user/login')->with('error','Please Login first');
 
         }
-        return view('frontend.dashboard');
+        $controller = $this;
+        return view('frontend.dashboard',compact('controller'));
 
     }
 
@@ -232,6 +238,12 @@ class UserLogin extends Controller
         session::forget('loginname');
         return redirect('/user/login')->with('success','Logout Successfully!!');
 
+    }
+
+    public function showSlug()
+    {
+        $entity = entityType::where('status',1)->get();
+       return $entity;
     }
 
 

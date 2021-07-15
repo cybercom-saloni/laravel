@@ -215,6 +215,9 @@ Route::get('/salesmanDelete/{id}',[Salesman::class,'deleteAction'])->name('sales
 Route::get('/salesmanClear',[Salesman::class,'clearAction']);
 Route::post('/SalesmanAddNewProduct/{id?}',[Salesman::class,'SalesmanAddNewProductAction']);
 
+// sorting
+Route::get('/payment/sorting',[Payment::class,'paymentSortingAction']);
+
 // Front-End
 Route::get('/user/login', [UserLogin::class,'userLoginAction']);
 
@@ -228,29 +231,31 @@ Route::middleware(['AuthUser','PreventBackHistory'])->group(function(){
     Route::post('/user/checkLogin', [UserLogin::class,'checkLoginAction'])->name('login.check');
     Route::get('/user/dashboard',[UserLogin::class,'dashboardAction']);
     Route::get('/user/contactus',[Pages::class,'contactusAction']);
-    // Route::get('/user/{$slug}',[Pages::class,'slugAction']);
-
-    Route::get('/user/logout', [UserLogin::class,'logoutAction']);
+    Route::get('/user/{slug}',[Pages::class,'slugAction']);
+    Route::get('/users/logout', [UserLogin::class,'logoutAction']);
 
 });
 
 
 //dymanic form
-Route::get('/admin/formName',[Entity_Type::class,'indexAction']);
-Route::get('/admin/createNewFormName',[Entity_Type::class,'createAction']);
+Route::prefix('admin/manageform')->group(function () {
+    Route::get('/view',[Entity_Type::class,'indexAction']);
+    Route::get('viewfields/{id}',[Attribute::class,'indexAction']);
+    Route::get('/create',[Entity_Type::class,'createAction']);
+    Route::get('/createfields',[Attribute::class,'createAction']);
+    Route::get('/edit/{id}',[Entity_Type::class,'editAction']);
+    Route::get('/editfields/{id}',[Attribute::class,'editAction']);
+    Route::get('/viewFormfields/{id?}',[Attribute::class,'showAction']);
+});
 Route::post('/admin/createNewFormNameSave',[Entity_Type::class,'saveAction']);
 Route::get('/admin/createNewFormNameStatus/{id}',[Entity_Type::class,'statusAction']);
-Route::get('/admin/createFormNameEdit/{id}',[Entity_Type::class,'editAction']);
 Route::get('/admin/createFormDelete/{id}',[Entity_Type::class,'deleteAction']);
 Route::post('/admin/createFormNameEditSave/{id}',[Entity_Type::class,'editSaveAction']);
 
 
 //dynamic form Attribute
-Route::get('/admin/AttributeformName',[Attribute::class,'indexAction']);
-Route::get('/admin/formNameAttribute/create',[Attribute::class,'createAction']);
 Route::get('/admin/formNameStatus/{id}',[Attribute::class,'statusAction']);
 Route::get('/admin/formNameDelete/{id}',[Attribute::class,'deleteAction']);
-Route::get('/admin/formNameEdit/{id}',[Attribute::class,'editAction']);
 Route::post('/admin/formNameSave',[Attribute::class,'saveAction']);
 Route::post('/admin/formNameEditSave/{id}',[Attribute::class,'editSaveAction']);
 Route::get('/admin/Attribute/option/{id}',[Attribute::class,'optionAction']);

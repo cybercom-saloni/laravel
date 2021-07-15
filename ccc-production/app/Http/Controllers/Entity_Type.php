@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\entityType;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 
@@ -12,6 +13,7 @@ class Entity_Type extends Controller
     public function indexAction()
     {
         $entity = entityType::all();
+     Session::forget('entity_type_id');
         // $entity = entityType::orderBy('sort_order','asc')->get();
         return view('manageForm.entityGrid',\compact('entity'));
     }
@@ -23,21 +25,21 @@ class Entity_Type extends Controller
     public function saveAction($id=null,Request $request)
     {
        try{
-        //    $validator = Validator::make($request->all(), [
-        //        "entity.entity_name" => "required|unique:entity_types,name",
-        //        "entity.slug" => "required",
-        //        "entity.sort_order" => "required",
-        //     ],[
-        //         "entity.entity_name.required" => "The entity name Field is required.",
-        //         "entity.slug.required" =>"The entity slug Field is required.",
-        //         "entity.entity_name.unique" =>"The entity name Field should be unique.",
-        //         "entity.sort_order.required" => "The entity sort_order Field is required.",
-        //     ]);
-        //     if ($validator->fails()) {
-        //         return redirect()->back()
-        //         ->withErrors($validator)
-        //         ->withInput();
-        //     }
+           $validator = Validator::make($request->all(), [
+               "entity.entity_name" => "required|unique:entity_types,entity_name",
+               "entity.slug" => "required",
+               "entity.sort_order" => "required",
+            ],[
+                "entity.entity_name.required" => "The entity name Field is required.",
+                "entity.slug.required" =>"The entity slug Field is required.",
+                "entity.entity_name.unique" =>"The entity name Field should be unique.",
+                "entity.sort_order.required" => "The entity sort_order Field is required.",
+            ]);
+            if ($validator->fails()) {
+                return redirect('/admin/manageform/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
             $entityNew= new entityType;
 
             $entityForm = $request->get('entity');
@@ -46,7 +48,7 @@ class Entity_Type extends Controller
             }
             // print_r($entityNew);
             $entityNew->save();
-            return redirect('/admin/formName')->with('success', 'Entity Saved successfully!!!');
+            return redirect('admin/manageform/view')->with('success', 'Entity Saved successfully!!!');
 
 
        }catch(Exception $e)
@@ -67,7 +69,7 @@ class Entity_Type extends Controller
             $entity->status = 0;
         }
         $entity->save();
-        return redirect('/admin/formName')->with('success', 'Entity Status Changed successfully!!!');
+        return redirect('admin/manageform/view')->with('success', 'Entity Status Changed successfully!!!');
     }
 
     public function editAction($id=null,Request $request)
@@ -75,7 +77,7 @@ class Entity_Type extends Controller
         try{
             if (!$id)
         {
-            return redirect('/admin/formName')->with('error','id not found!!');
+            return redirect('admin/manageform/view')->with('error','id not found!!');
 
         }
         else
@@ -84,7 +86,7 @@ class Entity_Type extends Controller
             $product = entityType::find($id);
             if(!$product)
             {
-                return redirect('/admin/formName')->with('error','id not found!!');
+                return redirect('admin/manageform/view')->with('error','id not found!!');
             }
             return view('manageForm.editEntity',['products'=> $product,'controller'=>$this]);
         }
@@ -97,9 +99,25 @@ class Entity_Type extends Controller
 
     public function editSaveAction($id=null,Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            "entity.entity_name" => "required|unique:entity_types,entity_name,$id",
+            "entity.slug" => "required",
+            "entity.sort_order" => "required",
+         ],[
+             "entity.entity_name.required" => "The entity name Field is required.",
+             "entity.slug.required" =>"The entity slug Field is required.",
+             "entity.entity_name.unique" =>"The entity name Field should be unique.",
+             "entity.sort_order.required" => "The entity sort_order Field is required.",
+         ]);
+         if ($validator->fails()) {
+             return redirect('/admin/createFormNameEdit/'.$id)
+             ->withErrors($validator)
+             ->withInput();
+         }
+
         $entityForm = $request->get('entity');
         entityType::updateOrInsert(['id'=>$id],$entityForm);
-        return redirect('/admin/formName')->with('success', 'Entity Saved successfully!!!');
+        return redirect('admin/manageform/view')->with('success', 'Entity Saved successfully!!!');
 
     }
 
@@ -107,6 +125,6 @@ class Entity_Type extends Controller
     {
         $entityType = entityType::find($id);
         $entityType->delete();
-        return redirect('/admin/formName')->with('success','Entity Deleted!!!');
+        return redirect('admin/manageform/view')->with('success','Entity Deleted!!!');
     }
 }

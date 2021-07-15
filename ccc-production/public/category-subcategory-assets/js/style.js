@@ -7,12 +7,22 @@ $(document).ready(function()
 
         var list   = e.length ? e : $(e.target),
             output = list.data('output');
+             $(function () {
+                $.ajax({
+                    type: 'post',
+                    url: "/category-subcategory/save-nested-categories",
+                    data: $('#categorySave').serializeArray(),
+                });
+        });
 
         if (window.JSON) {
            var a=  output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+
+      
         } else {
             output.val('JSON browser support required for this demo.');
         }
+
     };
 
     // activate Nestable for list 1
@@ -36,5 +46,8 @@ $(document).ready(function()
             $('.dd').nestable('collapseAll');
         }
     });
+
+
+
 
 });

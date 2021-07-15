@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class entityType extends Model
 {
     use HasFactory;
-    protected $table = 'entity_types';
+    protected $table = 'dynamic_form';
 }

@@ -13,7 +13,7 @@
                         <h3 class="panel-title">Manage Category</h3>
                     </div>
 
-                   
+
                     <div class="panel-body">
                         <div>
                             <a href="{{ route('formEdit', ['id' => 0, 'type' => 'root']) }}" class="btn btn-info">
@@ -45,10 +45,9 @@
                                      </ol>
                                 </div>
                                      <div class="row">
-                                        <form action="{{ route('category-subcategory.save-nested-categories') }}" method="post">
+                                        <form action="{{ route('category-subcategory.save-nested-categories') }}" id="categorySave" method="post">
                                             @csrf
                                             <textarea style="display:none;" name="nested_category_array" id="nestable-output"></textarea>
-                                            <button type="submit" class="btn btn-success" style="margin-top: 15px;" >Save category</button>
                                         </form>
                                     </div>
                             </div>
@@ -163,7 +162,7 @@
         });
 
     </script>
-      <script src="{{ url('category-subcategory-assets/js/jquery-3.5.1.slim.min.js') }}"></script>
+      <script src="{{ url('category-subcategory-assets/js/jquery.js') }}"></script>
         <script src="{{ url('category-subcategory-assets/js/popper.min.js') }}"></script>
         <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ url('category-subcategory-assets/js/jquery.nestable.js') }}"></script>

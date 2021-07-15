@@ -59,13 +59,10 @@
                 "color:white;"><span class="fa fa-sticky-note"></span>Salesman</a>
           </li>
               <li>
-            <a href="/admin/formName" style=
+            <a href="/admin/manageform/view" style=
                 "color:white;"><span class="fa fa-sticky-note"></span>Manage Form</a>
           </li>
-          <li>
-            <a href="/admin/AttributeformName" style=
-                "color:white;"><span class="fa fa-sticky-note"></span>Manage Attribute</a>
-          </li>
+        
     </ul>
     </nav>
 </div>

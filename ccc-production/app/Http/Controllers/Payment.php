@@ -16,7 +16,7 @@ class Payment extends Controller
         } else {
             Session::put('page', $page);
         }
-        $pagination = PaymentModel::paginate($page);
+        $pagination = PaymentModel::paginate(2);
         return view('payment.grid',['payments'=>$pagination,'controller'=>$this]);
 
     }
@@ -90,5 +90,16 @@ class Payment extends Controller
         }
         $PaymentModel->save();
         return redirect('payment')->with('paymentstatus','status Changed!!!');
+    }
+
+    public function paymentSortingAction(Request $request)
+    {
+       if($request->ajax())
+       {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sort_type');
+            $payments = PaymentModel::orderBy($sort_by,$sort_type)->get();
+            return view('payment.grid',compact('payments'));
+       }
     }
 }

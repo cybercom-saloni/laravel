@@ -28,7 +28,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h3 class="card-title"> Add Custom Page</h3>
+                                    <h3 class="card-title"> Add Custom Form</h3>
                                 </div>
                             </div>
                             <form action="/admin/createNewFormNameSave" method="post" id="form">
@@ -59,7 +59,7 @@
                                         </select>
                                 </div>
                                 <div class="form-group col-lg-12">
-                                    <center><button type="submit" name="saveCategory" id="update" class="btn  btn-lg btn-secondary">Add Entity</button></center>
+                                    <center><button type="submit" name="saveCategory" id="update" class="btn  btn-lg btn-secondary">Add</button></center>
                                 </div>
                             </form>
                         </div>

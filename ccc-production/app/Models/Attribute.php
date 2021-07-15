@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
     use HasFactory;
-    protected $table = 'attributes';
+    protected $table = 'dynamic_form_field';
 }

@@ -52,7 +52,7 @@
                                         <th  style="width:400px;" class="col-sm-2">Slug</th>
                                         <th style="width:400px" class="col-sm-3">SortOrder</th>
                                         <th class="col-sm-1">Status</th>
-                                        <th colspan="3" class="col-sm-1" style="text-align:center">Action</th>
+                                        <th colspan="4" class="col-sm-1" style="text-align:center">Action</th>
 
                                     </tr>
                                 </thead>
@@ -77,6 +77,7 @@
                                         <td><a href='/admin/manageform/edit/{{$value->id}}' class="btn btn-secondary" id="status">Edit</a></td>
                                         <td>  <a href='/admin/createFormDelete/{{$value->id}}' class="btn btn-secondary" id="status">Delete</a></td>
                                         <td>  <a href='/admin/manageform/viewfields/{{$value->id}}' class="btn btn-secondary" id="status">View Form Fields</a></td>
+                                        <td>  <a href="/admin/manageform/viewcustomers/{{$value->id}}" class="btn btn-secondary" id="status">View Customer for this Form</a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

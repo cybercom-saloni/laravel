@@ -24,15 +24,6 @@ class UserLogin extends Controller
             'email' =>$request->get('email'),
             'password' => $request->get('password'),
         ];
-        // $credentials = $request->only('email', 'password');
-        // print_r($credentials);
-        // if (Auth::attempt($credentials)) {
-        //    echo 1;
-        // }else
-        // {
-        //     echo 2;
-        // }
-        // die;
 
        $user = Customer::where('email',$request->get('email'))->first();
         if($user)
@@ -91,7 +82,7 @@ class UserLogin extends Controller
     }
     public function checkLoginAction(Request $request)
     {
-       
+
         try
         {
 

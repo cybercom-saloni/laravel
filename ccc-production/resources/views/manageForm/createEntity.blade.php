@@ -13,6 +13,7 @@
 
 
                 <div class="panel-body">
+             
                     @include('layoutTemplate.message')
                 @if($errors->any())
         <div class="alert alert-danger alert-dismissible" role="alert"><i class="fa fa-warning-circle"></i>

@@ -1,6 +1,5 @@
 @include('layoutTemplate.frontend.main')
 @include('layoutTemplate.frontend.header')
-
 <div id="table_data">
 <div id="Content">
 <div class="main">
@@ -16,29 +15,18 @@
 
                 </div>
                 <div class="panel-body">
-                @include('layoutTemplate.message')
-                @if($errors->any())
-        <div class="alert alert-danger alert-dismissible" role="alert"><i class="fa fa-warning-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span arial-hidden="true">x</span>
-            </button>
-             @foreach($errors->all() as $error)
-             {{$error}}<br>
-        @endforeach
-        </div>
-      @endif
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
 
-
                                     @if($attribute->count() == 0)
                                     <h3>No Data Found for this form....</h3>
                                     @endif
-                                    <h3>{{$entity->entity_name}}</h3><br>
-                                <form action="/admin/manageform/frontuser/save/{{$entity->id}}" id ="form" method="POST" enctype="multipart/form-data">
-                                    @csrf
+                                <form action="" method="POST">
                                     @foreach($attribute as $key=>$value)
 
                                     @if ($value->input_type == 'textarea')
@@ -48,7 +36,7 @@
                                                     <label for="{{$value->name}}"> {{$value->name}}</label>
                                                 </div>
                                                 <div class="col-lg-10">
-                                                <textarea class="form-control" name="{{$value->name}}" value="{{old($value->name)}}" id="description"  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="resize: vertical;{{$controller->getStyle($value->id,$entity->id)}} class="form-control" placeholder="" <?php if($value->isrequired == 1) echo 'aria-describedby="helpId" data-validation="required"'; else "";?>></textarea>
+                                                <textarea name="{{$value->name}}" id="description"  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="resize: vertical;{{$controller->getStyle($value->id,$entity->id)}} class="form-control" placeholder="PRODUCT DESCRIPTION" <?php if($value->isrequired == 1) echo "required"; else "";?>></textarea>
                                                 </div>
                                             </div><br>
                                         @elseif($value->description_type == 0)
@@ -57,30 +45,30 @@
                                                     <label for="{{$value->name}}"> {{$value->name}}</label>
                                                 </div>
                                                 <div class="col-lg-10">
-                                                <textarea name="{{$value->name}}" id="description"  class="form-control" value="{{old($value->name)}}" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}} class="form-control" placeholder="{{$value->placeholder}}" <?php if($value->isrequired == 1) echo "required"; else "";?>></textarea>
+                                                <textarea name="{{$value->name}}"  class="form-control" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}} class="form-control" placeholder="{{$value->placeholder}}" <?php if($value->isrequired == 1) echo "required"; else "";?>></textarea>
                                                 </div>
                                             </div><br>
                                         @endif
                                      @endif
-
+                                    
                                     @if ($value->input_type == 'text')
                                     <div class="row" style="padding-bottom: 20px;">
                                         <div class="col-lg-2">
                                             <label for="{{$value->name}}"> {{$value->name}}</label>
                                         </div>
                                         <div class="col-lg-10">
-                                            <input type="text" class="form-control"  value="{{old($value->name)}}" name="{{$value->name}}" id="{{$value->name}}" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
+                                            <input type="text" class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
                                         </div>
                                     </div>
                                     @endif
-
+                                       
                                     @if ($value->input_type == 'number')
                                     <div class="row" style="padding-bottom: 20px;">
                                         <div class="col-lg-2">
                                             <label for="{{$value->name}}"> {{$value->name}}</label>
                                         </div>
                                         <div class="col-lg-10">
-                                            <input type="number" value="{{old($value->name)}}" name="{{$value->name}}" id="{{$value->name}}" class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}}  style="{{$controller->getStyle($value->id,$entity->id)}}">
+                                            <input type="number"  class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
                                         </div>
                                     </div>
                                     @endif
@@ -91,7 +79,7 @@
                                             <label for="{{$value->name}}"> {{$value->name}}</label>
                                         </div>
                                         <div class="col-lg-10">
-                                            <input type="password"  value="{{old($value->name)}}" name="{{$value->name}}" id="{{$value->name}}" class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
+                                            <input type="password"  class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
                                         </div>
                                     </div>
                                     @endif
@@ -102,7 +90,7 @@
                                             <label for="{{$value->name}}"> {{$value->name}}</label>
                                         </div>
                                         <div class="col-lg-10">
-                                            <input type="email"  value="{{old($value->name)}}"  name="{{$value->name}}" id="{{$value->name}}" class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
+                                            <input type="email"  class="form-control" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
                                         </div>
                                     </div>
                                     @endif
@@ -110,10 +98,10 @@
                                     @if ($value->input_type == 'button')
                                     <div class="row" style="padding-bottom: 20px;">
                                         <div class="col-lg-2">
-
+                                            <label for="{{$value->name}}"> {{$value->name}}</label>
                                         </div>
                                         <div class="col-lg-10">
-                                            <button type="sumbit"  value="{{$value->name}}" name="{{$value->name}}" id="{{$value->name}}" class="btn btn-success" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">{{$value->name}}</button>
+                                            <button type="sumbit"  name="{{$value->name}}" class="btn btn-success" placeholder="{{$value->placeholder}}"  <?php if($value->isrequired == 1) echo "required"; else "";?>  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">{{$value->name}}</button>
                                         </div>
                                     </div>
                                     @endif
@@ -124,16 +112,15 @@
                                         </div>
                                         <div class="col-lg-10">
 
-                                            <select class="form-control"  name="{{$value->name}}[]" id="{{$value->name}}" <?php if($value->isrequired == 1) echo "required"; else "";?> {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
+                                            <select class="form-control" name="{{$value->name}}" <?php if($value->isrequired == 1) echo "required"; else "";?> {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">
                                             <option value="" disabled selected>Select</option>
                                             @foreach($controller->getOptions($value->id) as $key =>$option)
-                                            <option value="{{$option->id}}" id="{{$option->id}}" {{old($value->name) === $option->id ? 'selected' : ''}}>{{$option->name}}{{old($option->id)}}</option>
+                                            <option value={{$option->id}}>{{$option->name}}</option>
                                             @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     @endif
-
 
                                     @if ($value->input_type == 'multiselect')
                                     <div class="row"  style="padding-bottom: 20px;" >
@@ -142,9 +129,9 @@
                                         </div>
                                         <div class="col-lg-10">
 
-                                            <select multiple class="form-control"  name="{{$value->name}}[]" id="{{$value->name}}" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}" <?php if($value->isrequired == 1) echo "required"; else "";?>>
+                                            <select multiple class="form-control" name="{{$value->name}}" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}" <?php if($value->isrequired == 1) echo "required"; else "";?>>
                                             @foreach($controller->getOptions($value->id) as $key =>$option)
-                                                <option value="{{$option->id}}" id="{{$option->id}}" {{ old($value->id) === $option ? 'selected' : ''}}>{{$option->name}}</option>
+                                                <option value={{$option->id}}>{{$option->name}}</option>
                                             @endforeach
                                             </select>
                                         </div>
@@ -158,7 +145,7 @@
                                         </div>
                                         <div class="col-lg-10">
                                             @foreach($controller->getOptions($value->id) as $key =>$option)
-                                            <input type="radio"  name="{{$value->name}}[]" id="{{$value->name}}" {{ old($value->id) === $option ? 'selected' : ''}} {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}" value="{{$option->id}}" <?php if($value->isrequired == 1) echo "required"; else "";?>>{{$option->name}}
+                                            <input type="radio" name="{{$value->name}}" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}" value="{{$option->name}}" <?php if($value->isrequired == 1) echo "required"; else "";?>>{{$option->name}}
                                             @endforeach
                                         </div>
                                     </div>
@@ -171,13 +158,11 @@
                                         </div>
                                         <div class="col-lg-10 form-check form-check-inline">
                                             @foreach($controller->getOptions($value->id) as $key =>$option)
-                                            <input type="checkbox" value="{{$option->id}}" class="form-check-input"   name="{{$value->name}}[]" id="{{$value->name}}" {{ old($value->id) === $option ? 'checked' : ''}} {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}">{{$option->name}}
+                                            <input type="checkbox" class="form-check-input"  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}"name="{{$value->name}}[]" value="{{$option->name}}[]">{{$option->name}}
                                             @endforeach
                                         </div>
                                     </div>
                                     @endif
-
-
 
 
 
@@ -187,25 +172,15 @@
                                             <label for="{{$value->name}}"> {{$value->name}}</label>
                                         </div>
                                         <div class="col-lg-10">
-                                            <input type="date"  value="{{old($value->name)}}" class="form-control"  name="{{$value->name}}" id="{{$value->name}}"  {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}"<?php if($value->isrequired == 1) echo "required"; else "";?>>
+                                            <input type="date" class="form-control" name="{{$value->name}}" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}"<?php if($value->isrequired == 1) echo "required"; else "";?>>
                                         </div>
                                     </div>
                                     @endif
 
-
-                                    @if ($value->input_type == 'file')
-                                    <div class="row"  style="padding-bottom: 20px;">
-                                        <div class="col-lg-2">
-                                            <label for="{{$value->name}}"> {{$value->name}}</label>
-                                        </div>
-                                        <div class="col-lg-10">
-                                            <input type="file" class="form-control"  name="{{$value->name}}[]" id="{{$value->name}}" {{$value->validation?$controller->getValidation($value->id,$entity->id) : " "}} style="{{$controller->getStyle($value->id,$entity->id)}}"<?php if($value->isrequired == 1) echo "required"; else "";?>>
-                                        </div>
-                                    </div>
-                                    @endif
+                                   
 
                                     @endforeach
-
+                                    <button type="submit" name="update" class="btn btn-success btn-lg">SUMBIT</button>
                                 </form>
 
                 </div>
@@ -215,45 +190,12 @@
     </div>
 </div>
 <!-- END MAIN CONTENT -->
-<script src="{{ asset('assets/vendor/jquery/jqueryValidator.js') }}"></script>
-
 <script type="text/javascript">
- $(document).ready(function(){
-        $(window).load(function() {
-        $("#loading").fadeOut(3000);
-        });
- $("#sumbit").click(function(){
-$.validate();
-$("#loading").show();  $("#loading").fadeOut(3000);
-});
- });
-
-
-
         $(document).ready(function() {
             $('#description').summernote({
                 height: 200,
             });
         });
-
-
- $(document).ready(function () {
-
-$("#form").validate(); // intialize plugin
-// presumably, this would be called after you dynamically create the new elements
-$('input[type="checkbx"]').each(function () {
-    alert(2);
-    $(this).rules('add', {
-        required: true,
-        digits: true,
-        messages: {
-            required: " Please enter a score!",
-            digits: " Please only enter numbers!"
-        }
-    });
-});
-
-});
 </script>
 
 

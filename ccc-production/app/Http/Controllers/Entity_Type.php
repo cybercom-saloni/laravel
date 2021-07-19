@@ -26,7 +26,7 @@ class Entity_Type extends Controller
     {
        try{
            $validator = Validator::make($request->all(), [
-               "entity.entity_name" => "required|unique:entity_types,entity_name",
+               "entity.entity_name" => "required|unique:dynamic_form,entity_name",
                "entity.slug" => "required",
                "entity.sort_order" => "required",
             ],[
@@ -100,7 +100,7 @@ class Entity_Type extends Controller
     public function editSaveAction($id=null,Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "entity.entity_name" => "required|unique:entity_types,entity_name,$id",
+            "entity.entity_name" => "required|unique:dynamic_form,entity_name,$id",
             "entity.slug" => "required",
             "entity.sort_order" => "required",
          ],[

@@ -43,7 +43,7 @@
                                         <input type="text" class="form-control" value="{{$attributeEdit->name}}" name="attribute[name]" id="name" aria-describedby="helpId" placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)">
                                     </div>
 
-                             
+
                             </div>
 
                             <div class="form-group row">
@@ -51,22 +51,22 @@
                                     <label for="name">label</label>
                                     <input type="text"  value="{{$attributeEdit->label}}" class="form-control" name="attribute[label]" id="label" aria-describedby="helpId" placeholder="Attribute Label" data-validation="required">
                                 </div>
-                            
+
                                 <div class="form-group col-lg-6">
                                     <label for="name">placeholder</label>
                                     <input type="text"  value="{{$attributeEdit->placeholder}}" class="form-control" name="attribute[placeholder]" id="placeholder" aria-describedby="helpId" placeholder="Attribute Placeholder" data-validation="required">
                                 </div>
-                            </div>  
+                            </div>
                             <div class="form-group row">
                                 <div class="form-group col-lg-6">
                                     <label for="name">Validation</label>
                                     <input type="text"   id="validation" value="{{$attributeEdit->validation}}" class="form-control" name="attribute[validation]" id="placeholder" aria-describedby="helpId" placeholder="For example:- minlength=1,maxlength=10">
                                     <br>
                                     <div class="alert alert-warning">
-                                    Validations that can be used as comma-separated:-
+                                    Validations that can be used as semicolon-separated:-
                                     minimum characters (minlength = value)
                                     maximum characters (maxlength = value)
-                                    For example:- minlength=1,maxlength=10
+                                    For example:- minlength=1;maxlength=10
                                     </div>
                                 </div>
 
@@ -82,7 +82,7 @@
                             </div>
                             <div class="form-group row">
                                 <div class="form-group col-lg-4">
-                                
+
                                     <label for="name">isrequired</label>
                                     <select name="attribute[isrequired]" id="isrequired" class="form-control"  data-validation="required number">
                                             <option disabled selected>Select isRequired</option>
@@ -120,14 +120,55 @@
                                              <option value="{{$value}}" {{$attributeEdit ? ($attributeEdit->input_type == $value? 'selected' : ''): ' '}}>{{$value}}</option>
                                             @endforeach
                                         </select>
+
                                 </div>
+                                <div class="form-group col-lg-6">
+                                </div>
+                                </div>
+                                <div class="row" style="display:none;" id="descriptionTypeShow">
+                                    <div class="form-group col-lg-6">
+                                        <label for="name">Description With Summer Note</label>
+                                        <select name="attribute[description_type]" id="description_type" class="form-control"   data-validation="required number">
+                                            <option disabled selected>Select Description With Summer Note</option>
+
+                                            <option value="1"  {{$attributeEdit ? ($attributeEdit->description_type== 1 ? 'selected' : ''):''}}>
+                                                Yes
+                                            </option>
+                                            <option value="0"  {{$attributeEdit ? ($attributeEdit->description_type== 0 ? 'selected' : ''):''}}>
+                                                No
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                    </div>
+                                </div>
+
+                                <div class="row" style="display:none;" id="fileTypeShow">
+                                    <div class="form-group col-lg-6">
+                                    <label for="name">File Type</label>
+                                    <select name="attribute[file_type]" id="file_type" class="form-control">
+                                            <option disabled selected>Select File Type</option>
+                                            <option value="image"{{$attributeEdit ? ($attributeEdit->file_type === "image" ? 'selected' : ''):''}}>
+                                              Image
+                                            </option>
+                                            <option value=" "{{$attributeEdit ? ($attributeEdit->file_type !== "image" ? 'selected' : ''):''}}>
+                                              File
+                                            </option>
+                                        </select>
+                                    </div>
+                                     <div class="form-group col-lg-6">
+                                    <label for="name">File Validation</label>
+                                    <input type="text" class="form-control" value="{{$attributeEdit->backend_validation}}" name="attribute[backend_validation]" id="name" aria-describedby="helpId" placeholder="File validation">
+                                     </div>
+                                </div>
+
                                 <div class="form-group col-lg-6">
                                      <br><button type="submit" name="saveCategory" id="update" class="btn  btn-lg btn-secondary">UPDATE</button>
                                 </div>
                             </div>
 
                             </form>
-                           
+
                                     <br>
 
                                     @if($attributeEdit->input_type == 'select' || $attributeEdit->input_type == 'checkbox' || $attributeEdit->input_type == 'radio'|| $attributeEdit->input_type == 'multiselect' )
@@ -201,18 +242,27 @@
                                             </div>
                                             </div>
                                         </div>
+                                        <div  class="row">
+                                               <div class="col-lg-6">
+                                                   <a href="/admin/manageform/createfields" class="btn btn-lg btn-mute mb-10" style="margin-bottom:15px"><i class="fa fa-plus-square"></i> Create New Field</a><br>
+                                               </div>
+
+                                           </div>
+                                           </div>
+                           </div>
 
                                         <table  class="table table-bordered bg-light col-12  table-hover table-responsive" id="example">
                                             <thead class="text-white" style="background-color: darkkhaki;">
                                                 <tr>
-                                                    
-                                                    
+
+
                                                     <th>Name</th>
                                                     <th>input_type</th>
                                                     <th>label</th>
                                                     <th>placeholder</th>
                                                     <th>validation</th>
                                                     <th>style</th>
+                                                    <th>sort_order</th>
                                                     <th>isrequired</th>
                                                     <th colspan="4">Action</th>
                                                 </tr>
@@ -224,7 +274,7 @@
                                                 @endif
                                                 @foreach($fields as $value)
                                                 <tr>
-                                                   
+
                                                     <td>{{$value->name}}</td>
 
                                                     <td>{{$value->input_type}}</td>
@@ -233,14 +283,15 @@
                                                     <td>{{$value->placeholder}}</td>
                                                     <td>{{$value->validation}}</td>
                                                     <td>{{$value->style}}</td>
+                                                    <td>{{$value->sort_order}}</td>
                                                     <td>@if($value->isrequired == '1')
                                                         Yes
                                                         @else
                                                         No
                                                         @endif
                                                     </td>
-                                                    
-                                                  
+
+
                                                     <td>
                                             @if($value->status == 1)
                                             <a href='/admin/formNameStatus/{{$value->id}}' class="btn btn-warning" id="status">Enable</a>
@@ -260,9 +311,9 @@
                                                     <td></td>
                                                     @endif
                                                 </tr>
-                                                
+
                                                 @endforeach
-                                            </tbody> 
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -288,7 +339,22 @@
 
         $(document).ready(function(){
             inputType =$('#inputType').val();
-        console.log(inputType);
+        if(inputType == "textarea")
+        {
+            $("#descriptionTypeShow").show();
+        }
+        else
+        {
+            $("#descriptionTypeShow").hide();
+        }
+        if(inputType == "file")
+        {
+            $("#fileTypeShow").show();
+        }
+        else
+        {
+            $("#fileTypeShow").hide();
+        }
         if(inputType == "date" || inputType == "multiselect" || inputType == "checkbox" || inputType == "radio")
         {
           $("#validation").prop('readonly', true);

@@ -40,45 +40,77 @@
                                 <div class="form-group row">
                                     <div class="col-lg-6">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control"  name="attribute[name]" id="name" aria-describedby="helpId" placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)">
+                                        <input type="text" class="form-control" value="{{old('attribute.name')}}"  name="attribute[name]" id="name" aria-describedby="helpId" placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)">
                                     </div>
                                     <div class="form-group col-lg-6">
                                     <label for="name">input Type</label>
-                                    <select name="attribute[input_type]" id="inputType" class="form-control"  data-validation="required">
+                                    <select name="attribute[input_type]" id="inputType" class="form-control"  data-validation="required" onchange="inputValue()">
                                              <option disabled selected>Select Input Type</option>
                                              @foreach ($controller->getInputTypeOption() as $key => $value)
-                                             <option value="{{$value}}" class="text-upper">{{$value}}</option>
+                                             <option value="{{$value}}" class="text-upper"  {{ old('attribute.input_type') === $value ? 'selected' : ''}}>{{$value}}</option>
                                             @endforeach
                                     </select>
                                 </div>
+                                </div>
+                                <div class="row" style="display:none;" id="fileTypeShow">
+                                    <div class="form-group col-lg-6">
+                                    <label for="name">File Type</label>
+                                    <select name="attribute[file_type]" id="file_type" class="form-control">
+                                            <option disabled selected>Select File Type</option>
+                                            <option value="image" {{ old('attribute.file_type') === "image" ? 'selected' : ''}}>
+                                              Image
+                                            </option>
+
+                                        </select>
+                                    </div>
+                                     <div class="form-group col-lg-6">
+                                    <label for="name">File Validation</label>
+                                    <input type="text" class="form-control" value="{{old('attribute.backend_validation')}}"  name="attribute[backend_validation]" id="name" aria-describedby="helpId" placeholder="File validation">
+                                     </div>
+                                </div>
+                                    <div class="row" style="display:none;" id="descriptionTypeShow">
+                                    <div class="form-group col-lg-6">
+                                    </div>
+                                     <div class="form-group col-lg-6">
+                                    <label for="name">Description With Summer Note</label>
+                                    <select name="attribute[description_type]" id="description_type" class="form-control"  data-validation="required number">
+                                            <option disabled selected>Select Description With Summer Note</option>
+                                            <option value="1" {{ old('attribute.description_type') === 1 ? 'selected' : ''}}>
+                                               Yes
+                                            </option>
+                                            <option value="0" {{ old('attribute.description_type') === 0 ? 'selected' : ''}}>
+                                                No
+                                            </option>
+                                        </select>
+                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <div class="col-lg-6">
                                         <label for="name">label</label>
-                                        <input type="text"  min="1" step="1" class="form-control" name="attribute[label]" id="label" aria-describedby="helpId" placeholder="Attribute Label" data-validation="required">
+                                        <input type="text" value="{{old('attribute.label')}}" min="1" step="1" class="form-control" name="attribute[label]" id="label" aria-describedby="helpId" placeholder="Attribute Label" data-validation="required">
                                     </div>
                                     <div class="form-group col-lg-6">
                                             <label for="name">placeholder</label>
-                                            <input type="text"  min="1" step="1" class="form-control" name="attribute[placeholder]" id="placeholder" aria-describedby="helpId" placeholder="Attribute Placeholder" data-validation="required">
+                                            <input type="text" value="{{old('attribute.placeholder')}}" min="1" step="1" class="form-control" name="attribute[placeholder]" id="placeholder" aria-describedby="helpId" placeholder="Attribute Placeholder" data-validation="required">
                                     </div>
                                 </div>
 
                                   <div class="form-group row">
                                     <div class="col-lg-6">
                                         <label for="name">Validation</label>
-                                        <input type="text" class="form-control"  name="attribute[validation]" id="validation" aria-describedby="helpId" placeholder="For example:- minlength=1,maxlength=10">
+                                        <input type="text" class="form-control" value="{{old('attribute.validation')}}" name="attribute[validation]" id="validation" aria-describedby="helpId" placeholder="For example:- minlength=1,maxlength=10">
                                         <br>
                                         <div class="alert alert-warning">
                                         Validations that can be used as comma-separated:-
                                         minimum characters (minlength = value)
                                         maximum characters (maxlength = value)
                                         For example:- minlength=1,maxlength=10
-                                        </div>   
+                                        </div>
                                     </div>
                                     <div class="form-group col-lg-6">
                                     <label for="name">style</label>
-                                        <input type="text"  min="1" step="1" class="form-control" name="attribute[style]" id="style" aria-describedby="helpId" placeholder=" background-color:red,font-size:10px"><br>
+                                        <input type="text"  min="1" step="1" value="{{old('attribute.style')}}"class="form-control" name="attribute[style]" id="style" aria-describedby="helpId" placeholder=" background-color:red,font-size:10px"><br>
                                         <div class="alert alert-warning">
                                     Css Styles that can be used as comma-separated:-
 
@@ -95,13 +127,13 @@
                                                Yes
                                             </option>
                                             <option value="0">
-                                                no
+                                                No
                                             </option>
                                         </select>
                                      </div>
                                      <div class="form-group col-lg-4">
                                     <label for="name">Sort Order</label>
-                                        <input type="number"  min="1" step="1" class="form-control" name="attribute[sort_order]" id="sort_order" aria-describedby="helpId" placeholder="Attribute Sorting Order" data-validation="required number">
+                                        <input type="number"  min="1" step="1" value="{{old('attribute.sort_order')}}"class="form-control" name="attribute[sort_order]" id="sort_order" aria-describedby="helpId" placeholder="Attribute Sorting Order" data-validation="required number">
                                      </div>
                                 <div class="form-group col-lg-4">
                                     <label for="name">STATUS</label>
@@ -134,12 +166,22 @@
                                             </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
 
-                                        <table style="margin-left:70px" class="table table-bordered bg-light col-12  table-hover table-responsive" id="example">
+                               <div style=""  class="row">
+                                               <div class="col-lg-6">
+                                                   <a href="/admin/manageform/createfields" class="btn btn-lg btn-mute mb-10" style="margin-bottom:15px"><i class="fa fa-plus-square"></i> Create New Field</a><br>
+                                               </div>
+
+                                           </div>
+                                           </div>
+                           </div>
+
+                                        <table style="" class="table table-bordered bg-light col-12  table-hover table-responsive" id="example">
                                             <thead class="text-white" style="background-color: darkkhaki;">
                                                 <tr>
                                                     <th>Id</th>
-                                                    <th>Entity_type_id</th>
+
                                                     <th>Name</th>
                                                     <th>input_type</th>
                                                     <th>label</th>
@@ -147,7 +189,7 @@
                                                     <th>validation</th>
                                                     <th>style</th>
                                                     <th>isrequired</th>
-                                                
+
                                                     <th colspan="4">Action</th>
                                                 </tr>
                                             </thead>
@@ -159,7 +201,7 @@
                                                 @foreach($fields as $value)
                                                 <tr>
                                                     <td>{{$value->id}}</td>
-                                                    <td>{{$formName}}</td>
+                                                  
                                                     <td>{{$value->name}}</td>
 
                                                     <td>{{$value->input_type}}</td>
@@ -192,12 +234,12 @@
                                                     <td></td>
                                                     @endif
                                                 </tr>
-                                                
-                                           
+
+
 
                                                 </tr>
                                                 @endforeach
-                                            </tbody> 
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -223,8 +265,37 @@
     $('.addRow').on('click',function(){
   		$("table tbody").append($("table tbody tr:first").clone(true));
     });
+
+    function inputValue(){
+        inputType =$('#inputType').val();
+        if(inputType == "textarea")
+        {
+            $("#descriptionTypeShow").show();
+        }
+        else
+        {
+            $("#descriptionTypeShow").hide();
+        }
+        if(inputType == "file")
+        {
+            $("#fileTypeShow").show();
+        }
+        else
+        {
+            $("#fileTypeShow").hide();
+        }
+    }
     $("#inputType").focusout(function() {
         inputType =$('#inputType').val();
+        if(inputType == "textarea")
+        {
+            $("#descriptionTypeShow").show();
+        }
+        else
+        {
+            $("#descriptionTypeShow").hide();
+        }
+
         if(inputType == "date" || inputType == "multiselect" || inputType == "checkbox" || inputType == "radio")
         {
           $("#validation").prop('readonly', true);
@@ -249,4 +320,5 @@
         objTr.remove();
     }
 </script>
+
 @endsection

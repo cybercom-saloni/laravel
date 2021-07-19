@@ -246,6 +246,13 @@ Route::prefix('admin/manageform')->group(function () {
     Route::get('/edit/{id}',[Entity_Type::class,'editAction']);
     Route::get('/editfields/{id}',[Attribute::class,'editAction']);
     Route::get('/viewFormfields/{id?}',[Attribute::class,'showAction']);
+    Route::get('/viewcustomers/{id?}',[Attribute::class,'customerAction']);
+    Route::post('/frontuser/save/{formid}',[Pages::class,'saveFormAction']);
+    Route::get('/viewcustomers/fetch_data/{formid}',[Attribute::class,'fetchDataAction']);
+
+
+
+
 });
 Route::post('/admin/createNewFormNameSave',[Entity_Type::class,'saveAction']);
 Route::get('/admin/createNewFormNameStatus/{id}',[Entity_Type::class,'statusAction']);

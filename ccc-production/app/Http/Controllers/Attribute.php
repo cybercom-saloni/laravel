@@ -62,6 +62,7 @@ class Attribute extends Controller
             'password'=>'password',
             'email'=>'email',
             'file'=>'file',
+            'color'=>'color'
         ];
     }
     public function getBackEndTypeOption()
@@ -332,19 +333,34 @@ class Attribute extends Controller
        return $options;
 
     }
-
+    public function moreCustomerAction($customer_id)
+    {
+        $controller = $this;
+        $form_id = Session::get('paginate_form_id');
+        $values = Form_Values::where('form_id',$form_id)->where('customer_id',$customer_id)->get();
+        $submitvalues = Form_Values::where('form_id',$form_id)->where('customer_id',$customer_id)->where('form_field_id','42')->get();
+        return view('manageFormAttribute.moreCustomer',compact('form_id','controller','customer_id','values','submitvalues'));
+    }
     public function customerAction($form_id)
     {
-        $values = Form_Values::where('form_id',$form_id)->paginate(20);
+        // echo $values = Form_Values::where('form_id',$form_id)->paginate(20);
         $controller = $this;
         request()->session()->put('paginate_form_id',$form_id);
-        return view('manageFormAttribute.customer',compact('values','form_id','controller'));
+        $customers_id = Form_Values::where('form_id',$form_id)->distinct('customer_id')->pluck('customer_id');
+        return view('manageFormAttribute.customer',compact('customers_id','form_id','controller'));
+    }
+
+    public function getFormField($id)
+    {
+        $form_id = Session::get('paginate_form_id');
+        $values = Form_Values::where('form_id',$form_id)->where('customer_id',$id)->take(4)->get();
+        return $values;
     }
 
     public function getFormName($id)
     {
-           $formName = entityType::where('id',$id)->pluck('entity_name')->first();
-           return $formName;
+        $formName = entityType::where('id',$id)->pluck('entity_name')->first();
+        return $formName;
 
     }
     public function getCustomerName($id)

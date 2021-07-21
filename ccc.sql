@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2021 at 12:19 PM
+-- Generation Time: Jul 21, 2021 at 11:40 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -315,7 +315,8 @@ INSERT INTO `customers` (`id`, `firstname`, `lastname`, `email`, `password`, `pa
 (55, 'df', 'fd', 'sd@gmail.com', '4e6cb4ea15cfcc8f1c661ea8114547c43790f81e54ea1a7dabc90fd2da266756', '123456@Sa', '132323', 'pending', NULL, NULL, '2021-07-07 22:45:52', NULL),
 (56, 'saloni', 's', 'salonimaheshwari05@gmail.cofmfgfgfg', 'eyJpdiI6Imtxd1IrVDlIMHVRNXYyWHhxakVQV3c9PSIsInZhbHVlIjoiUS9XcTdQRytKYlQxQkhLL3Erc3l0UT09IiwibWFjIjoiZWFmNjU2M2JhZmI1ODc5ZDY4ZWQ2NjRhMzI0NDNmM2VkMTU4M2E4NGVkNmMzNjhkOWNiYTgzZjM1MjUzOGE4YyJ9', 'S@loni0512', '121212', '1', '2021-07-12 05:36:03', NULL, '2021-07-12 00:06:21', NULL),
 (57, 'saloni', 'maheshwari', 'salonimaheshwari05@gmail.comfgh', 'eyJpdiI6Ijl4V3pURXBHQTZ6c0Q1UStrWW5nbGc9PSIsInZhbHVlIjoiWnlmK0ZmWk0vZWdoWktCalZkNWw4VUtoQjFtOVM0NmlUR2x5RFBQcUdtTT0iLCJtYWMiOiJiM2JkZWVhZmUxOTU0MGI1YTgzM2I4Y2JiMmRmYzAzMjljNzgzZmRkZDg1NmNkZDQ0YWJjNjE5YTBjODE3NTZiIn0=', 'Salonimaheshwari05@gmail.com', '45', '1', NULL, NULL, '2021-07-12 00:13:20', NULL),
-(59, 'saloni', 'parwal', 'salonimaheshwari05@gmail.com', 'b6c4a628c1bd93b97fd32096340ffb361739128701b462bec62c986e66a2eacb', 'S@loni0512', '1212', '1', '2021-07-12 06:25:25', NULL, '2021-07-12 00:55:37', NULL);
+(59, 'saloni', 'parwal', 'salonimaheshwari05@gmail.com', 'b6c4a628c1bd93b97fd32096340ffb361739128701b462bec62c986e66a2eacb', 'S@loni0512', '1212', '1', '2021-07-12 06:25:25', NULL, '2021-07-12 00:55:37', NULL),
+(60, '', '', 'salonimaheshwari05@gmail.comd\r\n', '', '', '', 'new', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -338,7 +339,6 @@ CREATE TABLE `dynamic_form` (
 --
 
 INSERT INTO `dynamic_form` (`id`, `entity_name`, `slug`, `sort_order`, `status`, `created_at`, `updated_at`) VALUES
-(4, 'cc', 'cc', '1', 1, '2021-07-10 05:25:06', '2021-07-10 05:25:06'),
 (6, 'Contact-Us', 'contact-us', '1', 1, '2021-07-10 05:26:03', '2021-07-12 06:08:04'),
 (17, 'feedback', 'feedback', '5', 1, '2021-07-12 20:47:30', '2021-07-13 05:35:05'),
 (18, 'fileupload', 'fileupload', '1', 1, '2021-07-13 05:34:11', '2021-07-18 05:07:51'),
@@ -374,13 +374,12 @@ CREATE TABLE `dynamic_form_field` (
 --
 
 INSERT INTO `dynamic_form_field` (`id`, `entity_type_id`, `name`, `input_type`, `description_type`, `file_type`, `backend_validation`, `sort_order`, `label`, `placeholder`, `validation`, `style`, `isrequired`, `status`, `created_at`, `updated_at`) VALUES
-(6, 6, 'labels', 'text', NULL, '', '', '17', 'name', 'name', 'minlength=2,maxlength=10', 'background-color:red,font-size:40px', '1', 1, '2021-07-10 12:25:43', '2021-07-14 21:15:16'),
+(6, 6, 'labels', 'text', 0, NULL, NULL, '17', 'name', 'name', 'minlength=2,maxlength=10', 'background-color:red,font-size:40px', '1', 1, '2021-07-10 12:25:43', '2021-07-14 21:15:16'),
 (7, 6, 'description', 'checkbox', NULL, '', '', '3', 'option', 'description', '1', '1', '0', 1, '2021-07-10 12:26:03', '2021-07-14 21:11:53'),
 (8, 6, '1212ytytyty', 'date', NULL, '', '', '10', 'date', '12', '1', '1', '0', 1, NULL, '2021-07-14 21:15:10'),
 (9, 6, 'qw', 'textarea', NULL, '', '', '1', 'description', '12', '1ddggfg', '1', '1', 1, NULL, NULL),
 (10, 6, 'contactno', 'text', NULL, '', '', '12', 'contact', 'contact', 'maxlength=2', NULL, '1', 1, '2021-07-12 06:06:58', '2021-07-12 23:53:49'),
 (11, 6, 'xdd', 'radio', NULL, '', '', '11', 'd', 'd', '1', '1', '0', 1, '2021-07-12 06:24:16', '2021-07-12 06:24:16'),
-(12, 4, 'as', 'textarea', NULL, '', '', '1', 'df', 'df', 'sd', 'sd', '1', 1, '2021-07-12 23:18:36', '2021-07-15 05:44:51'),
 (13, 17, 'description', 'textarea', 1, '', '', '1', 'vb', 'dd', '1', '1', '1', 1, '2021-07-12 23:21:47', '2021-07-18 04:55:36'),
 (15, 17, 'name', 'text', 0, NULL, NULL, '100', 'name', 'name', 'minlength=3;maxlength=10', NULL, '1', 1, '2021-07-13 00:55:27', '2021-07-18 04:13:37'),
 (19, 20, 'fullname', 'text', 0, '', '', '1', 'name', 'name', 'minlength=2,maxlength=5', 'background-color:gray', '1', 1, '2021-07-14 05:34:21', '2021-07-15 23:05:10'),
@@ -389,10 +388,8 @@ INSERT INTO `dynamic_form_field` (`id`, `entity_type_id`, `name`, `input_type`, 
 (22, 20, 'dob', 'date', 0, '', '', '4', 'dob', 'dob', NULL, NULL, '1', 1, '2021-07-14 05:53:19', '2021-07-14 05:53:19'),
 (23, 20, 'hobby', 'checkbox', 0, '', '', '5', '11', '11', NULL, NULL, '1', 1, '2021-07-14 05:53:51', '2021-07-14 05:53:51'),
 (24, 20, 'ee', 'radio', NULL, '', '', '6', 'ee', 'ee', NULL, NULL, '1', 1, '2021-07-14 05:54:23', '2021-07-14 05:54:23'),
-(25, 4, 'drr', 'text', NULL, '', '', '2', 'd', 'f', NULL, NULL, '1', 0, '2021-07-14 11:41:08', '2021-07-14 11:41:18'),
 (26, 20, 'name', 'text', 0, '', '', '7', 'name', 'name', NULL, NULL, '1', 1, '2021-07-14 11:53:23', '2021-07-14 11:53:23'),
 (27, 17, 'Address', 'textarea', 0, '', '', '4', 'r', 'r', NULL, NULL, '1', 1, '2021-07-14 21:18:03', '2021-07-18 04:13:42'),
-(30, 4, '3dg', 'checkbox', NULL, '', '', '12', 's', 'd', NULL, NULL, '1', 1, '2021-07-15 00:16:28', '2021-07-15 00:16:28'),
 (32, 20, 'dgg', 'text', NULL, '', '', '8', 'dfdf', 'dfdf', '11', NULL, '0', 1, '2021-07-15 06:12:44', '2021-07-15 06:12:44'),
 (33, 20, 'develop', 'textarea', 1, '', '', '9', 'description_type', 'd', 'cols=10', NULL, '1', 1, '2021-07-15 06:26:35', '2021-07-15 20:46:26'),
 (34, 20, 'multiselect', 'multiselect', NULL, '', '', '91', 'multiselect', 'multiselect', NULL, NULL, '1', 1, '2021-07-15 06:40:36', '2021-07-15 06:40:36'),
@@ -413,13 +410,14 @@ INSERT INTO `dynamic_form_field` (`id`, `entity_type_id`, `name`, `input_type`, 
 (49, 17, 'hobby', 'checkbox', NULL, '', '', '3', 'hobby', 'hobby', NULL, NULL, '1', 1, '2021-07-16 05:44:18', '2021-07-17 02:44:26'),
 (50, 17, 'file', 'file', 0, NULL, 'mimes:txt,pdf', '2', 'file', 'file', 'multiple', NULL, '1', 1, '2021-07-16 06:44:21', '2021-07-18 09:02:07'),
 (51, 17, 'multiselect', 'multiselect', NULL, '', '', '3', 'multiselect', 'multiselect', NULL, NULL, '1', 1, '2021-07-16 07:21:27', '2021-07-16 22:21:09'),
-(53, 17, 'image', 'file', 0, 'image', 'mimes:jpeg,jpg,png', '1', 'image', 'image', 'multiple; accept=.jpg, .jpeg, .png', NULL, '1', 1, '2021-07-18 04:15:23', '2021-07-18 08:59:09'),
+(53, 17, 'image', 'file', 0, 'image', 'mimes:jpeg,jpg,png;max:2048', '1', 'image', 'image', 'multiple; accept=.jpg, .jpeg, .png', NULL, '1', 1, '2021-07-18 04:15:23', '2021-07-18 08:59:09'),
 (54, 18, 'input', 'file', 0, NULL, 'required;mimes:jpeg,jpg,png', '1', 'image', 'image', 'multiple; accept=.jpg, .jpeg, .png', NULL, '1', 1, '2021-07-18 05:09:16', '2021-07-19 02:21:41'),
 (55, 18, 'submit', 'button', NULL, NULL, NULL, '3', 'abc', 'abc', NULL, NULL, '1', 1, '2021-07-18 05:09:46', '2021-07-19 00:49:35'),
 (57, 18, 'number', 'number', 0, NULL, NULL, '1', 'number', 'number', 'min=2;step=4;maxlength=10', 'background-color:gray', '1', 1, '2021-07-19 00:20:48', '2021-07-19 02:16:04'),
 (58, 18, 'text', 'text', 0, NULL, NULL, '4', 'text', 'text', 'minlength=\"4\"', NULL, '1', 1, '2021-07-19 01:33:33', '2021-07-19 03:03:38'),
 (59, 6, 'submit', 'button', NULL, NULL, NULL, '999', 'submit', 'submit', NULL, NULL, '1', 1, '2021-07-19 01:39:51', '2021-07-19 01:39:51'),
-(60, 6, 'name1', 'text', NULL, NULL, NULL, '91', 'q', 'q', 'minlength=5;maxlength=10', NULL, '1', 1, '2021-07-19 01:42:20', '2021-07-19 01:42:20');
+(60, 6, 'name1', 'text', NULL, NULL, NULL, '91', 'q', 'q', 'minlength=5;maxlength=10', NULL, '1', 1, '2021-07-19 01:42:20', '2021-07-19 01:42:20'),
+(62, 17, 'color', 'color', NULL, NULL, NULL, '11', 'color', 'color', NULL, NULL, '1', 1, '2021-07-19 22:40:36', '2021-07-19 22:40:36');
 
 -- --------------------------------------------------------
 
@@ -497,29 +495,15 @@ CREATE TABLE `dynamic_form_field_values` (
 --
 
 INSERT INTO `dynamic_form_field_values` (`id`, `customer_id`, `form_id`, `form_field_id`, `input_values`, `option_id`, `created_at`) VALUES
-(5, 1, 17, 13, '<p>sa&nbsp; &nbsp;</p>', NULL, NULL),
-(6, 1, 17, 53, 'error2.png', NULL, NULL),
-(7, 1, 17, 15, 'saloni', NULL, NULL),
-(8, 1, 17, 50, 'on duty.pdf', NULL, NULL),
-(9, 1, 17, 43, 'sa@a', NULL, NULL),
-(10, 1, 17, 44, '12345', NULL, NULL),
-(11, 1, 17, 45, '12345', NULL, NULL),
-(12, 1, 17, 47, NULL, '55', NULL),
-(13, 1, 17, 48, NULL, '57', NULL),
-(14, 1, 17, 49, NULL, '64,63', NULL),
-(15, 1, 17, 51, NULL, '65,68', NULL),
-(16, 1, 17, 27, 'as', NULL, NULL),
-(17, 1, 17, 46, '2021-07-05', NULL, NULL),
-(18, 1, 17, 42, 'sumbit', NULL, NULL),
-(19, 1, 18, 54, 'error1.png', NULL, NULL),
-(20, 1, 18, 55, 'submit', NULL, NULL),
-(21, 1, 18, 54, 'ccc (2).sql', NULL, NULL),
-(22, 1, 18, 55, 'submit', NULL, NULL),
-(23, 1, 18, 54, 'productcsv2.csv', NULL, NULL),
-(24, 1, 18, 55, 'submit', NULL, NULL),
-(25, 1, 18, 54, '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', NULL, NULL),
-(26, 1, 18, 55, 'submit', NULL, NULL),
-(27, 1, 17, 13, '<p>saloni&nbsp;</p>', NULL, NULL),
+(5, 59, 17, 13, '<p>sa&nbsp; &nbsp;</p>', NULL, NULL),
+(6, 56, 17, 53, 'error2.png', NULL, NULL),
+(7, 59, 17, 15, 'saloni', NULL, NULL),
+(8, 13, 17, 50, 'on duty.pdf', NULL, NULL),
+(9, 13, 17, 43, 'sa@a', NULL, NULL),
+(10, 13, 17, 44, '12345', NULL, NULL),
+(17, 12, 17, 46, '2021-07-05', NULL, NULL),
+(18, 12, 17, 42, 'sumbit', NULL, NULL),
+(27, 1, 20, 13, '<p>saloni&nbsp;</p>', NULL, NULL),
 (28, 1, 17, 13, '<p>saloni</p>', NULL, NULL),
 (29, 1, 17, 13, '<p>saloni</p>', NULL, NULL),
 (30, 1, 17, 13, '<p>saloni</p>', NULL, NULL),
@@ -681,7 +665,95 @@ INSERT INTO `dynamic_form_field_values` (`id`, `customer_id`, `form_id`, `form_f
 (200, 1, 18, 55, 'submit', NULL, NULL),
 (201, 1, 18, 55, 'submit', NULL, NULL),
 (202, 1, 18, 57, '66', NULL, NULL),
-(203, 1, 18, 55, 'submit', NULL, NULL);
+(203, 1, 18, 55, 'submit', NULL, NULL),
+(219, 1, 17, 13, '<p>saloni&nbsp;&nbsp;&nbsp;&nbsp;</p>', NULL, NULL),
+(220, 1, 17, 53, 'Digging Spade.jpg', NULL, NULL),
+(221, 1, 17, 15, 'saloni', NULL, NULL),
+(222, 1, 17, 62, '#772b97', NULL, NULL),
+(223, 1, 17, 13, '<p>saloni</p>', NULL, NULL),
+(224, 1, 17, 53, 'Bonsai Set.jpg', NULL, NULL),
+(225, 1, 17, 15, 'saloni', NULL, NULL),
+(226, 1, 17, 62, '#772b97', NULL, NULL),
+(227, 1, 17, 50, 'RCC-ERCC-Bidder-Registration-Process-RCC-ERCC.pdf', NULL, NULL),
+(228, 1, 17, 43, 'saloni@12', NULL, NULL),
+(229, 1, 17, 44, '1e168188330d681b553bb92e2491d819a06805977ea8241e89d68bb2e983c92e', NULL, NULL),
+(230, 1, 17, 45, '12334', NULL, NULL),
+(231, 1, 17, 47, NULL, '55', NULL),
+(232, 1, 17, 48, NULL, '59', NULL),
+(233, 1, 17, 49, NULL, '64,63', NULL),
+(234, 1, 17, 51, NULL, '65,67', NULL),
+(235, 1, 17, 27, 'abc', NULL, NULL),
+(236, 1, 17, 46, '2021-07-08', NULL, NULL),
+(237, 1, 17, 42, 'sumbit', NULL, NULL),
+(238, 1, 17, 13, '<p>saloni</p>', NULL, NULL),
+(239, 1, 17, 53, '1624192644315.jpg', NULL, NULL),
+(240, 1, 17, 15, 'saloni', NULL, NULL),
+(241, 1, 17, 62, '#df7777', NULL, NULL),
+(242, 1, 17, 50, '1624206988989.pdf', NULL, NULL),
+(243, 1, 17, 43, 'saloni@12', NULL, NULL),
+(244, 1, 17, 44, '2350cd64ac7fd31eb8a3b97757c73398dd485701e39bb1eaa78bbf5cde67c245', NULL, NULL),
+(245, 1, 17, 45, '14', NULL, NULL),
+(246, 1, 17, 47, NULL, '55', NULL),
+(247, 1, 17, 48, NULL, '58', NULL),
+(248, 1, 17, 49, NULL, '64,63', NULL),
+(249, 1, 17, 51, NULL, '66,67,68', NULL),
+(250, 1, 17, 27, 'as', NULL, NULL),
+(251, 1, 17, 46, '2021-07-29', NULL, NULL),
+(252, 1, 17, 42, 'sumbit', NULL, NULL),
+(253, 1, 17, 13, '<p>saloni</p>', NULL, NULL),
+(254, 1, 17, 53, '1624192088728.jpg', NULL, NULL),
+(255, 1, 17, 15, 'saloni', NULL, NULL),
+(256, 1, 17, 62, '#b75757', NULL, NULL),
+(257, 1, 17, 50, '1624206988989.pdf', NULL, NULL),
+(258, 1, 17, 43, 'saloni@12', NULL, NULL),
+(261, 1, 17, 62, '#000000', NULL, NULL),
+(265, 1, 17, 62, '#000000', NULL, NULL),
+(269, 1, 17, 62, '#000000', NULL, NULL),
+(271, 1, 17, 13, '<p>ad</p>', NULL, NULL),
+(272, 1, 17, 53, '1624199445728.jpg', NULL, NULL),
+(273, 1, 17, 15, 'saloni', NULL, NULL),
+(274, 1, 17, 62, '#000000', NULL, NULL),
+(275, 1, 17, 50, '1624206988989.pdf', NULL, NULL),
+(276, 1, 17, 43, 'saloni@12', NULL, NULL),
+(277, 1, 17, 44, 'b9550b22e60bcbab742a4fbd00004e68e84a804dd8f6720296aefa463d812432', NULL, NULL),
+(278, 1, 17, 45, '14', NULL, NULL),
+(279, 1, 17, 47, NULL, '56', NULL),
+(280, 1, 17, 48, NULL, '60', NULL),
+(281, 1, 17, 49, NULL, '63', NULL),
+(282, 1, 17, 51, NULL, '66,67', NULL),
+(283, 1, 17, 27, 'as', NULL, NULL),
+(284, 1, 17, 46, '07/08/2021', NULL, NULL),
+(285, 1, 17, 42, 'sumbit', NULL, NULL),
+(286, 59, 17, 13, '<p>saloni</p>', NULL, NULL),
+(287, 59, 17, 53, '1624199445728.jpg', NULL, NULL),
+(288, 59, 17, 15, 'saloni', NULL, NULL),
+(289, 59, 17, 62, '#000000', NULL, NULL),
+(290, 59, 17, 50, '1624206988989.pdf', NULL, NULL),
+(291, 59, 17, 43, 'saloni@12', NULL, NULL),
+(292, 59, 17, 44, '349fce1169cd599b0546f646e692b09268097b17cc90d59be6d4bd086109f06c', NULL, NULL),
+(293, 59, 17, 45, '14', NULL, NULL),
+(294, 59, 17, 47, NULL, '55', NULL),
+(295, 59, 17, 48, NULL, '59', NULL),
+(296, 59, 17, 49, NULL, '64,63', NULL),
+(297, 59, 17, 51, NULL, '67,68', NULL),
+(298, 59, 17, 27, 'as', NULL, NULL),
+(299, 59, 17, 46, '13-07-2021', NULL, NULL),
+(300, 59, 17, 42, 'sumbit', NULL, NULL),
+(301, 59, 17, 13, '<p>textarea</p>', NULL, NULL),
+(302, 59, 17, 53, '3 inch Khurpa with Wooden Handle No. MMI-90.jpg', NULL, NULL),
+(303, 59, 17, 15, 'saloni', NULL, NULL),
+(304, 59, 17, 62, '#7d3636', NULL, NULL),
+(305, 59, 17, 50, 'RCC-ERCC-Bidder-Registration-Process-RCC-ERCC.pdf', NULL, NULL),
+(306, 59, 17, 43, 'saloni@12', NULL, NULL),
+(307, 59, 17, 44, 'cf673adfbefd4523b3a067a964ff45d67433acd8c55bf30a4266bb964e67aac8', NULL, NULL),
+(308, 59, 17, 45, '14', NULL, NULL),
+(309, 59, 17, 47, NULL, '55', NULL),
+(310, 59, 17, 48, NULL, '58', NULL),
+(311, 59, 17, 49, NULL, '64,63', NULL),
+(312, 59, 17, 51, NULL, '66,67', NULL),
+(313, 59, 17, 27, 'address', NULL, NULL),
+(314, 59, 17, 46, '21-07-2021', NULL, NULL),
+(315, 59, 17, 42, 'sumbit', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1530,7 +1602,7 @@ ALTER TABLE `comment_post`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `dynamic_form`
@@ -1542,7 +1614,7 @@ ALTER TABLE `dynamic_form`
 -- AUTO_INCREMENT for table `dynamic_form_field`
 --
 ALTER TABLE `dynamic_form_field`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `dynamic_form_field_option`
@@ -1554,7 +1626,7 @@ ALTER TABLE `dynamic_form_field_option`
 -- AUTO_INCREMENT for table `dynamic_form_field_values`
 --
 ALTER TABLE `dynamic_form_field_values`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=219;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=316;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

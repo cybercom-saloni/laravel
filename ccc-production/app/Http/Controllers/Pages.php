@@ -68,9 +68,8 @@ class Pages extends Controller
 
     public function saveFormAction($form_id,Request $request)
     {
-        $customer_id = Session::has('loginid');
+        $customer_id = Session::get('loginid');
         $formfields = Attribute::where('entity_type_id',$form_id)->where('status',1)->orderBy('sort_order')->get();
-
         $formValues = $request->all();
         echo "<pre>";
         // print_r($formValues);

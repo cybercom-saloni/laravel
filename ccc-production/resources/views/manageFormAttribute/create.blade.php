@@ -40,7 +40,7 @@
                                 <div class="form-group row">
                                     <div class="col-lg-6">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control" value="{{old('attribute.name')}}"  name="attribute[name]" id="name" aria-describedby="helpId" placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)">
+                                        <input type="text" class="form-control" value="{{old('attribute.name')}}"  name="attribute[name]" id="name" aria-describedby="helpId" required placeholder="ENTITY NAME" data-validation="required length" data-validation-length="min2" onload="createSlug(this.value)" onkeyup="createSlug(this.value)">
                                     </div>
                                     <div class="form-group col-lg-6">
                                     <label for="name">input Type</label>
@@ -201,7 +201,7 @@
                                                 @foreach($fields as $value)
                                                 <tr>
                                                     <td>{{$value->id}}</td>
-                                                  
+
                                                     <td>{{$value->name}}</td>
 
                                                     <td>{{$value->input_type}}</td>

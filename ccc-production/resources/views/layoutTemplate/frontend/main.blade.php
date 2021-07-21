@@ -37,7 +37,10 @@
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.css" rel="stylesheet">
 
-    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <!-- select -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- date -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .disabled-link {
             pointer-events: none;
@@ -52,7 +55,7 @@
             z-index: 99999;
         }
 
-    </style>
+        </style>
 
 </head>
 
@@ -65,7 +68,7 @@
 
         <div id="content" class="bg-dark">
 
-        @yield('content')
+            @yield('content')
         </div>
 
         <!-- END MAIN -->
@@ -74,7 +77,7 @@
         <footer>
             <div class="container-fluid">
                 <!-- <p class="copyright">&copy; 2021 <a href="https://www.themeineed.com" target="_blank">Theme I Need</a>.
-                    All Rights Reserved.</p> -->
+                All Rights Reserved.</p> -->
             </div>
         </footer>
 
@@ -82,14 +85,17 @@
     <!-- END WRAPPER -->
     <!-- Javascript -->
 
+
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/chartist/js/chartist.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/jqueryValidator.js') }}"></script>
     <script src="{{ asset('assets/scripts/klorofil-common.js') }}"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </body>
 
 </html>

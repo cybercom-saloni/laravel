@@ -37,7 +37,7 @@
                             <div class="col-lg-12">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                    <a style="margin-left:70px;margin-bottom:10px" href="/admin/manageform/create" class="btn btn-lg btn-mute mb-10" style="margin-bottom:15px"><i class="fa fa-plus-square"></i> Create New Entity</a><br>
+                                    <a style="margin-left:70px;margin-bottom:10px" href="/admin/manageform/create" class="btn btn-lg btn-mute mb-10" style="margin-bottom:15px"><i class="fa fa-plus-square"></i> Create New Form</a><br>
                                     </div>
                                     <div class="col-lg-6"></div>
                                 </div>
@@ -75,7 +75,7 @@
                                             @endif
                                         </td>
                                         <td><a href='/admin/manageform/edit/{{$value->id}}' class="btn btn-secondary" id="status">Edit</a></td>
-                                        <td>  <a href='/admin/createFormDelete/{{$value->id}}' class="btn btn-secondary" id="status">Delete</a></td>
+                                        <td>  <a href='/admin/createFormDelete/{{$value->id}}' class="btn btn-secondary delete-confirm" id="status">Delete</a></td>
                                         <td>  <a href='/admin/manageform/viewfields/{{$value->id}}' class="btn btn-secondary" id="status">View Form Fields</a></td>
                                         <td>  <a href="/admin/manageform/viewcustomers/{{$value->id}}" class="btn btn-secondary" id="status">View Customer for this Form</a></td>
                                     </tr>
@@ -97,5 +97,19 @@
         $("#status").click(function() {
             jQuery("#loading").show();
         });
+        $('.delete-confirm').on('click', function (event) {
+    event.preventDefault();
+    const url = $(this).attr('href');
+    swal({
+        title: 'Are you sure?',
+        text: 'This record and it`s details will be permanantly deleted!',
+        icon: 'warning',
+        buttons: ["Cancel", "Yes!"],
+    }).then(function(value) {
+        if (value) {
+            window.location.href = url;
+        }
+    });
+});
 </script>
 @stop

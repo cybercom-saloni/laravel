@@ -15,7 +15,8 @@
 
                 <div class="panel-body">
                     @include('layoutTemplate.message')
-                    @include('manageFormAttribute.header')
+
+
                 @if($errors->any())
         <div class="alert alert-danger alert-dismissible" role="alert"><i class="fa fa-warning-circle"></i>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -33,41 +34,59 @@
                                     <h3 class="card-title"> View Customer of {{$controller->getFormName($form_id)}} Form</h3>
 
                            <table class="table table-bordered bg-light col-12  table-hover" id="example">
-                                <thead class="text-white" style="background-color: darkkhaki;">
-                                    <tr>
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-sm-2">Customer Name</th>
-                                        <th  style="width:400px;" class="col-sm-2">Field Name</th>
-                                        <th style="width:400px" class="col-sm-3">Field Values</th>
-                                    </tr>
+                                <thead>
+
                                 </thead>
                                 <tbody>
-                                    @if(count($values) == 0)
-                                        <tr><td colspan="4"> No Data Found For {{$controller->getFormName($form_id)}} Form</td></tr>
-                                    @endif
-                                    @foreach($values as $value)
-                                    <tr>
-                                        <td>{{$value->id}}</td>
-                                        <td>{{$controller->getCustomerName($value->customer_id)}}</td>
-                                        <td>{{$controller->getFormFieldName($value->form_field_id)}}</td>
-                                        <td id="values" >
-                                        @if($value->input_values != null)
-                                            @if(strpos($value->input_values, '.jpg') !== false ||strpos($value->input_values, '.jpeg') !== false ||strpos($value->input_values, '.png') !== false ||strpos($value->input_values, '.svg') !== false ||strpos($value->input_values, '.gif') !== false)
-                                                <img src="\frontend\images\{{$value->input_values}}" width="100px" height="100px">
-                                            @elseif(strpos($value->input_values, '.docx') !== false ||strpos($value->input_values, '.csv') !== false ||strpos($value->input_values, '.pdf') !== false ||strpos($value->input_values, '.txt') !== false||strpos($value->input_values, '.xls') !== false)
-                                                <a href="\frontend\files\{{$value->input_values}}" style="color:#676a6d;">{{$value->input_values}}</a>
-                                            @else
-                                                {{$value->input_values}}
-                                            @endif
-                                        @elseif($value->option_id != null)
-                                            {{$controller->getOptionName($value->option_id)}}
-                                        @endif
-                                        </td>
-                                    </tr>
+
+                                <tr class="text-white" style="background-color: darkkhaki;">
+                                    <th rowspan="3" class="text-center" style="color:white; font-weight:bold;padding-top:50px;">Customers Name</th>
+                                    <th colspan="9" class="text-center" style="color:white; font-weight:bold;">Form Fields</th>
+                                </tr>
+                                <tr  class="text-white" style="background-color: darkkhaki;">
+                                    <td colspan="2"class="text-center" style="color:white; font-weight:bold;">field 1</td>
+                                    <td colspan="2"class="text-center" style="color:white; font-weight:bold;">field 2</td>
+                                    <td colspan="2"class="text-center" style="color:white; font-weight:bold;">field 3</td>
+                                    <td colspan="2"class="text-center" style="color:white; font-weight:bold;">field 4</td>
+                                    <td rowspan="2" style="padding-top:30px; color:white; font-weight:bold;"> Display All Fields</td>
+                                </tr>
+                                <tr  class="text-white" style="background-color: darkkhaki;">
+                                    <td class="text-center" style="color:white; font-weight:bold;">form field</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form field</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form field</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form field</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form value</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form value</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form value</td>
+                                    <td class="text-center" style="color:white; font-weight:bold;">form value</td>
+                                </tr>
+                                @if(count($customers_id) == 0)
+                                    <tr><td colspan="10"  class="text-center"> No Data Found For {{$controller->getFormName($form_id)}} Form</td></tr>
+                                @endif
+                                @foreach($customers_id as $value)
+                                <tr>
+                                    <td class="text-center">{{$controller->getCustomerName($value)}}</td>
+                                    @foreach($controller->getFormField($value) as $formvalue)
+                                        <td class="text-center">{{$controller->getFormFieldName($formvalue->form_field_id)}}</td>
+                                        <td class="text-center">{{$formvalue->input_values}}</td>
                                     @endforeach
+                                    @if(count($controller->getFormField($value))== 4)
+                                        <td class="text-center">
+                                            <a href="/admin/manageform/viewmorecustomers/{{$value}}" class="btn btn-secondary btn-lg">More</a>
+                                        </td>
+                                    @elseif(count($controller->getFormField($value))== 2)
+                                        <td class="text-center" colspan="7" style="color:black; font-weight:bold;"> No More Fields</td>
+                                    @elseif(count($controller->getFormField($value))== 3)
+                                        <td class="text-center" colspan="5" style="color:black; font-weight:bold;"> No More Fields</td>
+                                    @elseif(count($controller->getFormField($value))== 1)
+                                        <td class="text-center" colspan="8" style="color:black; font-weight:bold;">No More Fields</td>
+                                    @endif
+                                </tr>
+                                @endforeach
                                 </tbody>
+
+
                            </table>
-                                {{$values->links()}}
                                 </div>
                             </div>
 
@@ -79,6 +98,7 @@
     </div>
 </div>
     </div>
+
 <script>
 $(document).ready(function(){
         // $(window).load(function() {

@@ -31,29 +31,29 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                               
+
                                <div class="row">
                                                <div class="col-lg-6">
                                                    <h3> View {{$formName}} Fields</h3>
                                                </div>
                                                <div class="col-lg-6">
-                                                   
-                                                  
+
+
                                                </div>
-                                              
+
                                            </div>
                                            </div>
                            </div>
-                         
+
 
 
                             <div class="col-lg-12">
-                               
+
                                 <div class="row">
                                                 <div class="col-lg-6">
                                                     <a href="/admin/manageform/createfields" class="btn btn-lg btn-mute mb-10" style="margin-bottom:15px"><i class="fa fa-plus-square"></i> Create New Field</a><br>
                                                 </div>
-                                               
+
                                             </div>
                                             </div>
                             </div>
@@ -106,7 +106,7 @@
                                             @endif
                                         </td>
                                         <td><a href='/admin/manageform/editfields/{{$value->id}}' class="btn btn-secondary" id="status">Edit</a></td>
-                                        <td>  <a href='/admin/formNameDelete/{{$value->id}}' class="btn btn-secondary" id="status">Delete</a></td>
+                                        <td>  <a href='/admin/formNameDelete/{{$value->id}}' class="btn btn-secondary delete-confirm" id="status">Delete</a></td>
                                         @if($value->input_type == 'select')
                                         <td style="padding-left:0px">  <a  href='/admin/Attribute/option/{{$value->id}}' class="btn btn-secondary" id="options">Options</a></td>
                                         @elseif($value->input_type == 'radio')
@@ -136,5 +136,19 @@
         $("#status").click(function() {
             jQuery("#loading").show();
         });
+        $('.delete-confirm').on('click', function (event) {
+    event.preventDefault();
+    const url = $(this).attr('href');
+    swal({
+        title: 'Are you sure?',
+        text: 'This record and it`s details will be permanantly deleted!',
+        icon: 'warning',
+        buttons: ["Cancel", "Yes!"],
+    }).then(function(value) {
+        if (value) {
+            window.location.href = url;
+        }
+    });
+});
 </script>
 @stop

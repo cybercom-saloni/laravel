@@ -37,7 +37,13 @@
 
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.css" rel="stylesheet">
 
+
+
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <!-- select -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+    <!-- date -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .disabled-link {
             pointer-events: none;
@@ -52,50 +58,44 @@
             z-index: 99999;
         }
 
-    </style>
+        </style>
 
 </head>
 
 <body>
 
     <!-- WRAPPER -->
-    <div id="wrapper">
-        <!-- NAVBAR -->
-        @include('layoutTemplate.navbar')
-        <!-- END NAVBAR -->
+    <!-- NAVBAR -->
 
-        <!-- LEFT SIDEBAR -->
-        @include('layoutTemplate.left')
-        <!-- END LEFT SIDEBAR -->
+    <!-- MAIN -->
 
-        <!-- MAIN -->
-
-        <div id="content" class="bg-dark">
+    <div id="content" class="bg-dark">
 
         @yield('content')
-        </div>
-
-        <!-- END MAIN -->
-
-        <div class="clearfix"></div>
-        <footer>
-            <div class="container-fluid">
-                <!-- <p class="copyright">&copy; 2021 <a href="https://www.themeineed.com" target="_blank">Theme I Need</a>.
-                    All Rights Reserved.</p> -->
-            </div>
-        </footer>
-
     </div>
-    <!-- END WRAPPER -->
-    <!-- Javascript -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <!-- END MAIN -->
+
+    <footer>
+        <div class="container-fluid">
+            <!-- <p class="copyright">&copy; 2021 <a href="https://www.themeineed.com" target="_blank">Theme I Need</a>.
+        All Rights Reserved.</p> -->
+    </div>
+</footer>
+
+
+<!-- END WRAPPER -->
+<!-- Javascript -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/chartist/js/chartist.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery/jqueryValidator.js') }}"></script>
     <script src="{{ asset('assets/scripts/klorofil-common.js') }}"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.4/summernote.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 

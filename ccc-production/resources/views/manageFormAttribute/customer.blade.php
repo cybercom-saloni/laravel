@@ -27,11 +27,13 @@
         @endforeach
         </div>
       @endif
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h3 class="card-title"> View Customer of {{$controller->getFormName($form_id)}} Form</h3>
+                                        <a href="/admin/manageform/view" class="btn btn-lg btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                                        <h3 class="card-title" style="padding-left: 108px;margin-top: -33px;"> View Customer of {{$controller->getFormName($form_id)}} Form</h3>
 
                            <table class="table table-bordered bg-light col-12  table-hover" id="example">
                                 <thead>

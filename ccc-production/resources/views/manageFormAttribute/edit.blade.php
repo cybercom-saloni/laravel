@@ -139,26 +139,18 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-lg-6">
-                                    </div>
+
                                 </div>
 
                                 <div class="row" style="display:none;" id="fileTypeShow">
-                                    <div class="form-group col-lg-6">
-                                    <label for="name">File Type</label>
-                                    <select name="attribute[file_type]" id="file_type" class="form-control">
-                                            <option disabled selected>Select File Type</option>
-                                            <option value="image"{{$attributeEdit ? ($attributeEdit->file_type === "image" ? 'selected' : ''):''}}>
-                                              Image
-                                            </option>
-                                            <option value=" "{{$attributeEdit ? ($attributeEdit->file_type !== "image" ? 'selected' : ''):''}}>
-                                              File
-                                            </option>
-                                        </select>
-                                    </div>
+
                                      <div class="form-group col-lg-6">
                                     <label for="name">File Validation</label>
                                     <input type="text" class="form-control" value="{{$attributeEdit->backend_validation}}" name="attribute[backend_validation]" id="name" aria-describedby="helpId" placeholder="File validation">
+                                    <br><div class="alert alert-warning">
+                                        File Validations that can be used as semicolon-separated:-
+                                        For example:- required;mimes:jpeg,png,svg
+                                    </div>
                                      </div>
                                 </div>
 

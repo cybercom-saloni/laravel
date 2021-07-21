@@ -31,7 +31,8 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h3 class="card-title"> View All Customer of {{$controller->getFormName($form_id)}} Form</h3>
+                                <a href="/admin/manageform/viewcustomers/{{$form_id}}" class="btn btn-lg btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                                        <h3 class="card-title" style="padding-left: 108px;margin-top: -33px;"> View All Customer of {{$controller->getFormName($form_id)}} Form</h3>
                                     <div style="height: 600px;overflow: scroll;">
                            <table class="table table-bordered bg-light col-12  table-hover" id="example">
                                 <tbody>

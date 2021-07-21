@@ -54,19 +54,17 @@
                                 </div>
                                 <div class="row" style="display:none;" id="fileTypeShow">
                                     <div class="form-group col-lg-6">
-                                    <label for="name">File Type</label>
-                                    <select name="attribute[file_type]" id="file_type" class="form-control">
-                                            <option disabled selected>Select File Type</option>
-                                            <option value="image" {{ old('attribute.file_type') === "image" ? 'selected' : ''}}>
-                                              Image
-                                            </option>
 
-                                        </select>
                                     </div>
                                      <div class="form-group col-lg-6">
                                     <label for="name">File Validation</label>
                                     <input type="text" class="form-control" value="{{old('attribute.backend_validation')}}"  name="attribute[backend_validation]" id="name" aria-describedby="helpId" placeholder="File validation">
-                                     </div>
+                                    <br><div class="alert alert-warning">
+                                        File Validations that can be used as semicolon-separated:-
+                                        For example:- required;mimes:jpeg,png,svg
+                                    </div>
+                                    </div>
+
                                 </div>
                                     <div class="row" style="display:none;" id="descriptionTypeShow">
                                     <div class="form-group col-lg-6">

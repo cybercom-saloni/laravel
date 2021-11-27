@@ -172,11 +172,89 @@
 
     <div id="loading">  </div>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#description').summernote({
-                height: 200,
+        $(function() {
+                $('#description').summernote({
+                    focus: true,
+                    height: 250,
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            for (let i = 0; i < files.length; i++) {
+                                sendFile(files[i]);
+                            }
+                        }
+                    }
+                });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                function sendFile(file, editor, welEditable) {
+                    data = new FormData();
+                    data.append("file", file);
+
+                    $.ajax({
+                        data: data,
+                        method: 'POST',
+                        url: "/summernote/product/img-upload",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(data) {
+                            console.log(file.name);
+                            var image = $('<img>').attr('src', `/images/summernote_temp/product/${file.name}`);
+                            $('#description').summernote("insertNode", image[0]);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus + " " + errorThrown);
+                        }
+                    });
+                }
+
             });
-        });
+        // $(document).ready(function() {
+        //     $('#description').summernote({
+        //         height: 200,
+        //         callbacks: {
+        //         onImageUpload: function(image) {
+        //             uploadImage(image[0]);
+        //         }
+        //     }
+        //     });
+
+        // });
+        // $.ajaxSetup({
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             }
+        //         });
+
+        // function uploadImage(image) {
+        //     var data = new FormData();
+        //     data.append("image", image);
+        //     console.log(image);
+
+        //     $.ajax({
+        //         url: '/summernote/product/img-upload',
+        //         cache: false,
+        //         contentType: false,
+        //         processData: false,
+        //         data: data,
+        //         type: "POST",
+        //         success: function(url) {
+        //             console.log(url);
+        //             console.log(image.name);
+        //             // http://127.0.0.1:8000/images/summernote_temp/
+        //             var image = $('<img>').attr('src', `/images/summernote_temp/${image.name}`);
+        //             $('#description').summernote("insertNode", image[0]);
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //                     console.log(textStatus + "" + errorThrown);
+        //                 }
+        //     });
+        // }
+
         function createSlug(str)
         {
              //replace all special characters | symbols with a space

@@ -28,6 +28,9 @@ use App\Http\Controllers\Entity_Type;
 use App\Http\Controllers\Attribute;
 use App\Http\Controllers\Pages;
 
+//route for upload summernote image on product
+Route::post('/summernote/product/img-upload', [Product::class, 'summernoteUpload'])->name('uploadSummerNote');
+
 /*
 
 |--------------------------------------------------------------------------

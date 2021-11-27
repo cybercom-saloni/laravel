@@ -28,6 +28,20 @@ class Product extends Controller
     protected $categoryOptions = [];
     public $id = null;
 
+    public function summernoteUpload(Request $request)
+    {
+
+        $name = $request->file('file')->getClientOriginalName();
+        // print_r($_FILES);die;
+        // echo $name;
+// echo public_path();die;
+// print_r($request->file);die;
+// $image_name= "/images/summernote_temp";
+// $path = public_path() . $image_name;
+// $request->file->move($path, $name);
+// move_uploaded_file($_FILES['image']['tmp_name'],'C:/xampp/htdocs/cc-production-laravel/laravel/ccc-production/public/images/summernote_temp/'.$name);
+        $path = $request->file->move(public_path('/images/summernote_temp/product'),$name);
+    }
 
     public function getProductModel()
     {
@@ -279,7 +293,7 @@ class Product extends Controller
                 ->withInput();
             }
             $productValue = $request->get('product');
-            print_r($productValue['slug']);
+        //    print_r($productValue['slug ']);
             $slug = ProductModel::pluck('slug','id')->toArray();
             $product = $this->getProductModel();
             $formData = $request->get('product');
